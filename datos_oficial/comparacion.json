@@ -1,0 +1,56 @@
+{
+ "20": {
+  "pluvial_ha": 0.68,
+  "T500": {
+   "oficial_ha": 9.66,
+   "pluvial_dentro_pct": 0.0,
+   "oficial_mojada_pct": 0.0
+  },
+  "T100": {
+   "oficial_ha": 9.26,
+   "pluvial_dentro_pct": 0.0,
+   "oficial_mojada_pct": 0.0
+  },
+  "T10": {
+   "oficial_ha": 5.85,
+   "pluvial_dentro_pct": 0.0,
+   "oficial_mojada_pct": 0.0
+  }
+ },
+ "60": {
+  "pluvial_ha": 1.64,
+  "T500": {
+   "oficial_ha": 9.66,
+   "pluvial_dentro_pct": 0.0,
+   "oficial_mojada_pct": 0.0
+  },
+  "T100": {
+   "oficial_ha": 9.26,
+   "pluvial_dentro_pct": 0.0,
+   "oficial_mojada_pct": 0.0
+  },
+  "T10": {
+   "oficial_ha": 5.85,
+   "pluvial_dentro_pct": 0.0,
+   "oficial_mojada_pct": 0.0
+  }
+ },
+ "120": {
+  "pluvial_ha": 1.9,
+  "T500": {
+   "oficial_ha": 9.66,
+   "pluvial_dentro_pct": 0.2,
+   "oficial_mojada_pct": 0.0
+  },
+  "T100": {
+   "oficial_ha": 9.26,
+   "pluvial_dentro_pct": 0.2,
+   "oficial_mojada_pct": 0.0
+  },
+  "T10": {
+   "oficial_ha": 5.85,
+   "pluvial_dentro_pct": 0.2,
+   "oficial_mojada_pct": 0.1
+  }
+ }
+}

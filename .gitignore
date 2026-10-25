@@ -1,0 +1,27 @@
+# Archivos de Blender (pesados; la maqueta se regenera con osm_ripollet.py)
+*.blend
+*.blend1
+__pycache__/
+
+# Vistas previas
+preview_*.png
+
+# Salida intermedia del proceso (la regeneran osm_ripollet.py y ensamblar.py)
+datos_visor/
+verdad.html
+
+# Cachés de descarga: se vuelven a bajar con los obtener_*.py
+datos_catastro/teselas/
+datos_catastro/bordillos/
+datos_catastro/farolas/
+datos_arboles/teselas/
+datos_arboles/registro.txt
+datos_publicos/*.zip
+datos_publicos/renta_30896.json
+datos_publicos/demografia_30904.json
+# Certificados energéticos por vivienda (con dirección): solo va el resumen por edificio dentro de la app
+datos_publicos/certificados_ripollet.json
+
+# Perfiles temporales de Chrome de las pruebas
+.perfil_chrome/
+.perfil_cdp/

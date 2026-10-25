@@ -1,0 +1,1046 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-07-15T15:22:01Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 2692745008,
+  "lat": 41.5039042,
+  "lon": 2.1536306,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:postcode": "08291",
+    "addr:street": "Carrer del Pedraforca",
+    "name": "Soni",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3814129774,
+  "lat": 41.4939184,
+  "lon": 2.1476218,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:full": "carretera Barcelona, 130",
+    "addr:housenumber": "130",
+    "addr:postcode": "08291",
+    "addr:street": "Carretera de Barcelona",
+    "amenity": "pharmacy",
+    "contact:phone": "+34936920021",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Merinero Cabestany, P. Carolina",
+    "ref": "3623823",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:57:32 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 4908825607,
+  "lat": 41.5018093,
+  "lon": 2.1566228,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Carrer dels Afores",
+    "name": "Próxim Ripollet",
+    "opening_hours": "Mo-Su 08:30-23:00",
+    "operator": "Grupo Miquel",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4908825608,
+  "lat": 41.5040974,
+  "lon": 2.1593935,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Av. Maria Torras",
+    "name": "Supermercats Juma",
+    "operator": "Grup Dusa",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997293,
+  "lat": 41.4969539,
+  "lon": 2.1614334,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "53",
+    "addr:postcode": "08291",
+    "addr:street": "Rambla de Sant Jordi",
+    "brand": "BonÀrea",
+    "brand:wikidata": "Q11924743",
+    "brand:wikipedia": "ca:Grup Alimentari Guissona",
+    "name": "BonÀrea",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997298,
+  "lat": 41.4980746,
+  "lon": 2.1569099,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Carrer Nou",
+    "brand": "BonÀrea",
+    "brand:wikidata": "Q11924743",
+    "brand:wikipedia": "ca:Grup Alimentari Guissona",
+    "name": "BonÀrea",
+    "ref": "42363",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997299,
+  "lat": 41.4994309,
+  "lon": 2.1575615,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Rambla de Sant Esteve",
+    "name": "Punt Fresc",
+    "name:ca": "Punt Fresc",
+    "operator": "Punt Fresc",
+    "shop": "greengrocer"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997300,
+  "lat": 41.4984285,
+  "lon": 2.1581985,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "4",
+    "addr:street": "Rambla de Sant Esteve",
+    "name": "Pá Artesá del Vallés",
+    "opening_hours:signed": "no",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997302,
+  "lat": 41.4988584,
+  "lon": 2.1579773,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "12",
+    "addr:postcode": "08291",
+    "addr:street": "Rambla de Sant Esteve",
+    "mobile": "+34633787803",
+    "name": "Cafè 85º",
+    "operator": "Supan",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997308,
+  "lat": 41.4987599,
+  "lon": 2.1614668,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Carrer de Pau Casals",
+    "name": "Tutti Frutti",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997311,
+  "lat": 41.4997965,
+  "lon": 2.1622125,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Carrer de Pau Casals",
+    "brand": "Coaliment",
+    "brand:wikidata": "Q127503706",
+    "name": "Coaliment",
+    "operator": "CoAliment",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997312,
+  "lat": 41.4999674,
+  "lon": 2.1625195,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:full": "carrer Sant Andreu, 4",
+    "addr:housenumber": "4",
+    "addr:postcode": "08291",
+    "addr:street": "carrer Sant Andreu",
+    "alt_name": "Farmàcia López Martí, Ruth",
+    "amenity": "pharmacy",
+    "contact:phone": "+34936922336",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmacia Toledo",
+    "ref": "3623490",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:57:32 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997319,
+  "lat": 41.5055020,
+  "lon": 2.1552977,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Carrer del Puigmal",
+    "name": "Alimentació Pica d'Estats",
+    "name:ca": "Alimentació Pica d'Estats",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997320,
+  "lat": 41.5067134,
+  "lon": 2.1550689,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "23",
+    "addr:street": "Avinguda de Catalunya",
+    "brand": "Condis",
+    "brand:wikidata": "Q57417581",
+    "name": "Condis",
+    "operator": "Condis",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997746,
+  "lat": 41.4964363,
+  "lon": 2.1625469,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Rambla de Sant Jordi",
+    "brand": "Bonpreu",
+    "brand:wikidata": "Q11924747",
+    "brand:wikipedia": "ca:Grup Bon Preu",
+    "name": "Bonpreu",
+    "name:ca": "Bonpreu",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4908997753,
+  "lat": 41.4962917,
+  "lon": 2.1628474,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Rambla de Sant Jordi",
+    "name": "Supan",
+    "operator": "Supan",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 5169022109,
+  "lat": 41.4956283,
+  "lon": 2.1625320,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "4",
+    "addr:street": "Carrer de Rizal",
+    "name": "La Cantonada",
+    "name:ca": "La Cantonada",
+    "shop": "butcher"
+  }
+},
+{
+  "type": "node",
+  "id": 5169022115,
+  "lat": 41.4954560,
+  "lon": 2.1618719,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "1",
+    "addr:street": "Carrer de Rizal",
+    "name": "Pastisser David Roig",
+    "name:ca": "Pastisser David Roig",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 5169022116,
+  "lat": 41.4955521,
+  "lon": 2.1619375,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "1",
+    "addr:street": "Carrer de Rizal",
+    "amenity": "pharmacy",
+    "healthcare": "pharmacy",
+    "name": "Farmácia Rizal"
+  }
+},
+{
+  "type": "node",
+  "id": 5239649092,
+  "lat": 41.5019168,
+  "lon": 2.1581494,
+  "tags": {
+    "name": "Ali Alimentació",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5239649095,
+  "lat": 41.5024953,
+  "lon": 2.1585383,
+  "tags": {
+    "name": "Millenium Technology",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 5239649098,
+  "lat": 41.5027083,
+  "lon": 2.1574279,
+  "tags": {
+    "name": "Super Afores",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5239649101,
+  "lat": 41.5025172,
+  "lon": 2.1575647,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:full": "carrer Palau Ausit, 1",
+    "addr:housenumber": "1",
+    "addr:postcode": "08291",
+    "addr:street": "carrer Palau Ausit",
+    "alt_name": "Farmàcia Pijoan Mas, Montserrat",
+    "amenity": "pharmacy",
+    "contact:phone": "+34936917059",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmacia Els Pinetons",
+    "ref": "3621584",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:57:32 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 5239649108,
+  "lat": 41.5022342,
+  "lon": 2.1571597,
+  "tags": {
+    "name": "Centre d'Estètica Marga",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 5239649116,
+  "lat": 41.5025114,
+  "lon": 2.1576613,
+  "tags": {
+    "name": "terranova cnc 76",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 5239649117,
+  "lat": 41.5023587,
+  "lon": 2.1580877,
+  "tags": {
+    "name": "Finques Pinetons",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 5239650526,
+  "lat": 41.5021860,
+  "lon": 2.1579563,
+  "tags": {
+    "name": "Forn de pa Luna",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 5297391535,
+  "lat": 41.5062925,
+  "lon": 2.1550233,
+  "tags": {
+    "name": "El Rebost de l'Àngela",
+    "shop": "butcher"
+  }
+},
+{
+  "type": "node",
+  "id": 5557366104,
+  "lat": 41.4945978,
+  "lon": 2.1624891,
+  "tags": {
+    "name": "Tradys",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5594710184,
+  "lat": 41.4981240,
+  "lon": 2.1607922,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "39",
+    "addr:postcode": "08291",
+    "addr:street": "Carrer de Pau Casals",
+    "brand": "Condis",
+    "brand:wikidata": "Q57417581",
+    "description": "Condis express Ripollet: Es un supermercado moderno, pensado para responder en todo momento a tus necesidades. En Condis express queremos poner a tu disposición la posibilidad de hacer una compra íntegra a toda hora. / CUENTA CON SERVICIO A DOMICILIO.",
+    "name": "Condis",
+    "note": "DISPONE DE: Servicio a domicilio / Quesos / Charcuteria / Congelados / Carniceria / Panaderia / Frutas y Verduras / ETC. => ABIERTO: 365 días del año (de 09:00h a 23:00h).",
+    "opening_hours": "Mo-Su 09:00-23:00",
+    "operator": "Condis",
+    "payment:cash": "yes",
+    "payment:coins": "yes",
+    "payment:maestro": "yes",
+    "payment:mastercard": "yes",
+    "payment:visa": "yes",
+    "payment:visa_debit": "yes",
+    "shop": "supermarket",
+    "website": "https://www.condis.es/"
+  }
+},
+{
+  "type": "node",
+  "id": 5826870456,
+  "lat": 41.4960861,
+  "lon": 2.1634596,
+  "tags": {
+    "name": "Euroland",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5827095714,
+  "lat": 41.4970893,
+  "lon": 2.1606241,
+  "tags": {
+    "name": "pa artesà",
+    "name:ca": "pa artesà",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 5827095728,
+  "lat": 41.4969377,
+  "lon": 2.1578762,
+  "tags": {
+    "name": "Juma",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5827095733,
+  "lat": 41.4968184,
+  "lon": 2.1587098,
+  "tags": {
+    "addr:housenumber": "6",
+    "addr:street": "Carrer de la Lluna",
+    "amenity": "pharmacy",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "L'auditori"
+  }
+},
+{
+  "type": "node",
+  "id": 5827096601,
+  "lat": 41.4968984,
+  "lon": 2.1563406,
+  "tags": {
+    "amenity": "pharmacy",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Selva"
+  }
+},
+{
+  "type": "node",
+  "id": 5827096603,
+  "lat": 41.4967839,
+  "lon": 2.1565122,
+  "tags": {
+    "addr:housenumber": "5",
+    "addr:street": "Carrer del Calvari",
+    "brand": "Condis",
+    "brand:wikidata": "Q57417581",
+    "name": "Condis",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5827096853,
+  "lat": 41.5003597,
+  "lon": 2.1535672,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "2",
+    "addr:postcode": "08291",
+    "addr:street": "Carrer de Sant Josep",
+    "brand": "Condis",
+    "brand:wikidata": "Q57417581",
+    "name": "Condis",
+    "opening_hours": "Mo-Su 09:00-23:30",
+    "operator": "Condis",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5827209216,
+  "lat": 41.4952849,
+  "lon": 2.1566064,
+  "tags": {
+    "name": "Supermercat Ripollet",
+    "name:ca": "Supermercat Ripollet",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 5827209217,
+  "lat": 41.4953288,
+  "lon": 2.1587211,
+  "tags": {
+    "name": "Mundi",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 5827313414,
+  "lat": 41.4997373,
+  "lon": 2.1619556,
+  "tags": {
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 5827445871,
+  "lat": 41.4986920,
+  "lon": 2.1618666,
+  "tags": {
+    "name": "Frutería",
+    "shop": "greengrocer"
+  }
+},
+{
+  "type": "node",
+  "id": 6464745967,
+  "lat": 41.5015412,
+  "lon": 2.1599998,
+  "tags": {
+    "brand": "Caprabo",
+    "brand:wikidata": "Q1980781",
+    "brand:wikipedia": "en:Caprabo",
+    "name": "Caprabo",
+    "name:ca": "Caprabo",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 7063767280,
+  "lat": 41.4970053,
+  "lon": 2.1613054,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:postcode": "08291",
+    "addr:street": "Rambla de Sant Jordi",
+    "name": "Casa Ametller",
+    "name:ca": "Casa Ametller",
+    "operator": "Sense Intermediaris de Casa Ametller",
+    "shop": "greengrocer"
+  }
+},
+{
+  "type": "node",
+  "id": 7323611531,
+  "lat": 41.5012071,
+  "lon": 2.1537119,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:full": "carrer Sant Josep, 12-14",
+    "addr:housenumber": "12-14",
+    "addr:postcode": "08291",
+    "addr:street": "Carrer de Sant Josep",
+    "amenity": "pharmacy",
+    "contact:phone": "+34937683241",
+    "dispensing": "yes",
+    "name": "Farmàcia Caelles Franch, Mª Nieves",
+    "ref": "9943659",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:57:32 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7894239649,
+  "lat": 41.5019700,
+  "lon": 2.1526361,
+  "tags": {
+    "name": "Soni",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 7894239650,
+  "lat": 41.5019298,
+  "lon": 2.1543205,
+  "tags": {
+    "shop": "greengrocer"
+  }
+},
+{
+  "type": "node",
+  "id": 7894239662,
+  "lat": 41.5000636,
+  "lon": 2.1571905,
+  "tags": {
+    "name": "Grup la Granja",
+    "name:ca": "Grup la Granja",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 7981397995,
+  "lat": 41.4935138,
+  "lon": 2.1481318,
+  "tags": {
+    "name": "pollos planes",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 7981397996,
+  "lat": 41.4942692,
+  "lon": 2.1495775,
+  "tags": {
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 8513516308,
+  "lat": 41.5027914,
+  "lon": 2.1550419,
+  "tags": {
+    "addr:city": "ripollet",
+    "addr:housenumber": "44",
+    "addr:postcode": "08291",
+    "addr:street": "carrer Sant Salvador",
+    "name": "apassionat",
+    "opening_hours": "Mo-Fr 06:00-14:00",
+    "payment:coins": "yes",
+    "payment:mastercard": "yes",
+    "payment:notes": "yes",
+    "payment:visa": "yes",
+    "payment:visa_debit": "yes",
+    "payment:visa_electron": "yes",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 10298359207,
+  "lat": 41.4974192,
+  "lon": 2.1559438,
+  "tags": {
+    "name": "Alsina",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 10300692429,
+  "lat": 41.4952173,
+  "lon": 2.1594648,
+  "tags": {
+    "addr:housenumber": "101",
+    "addr:street": "Carrer del Calvari",
+    "name": "Call",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 10308902403,
+  "lat": 41.4960534,
+  "lon": 2.1551300,
+  "tags": {
+    "name": "Tandy",
+    "organic": "only",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 10308914424,
+  "lat": 41.4970993,
+  "lon": 2.1535906,
+  "tags": {
+    "name": "Bon Día",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 10308914460,
+  "lat": 41.4947796,
+  "lon": 2.1553659,
+  "tags": {
+    "name": "Botiga Galp",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 10312924136,
+  "lat": 41.4979774,
+  "lon": 2.1567782,
+  "tags": {
+    "name": "Johm",
+    "shop": "greengrocer"
+  }
+},
+{
+  "type": "node",
+  "id": 10315428811,
+  "lat": 41.4981416,
+  "lon": 2.1578152,
+  "tags": {
+    "amenity": "pharmacy",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia del Mercat"
+  }
+},
+{
+  "type": "node",
+  "id": 11539333169,
+  "lat": 41.5014971,
+  "lon": 2.1520302,
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "node",
+  "id": 11539339669,
+  "lat": 41.5044491,
+  "lon": 2.1551332,
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "node",
+  "id": 11539383070,
+  "lat": 41.5020387,
+  "lon": 2.1575015,
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "node",
+  "id": 12475375637,
+  "lat": 41.4983628,
+  "lon": 2.1583468,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "2",
+    "addr:street": "Rambla de Sant Esteve",
+    "name": "Macxipa",
+    "opening_hours:signed": "no",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "way",
+  "id": 196386746,
+  "center": {
+    "lat": 41.4952052,
+    "lon": 2.1553872
+  },
+  "tags": {
+    "brand": "Maxi Dia",
+    "brand:wikidata": "Q925132",
+    "brand:wikipedia": "es:Supermercados DIA",
+    "name": "Maxi Dia",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
+  "id": 346012093,
+  "center": {
+    "lat": 41.4956480,
+    "lon": 2.1532071
+  },
+  "tags": {
+    "access": "yes",
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 347397012,
+  "center": {
+    "lat": 41.5069138,
+    "lon": 2.1557687
+  },
+  "tags": {
+    "access": "yes",
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 347397013,
+  "center": {
+    "lat": 41.4995189,
+    "lon": 2.1568555
+  },
+  "tags": {
+    "leisure": "playground",
+    "name": "Plaça del Molí",
+    "name:ca": "Plaça del Molí"
+  }
+},
+{
+  "type": "way",
+  "id": 349575938,
+  "center": {
+    "lat": 41.4965848,
+    "lon": 2.1548920
+  },
+  "tags": {
+    "access": "yes",
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 435144674,
+  "center": {
+    "lat": 41.4956086,
+    "lon": 2.1543140
+  },
+  "tags": {
+    "brand": "Lidl",
+    "brand:website": "https://www.lidl.es",
+    "brand:wikidata": "Q151954",
+    "brand:wikipedia": "en:Lidl",
+    "building": "yes",
+    "name": "Lidl",
+    "opening_hours": "Mo-Sa 09:15-21:15",
+    "operator": "Lidl",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
+  "id": 448025368,
+  "center": {
+    "lat": 41.5090032,
+    "lon": 2.1513951
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 448025369,
+  "center": {
+    "lat": 41.5087940,
+    "lon": 2.1509810
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 593045144,
+  "center": {
+    "lat": 41.5020781,
+    "lon": 2.1533714
+  },
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "2",
+    "addr:postcode": "08291",
+    "addr:street": "Carrer del Pedraforca",
+    "brand": "Consum",
+    "brand:wikidata": "Q8350308",
+    "brand:wikipedia": "es:Consum",
+    "building": "yes",
+    "name": "Consum",
+    "name:ca": "Consum",
+    "opening_hours": "Mo-Sa 09:00-21:30",
+    "operator": "Consum",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
+  "id": 614226550,
+  "center": {
+    "lat": 41.5004660,
+    "lon": 2.1591257
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 754115873,
+  "center": {
+    "lat": 41.5026958,
+    "lon": 2.1530791
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 755443026,
+  "center": {
+    "lat": 41.4948581,
+    "lon": 2.1628032
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 755443028,
+  "center": {
+    "lat": 41.4952382,
+    "lon": 2.1623542
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 766319201,
+  "center": {
+    "lat": 41.5053228,
+    "lon": 2.1532105
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 822888267,
+  "center": {
+    "lat": 41.5044052,
+    "lon": 2.1508540
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 1126081710,
+  "center": {
+    "lat": 41.4946056,
+    "lon": 2.1597573
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 1128072913,
+  "center": {
+    "lat": 41.4984544,
+    "lon": 2.1570503
+  },
+  "tags": {
+    "amenity": "marketplace",
+    "building": "commercial",
+    "layer": "-1",
+    "name": "Mercat Municipal de Ripollet"
+  }
+},
+{
+  "type": "way",
+  "id": 1128299661,
+  "center": {
+    "lat": 41.4982315,
+    "lon": 2.1579787
+  },
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "way",
+  "id": 1219309460,
+  "center": {
+    "lat": 41.4943804,
+    "lon": 2.1568866
+  },
+  "tags": {
+    "brand": "Mercadona",
+    "brand:wikidata": "Q377705",
+    "building": "yes",
+    "name": "Mercadona",
+    "shop": "supermarket"
+  }
+}
+
+  ]
+}

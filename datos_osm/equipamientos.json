@@ -1,0 +1,607 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-25T11:17:35Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1278038199,
+  "lat": 41.5062823,
+  "lon": 2.1545415,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "18",
+    "addr:postcode": "08291",
+    "addr:street": "Avinguda de Catalunya",
+    "amenity": "clinic",
+    "emergency": "no",
+    "name": "Centre d'Atenció Primària Pinetons",
+    "phone": "+34 935946537",
+    "short_name": "CAP Pinetons",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5169022112,
+  "lat": 41.4958514,
+  "lon": 2.1624514,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "5",
+    "addr:street": "Carrer de Rizal",
+    "amenity": "kindergarten",
+    "education": "kindergarten",
+    "name": "Llar d'infants Somnis",
+    "ref": "8074941"
+  }
+},
+{
+  "type": "node",
+  "id": 5239650522,
+  "lat": 41.5025817,
+  "lon": 2.1574869,
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "Vallès Dental",
+    "name:ca": "Vallès Dental"
+  }
+},
+{
+  "type": "node",
+  "id": 5239650525,
+  "lat": 41.5022180,
+  "lon": 2.1578088,
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Yessi"
+  }
+},
+{
+  "type": "node",
+  "id": 5557365345,
+  "lat": 41.5014482,
+  "lon": 2.1562556,
+  "tags": {
+    "amenity": "doctors",
+    "healthcare": "doctor",
+    "name": "CM Les Moreres"
+  }
+},
+{
+  "type": "node",
+  "id": 5557365404,
+  "lat": 41.5027165,
+  "lon": 2.1603536,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:postcode": "08291",
+    "addr:street": "Carrer de Federico García Lorca",
+    "amenity": "doctors",
+    "healthcare": "doctor",
+    "healthcare:speciality": "rehabilitation",
+    "name": "CMC Ripollet",
+    "operator": "Centre de Medicina Correctiva"
+  }
+},
+{
+  "type": "node",
+  "id": 5658573414,
+  "lat": 41.5018618,
+  "lon": 2.1528996,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:postcode": "08291",
+    "addr:street": "Carrer del Pedraforca",
+    "amenity": "school",
+    "education": "school",
+    "name": "campus ítaca"
+  }
+},
+{
+  "type": "node",
+  "id": 5827096600,
+  "lat": 41.4969145,
+  "lon": 2.1567993,
+  "tags": {
+    "addr:housenumber": "5-7",
+    "addr:street": "Carrer del Calvari",
+    "amenity": "community_centre",
+    "community_centre": "youth_centre",
+    "name": "Centre Obert La Placeta"
+  }
+},
+{
+  "type": "node",
+  "id": 6401964299,
+  "lat": 41.4973157,
+  "lon": 2.1549414,
+  "tags": {
+    "amenity": "social_facility",
+    "contact:email": "siad@ripollet.cat",
+    "contact:phone": "+34 935 046040",
+    "name": "Servei d'informació i atenció a les dones (SIAD)",
+    "operator": "Ajuntament de Ripollet",
+    "social_facility:for": "woman",
+    "source": "Generalitat de Catalunya",
+    "source:date": "2018-05-03"
+  }
+},
+{
+  "type": "node",
+  "id": 6939215934,
+  "lat": 41.5025512,
+  "lon": 2.1602297,
+  "tags": {
+    "amenity": "social_facility",
+    "name": "Centre de dia Can Vargas",
+    "social_facility": "group_home",
+    "social_facility:for": "senior"
+  }
+},
+{
+  "type": "node",
+  "id": 7163683585,
+  "lat": 41.5068968,
+  "lon": 2.1561742,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:postcode": "08291",
+    "addr:street": "Rambla de les Vinyes",
+    "amenity": "doctors",
+    "healthcare": "doctor",
+    "name": "Estética y bienestar desde el Alma",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 7184809146,
+  "lat": 41.4935484,
+  "lon": 2.1489550,
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:postcode": "08291",
+    "addr:street": "Avinguda Creu Roja",
+    "amenity": "community_centre",
+    "name": "Casal Cívic (en obres)"
+  }
+},
+{
+  "type": "node",
+  "id": 8191001268,
+  "lat": 41.4968685,
+  "lon": 2.1544620,
+  "tags": {
+    "amenity": "community_centre",
+    "name": "Centre Cívic Maragall"
+  }
+},
+{
+  "type": "node",
+  "id": 8303455022,
+  "lat": 41.4953633,
+  "lon": 2.1535508,
+  "tags": {
+    "addr:street": "Carrer Can Masachs",
+    "amenity": "social_facility",
+    "name": "Oficina Drets Socials",
+    "operator": "Ajuntament de Ripollet"
+  }
+},
+{
+  "type": "node",
+  "id": 8303455023,
+  "lat": 41.4972853,
+  "lon": 2.1549801,
+  "tags": {
+    "amenity": "social_facility",
+    "name": "Serveis Socials - Salut - OMIC",
+    "operator": "Ajuntament de Ripollet"
+  }
+},
+{
+  "type": "node",
+  "id": 10295332358,
+  "lat": 41.4970618,
+  "lon": 2.1583467,
+  "tags": {
+    "amenity": "community_centre",
+    "name": "Associació d'Espectadors del Teatre del Mercat Vell"
+  }
+},
+{
+  "type": "node",
+  "id": 10311434589,
+  "lat": 41.4971941,
+  "lon": 2.1586346,
+  "tags": {
+    "addr:housenumber": "32",
+    "addr:street": "Carrer Monturiol",
+    "amenity": "community_centre",
+    "name": "El Local",
+    "name:ca": "El Local",
+    "network": "Casals i Ateneus dels Països Catalans",
+    "network:website": "https://www.casalsiateneus.cat",
+    "network:wikidata": "Q119411870"
+  }
+},
+{
+  "type": "way",
+  "id": 191297246,
+  "center": {
+    "lat": 41.5059230,
+    "lon": 2.1526825
+  },
+  "tags": {
+    "amenity": "kindergarten",
+    "education": "kindergarten",
+    "name": "Escola Bressol La Verema",
+    "name:ca": "Escola Bressol La Verema",
+    "ref": "8070337"
+  }
+},
+{
+  "type": "way",
+  "id": 191499468,
+  "center": {
+    "lat": 41.5056865,
+    "lon": 2.1533643
+  },
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "16",
+    "addr:postcode": "08291",
+    "addr:street": "Avinguda de Catalunya",
+    "amenity": "school",
+    "education": "school",
+    "member_of": "Xarxa de Ràdios Escolars",
+    "name": "Institut Escola Els Pinetons",
+    "ref": "8076583",
+    "wikidata": "Q111261127"
+  }
+},
+{
+  "type": "way",
+  "id": 193804956,
+  "center": {
+    "lat": 41.5052831,
+    "lon": 2.1543421
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Escola Josep Maria Ginesta",
+    "name:ca": "Escola Josep Maria Ginesta",
+    "ref": "8023554",
+    "wikidata": "Q111338767"
+  }
+},
+{
+  "type": "way",
+  "id": 196386733,
+  "center": {
+    "lat": 41.4965062,
+    "lon": 2.1534330
+  },
+  "tags": {
+    "amenity": "townhall",
+    "building": "yes",
+    "contact:phone": "+34935046000",
+    "contact:website": "https://www.ripollet.cat/",
+    "name": "Ajuntament de Ripollet",
+    "old_name": "Can Masachs",
+    "wheelchair": "yes",
+    "wikidata": "Q20985207",
+    "wikimedia_commons": "Category:Can Masachs (Ripollet)",
+    "wikipedia": "ca:Can Masachs"
+  }
+},
+{
+  "type": "way",
+  "id": 196386735,
+  "center": {
+    "lat": 41.4964123,
+    "lon": 2.1530429
+  },
+  "tags": {
+    "amenity": "library",
+    "building": "yes",
+    "name": "Biblioteca Pública Ripollet",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 196386745,
+  "center": {
+    "lat": 41.4976430,
+    "lon": 2.1524414
+  },
+  "tags": {
+    "amenity": "police",
+    "building": "public",
+    "name": "Policia Municipal Ripollet",
+    "name:ca": "Policia Municipal Ripollet"
+  }
+},
+{
+  "type": "way",
+  "id": 196386767,
+  "center": {
+    "lat": 41.4974677,
+    "lon": 2.1524323
+  },
+  "tags": {
+    "amenity": "police",
+    "name": "Protecció civil",
+    "name:ca": "Protecció civil"
+  }
+},
+{
+  "type": "way",
+  "id": 196557302,
+  "center": {
+    "lat": 41.4965069,
+    "lon": 2.1517172
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Institut Lluís Companys",
+    "name:ca": "Institut Lluís Companys",
+    "name:etymology:wikidata": "Q7981",
+    "ref": "8037206",
+    "wikidata": "Q111261214"
+  }
+},
+{
+  "type": "way",
+  "id": 348782600,
+  "center": {
+    "lat": 41.4970081,
+    "lon": 2.1522232
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Escola Francesc Escursell i Bartalot",
+    "ref": "8038156",
+    "wikidata": "Q111339090"
+  }
+},
+{
+  "type": "way",
+  "id": 499652294,
+  "center": {
+    "lat": 41.5000906,
+    "lon": 2.1616001
+  },
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:street": "Carrer del Padró",
+    "amenity": "school",
+    "education": "school",
+    "name": "Escola Gassó i Vidal",
+    "name:ca": "Escola Gassó i Vidal",
+    "ref": "8023426",
+    "wikidata": "Q111338763"
+  }
+},
+{
+  "type": "way",
+  "id": 521049783,
+  "center": {
+    "lat": 41.5010498,
+    "lon": 2.1639586
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Escola Enric Tatché i Pol",
+    "name:ca": "Escola Enric Tatché i Pol",
+    "ref": "8033948",
+    "wikidata": "Q111338994"
+  }
+},
+{
+  "type": "way",
+  "id": 521049801,
+  "center": {
+    "lat": 41.5021354,
+    "lon": 2.1509966
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Institut Palau Ausit",
+    "name:ca": "Institut Palau Ausit",
+    "ref": "8035295",
+    "wheelchair": "yes",
+    "wikidata": "Q111261267"
+  }
+},
+{
+  "type": "way",
+  "id": 521049802,
+  "center": {
+    "lat": 41.4999047,
+    "lon": 2.1528754
+  },
+  "tags": {
+    "amenity": "kindergarten",
+    "education": "kindergarten",
+    "name": "Escola Bressol La Rodeta del Molí",
+    "name:ca": "Escola Bressol La Rodeta del Molí",
+    "ref": "8064556"
+  }
+},
+{
+  "type": "way",
+  "id": 521049805,
+  "center": {
+    "lat": 41.4991843,
+    "lon": 2.1562944
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "Escola Anselm Clavé",
+    "name:etymology:wikidata": "Q2335557",
+    "ref": "8023566",
+    "wikidata": "Q111338768"
+  }
+},
+{
+  "type": "way",
+  "id": 561808417,
+  "center": {
+    "lat": 41.4952846,
+    "lon": 2.1599689
+  },
+  "tags": {
+    "amenity": "clinic",
+    "building": "yes",
+    "healthcare": "hospital",
+    "healthcare:speciality": "general",
+    "name": "Centre d'Atenció Primària I Ripollet",
+    "short_name": "CAP I Ripollet"
+  }
+},
+{
+  "type": "way",
+  "id": 568526630,
+  "center": {
+    "lat": 41.4941927,
+    "lon": 2.1493412
+  },
+  "tags": {
+    "amenity": "clinic",
+    "building": "yes",
+    "healthcare": "clinic",
+    "name": "Creu Roja",
+    "name:ca": "Creu Roja"
+  }
+},
+{
+  "type": "way",
+  "id": 579317175,
+  "center": {
+    "lat": 41.5028012,
+    "lon": 2.1536343
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "San Juan de la Cruz",
+    "ref": "8023487",
+    "wikidata": "Q111595432"
+  }
+},
+{
+  "type": "way",
+  "id": 613445678,
+  "center": {
+    "lat": 41.4979242,
+    "lon": 2.1585888
+  },
+  "tags": {
+    "amenity": "community_centre",
+    "building": "public",
+    "community_centre:for": "juvenile",
+    "name": "Cal Teixell"
+  }
+},
+{
+  "type": "way",
+  "id": 653461184,
+  "center": {
+    "lat": 41.4979400,
+    "lon": 2.1533163
+  },
+  "tags": {
+    "amenity": "community_centre",
+    "building": "public",
+    "name": "Centre cívic Can Calvet"
+  }
+},
+{
+  "type": "way",
+  "id": 754115862,
+  "center": {
+    "lat": 41.4978265,
+    "lon": 2.1540058
+  },
+  "tags": {
+    "amenity": "school",
+    "education": "school",
+    "name": "FEDAC-Ripollet",
+    "ref": "8023463",
+    "wikidata": "Q111595430"
+  }
+},
+{
+  "type": "way",
+  "id": 814158481,
+  "center": {
+    "lat": 41.5013189,
+    "lon": 2.1571760
+  },
+  "tags": {
+    "amenity": "school",
+    "building": "school",
+    "education": "school",
+    "layer": "1",
+    "name": "CFA Jaume Tuset",
+    "ref": "8055397"
+  }
+},
+{
+  "type": "way",
+  "id": 1290647027,
+  "center": {
+    "lat": 41.4972077,
+    "lon": 2.1619278
+  },
+  "tags": {
+    "addr:city": "Ripollet",
+    "addr:housenumber": "78",
+    "addr:postcode": "08291",
+    "addr:street": "Carrer de Tamarit",
+    "amenity": "police",
+    "building": "yes",
+    "layer": "1",
+    "name": "Policia Nacional",
+    "operator": "Cuerpo Nacional de Policía",
+    "operator:en": "National Police Corps",
+    "operator:es": "Cuerpo Nacional de Policía",
+    "operator:short": "CNP",
+    "operator:wikidata": "Q1143194"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921744,
+  "center": {
+    "lat": 41.4944458,
+    "lon": 2.1496078
+  },
+  "tags": {
+    "amenity": "community_centre",
+    "building": "yes",
+    "community_centre": "cultural_centre",
+    "name": "Celler Cooperatiu de Ripollet",
+    "name:ca": "Celler Cooperatiu de Ripollet",
+    "wikidata": "Q133872857",
+    "wikipedia": "ca:Celler Cooperatiu de Ripollet"
+  }
+}
+
+  ]
+}

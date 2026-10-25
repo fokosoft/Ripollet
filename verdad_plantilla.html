@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Simulación de referencia</title>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<pre id="registro">Simulando…</pre>
+<script type="module">
+// Simula los escenarios de lluvia uniforme y deja la profundidad máxima de cada celda en window.__verdad
+// (entrenar_neutro.mjs la recoge con el protocolo de depuración de Chrome).
+import * as THREE from "three";
+import { GPUComputationRenderer } from "three/addons/misc/GPUComputationRenderer.js";
+/*__MODULOS__*/
+const DATOS = __DATOS__;
+const BLOBS = __BLOBS__;
+const anotar = (t) => { document.getElementById("registro").textContent += "\n" + t; };
+const aBase64 = (u8) => {
+  let s = "";
+  for (let k = 0; k < u8.length; k += 0x8000) s += String.fromCharCode(...u8.subarray(k, k + 0x8000));
+  return btoa(s);
+};
+
+const d = await cargarDatos(DATOS, BLOBS);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(64, 64);
+const sim = crearSimulacion(renderer, DATOS.sim, d.codigos, crearAltura(d.terreno), d.suelo4m);
+const resultados = {};
+for (const mmh of INTENSIDADES) {
+  const t0 = performance.now();
+  sim.secar();
+  sim.lluviaGlobal = mmh;
+  const pasosLluvia = DURACION_LLUVIA / DT_SIM, pasos = (DURACION_LLUVIA + DURACION_ESCORRENTIA) / DT_SIM;
+  for (let p = 0; p < pasos; p++) {
+    if (p === pasosLluvia) sim.lluviaGlobal = 0;
+    sim.paso();
+    if (p % 600 === 599) { sim.leer(); await new Promise((r) => setTimeout(r, 0)); }   // espera a la GPU
+  }
+  const { maxima } = sim.leer();
+  resultados[mmh] = aBase64(new Uint8Array(Uint16Array.from(maxima, (v) => Math.min(65535, Math.round(v * 100))).buffer));
+  const n = maxima.reduce((a, v) => a + (v >= 0.3), 0);
+  anotar(`${mmh} mm/h: ${((performance.now() - t0) / 1000).toFixed(1)} s · celdas ≥ 30 cm: ${n}`);
+}
+window.__verdad = { listo: true, resultados };
+anotar("LISTO");
+</script>
+</body>
+</html>

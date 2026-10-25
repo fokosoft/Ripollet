@@ -1,0 +1,1951 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ripollet: risc d'inundació</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #bfe0f5; font-family: system-ui, sans-serif;
+               touch-action: none; user-select: none; }
+  .panel { position: fixed; top: 12px; left: 12px; right: 12px; max-width: 460px; padding: 10px 14px;
+           background: rgba(0,0,0,.6); color: #fff; border-radius: 8px; font-size: 14px; line-height: 1.4; }
+  .panel b { color: #ffd166; }
+  .botones { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  button { font: inherit; font-size: 13px; padding: 5px 10px; border: 0; border-radius: 6px; cursor: pointer;
+           background: rgba(255,255,255,.18); color: #fff; }
+  button:hover { background: #2f5fa8; }
+  button.principal { background: #d64545; font-weight: 600; }
+  #idioma { float: right; font-weight: 700; padding: 2px 8px; }
+  #hud, #lluvia, #riesgo { display: none; }
+  #lluvia, #riesgo, .herramienta { left: auto; right: 12px; max-width: 360px; max-height: calc(100vh - 40px); overflow: auto; }
+  .herramienta { display: none; }
+  .herramienta label { display: block; margin-top: 8px; }
+  .herramienta ol, .herramienta ul { margin: 6px 0 0; padding-left: 20px; }
+  .herramienta li[data-x] { cursor: pointer; }
+  .leyenda { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; margin-top: 6px; }
+  .leyenda i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; vertical-align: -2px; }
+  #lluvia label, #riesgo label { display: block; margin-top: 8px; }
+  input[type=range] { width: 100%; }
+  select { font: inherit; font-size: 13px; margin-left: 4px; max-width: 100%; }
+  .valor { color: #9fd3ff; }
+  .nota { font-size: 12px; opacity: .8; margin-top: 8px; }
+  #tormentas, #listaPuntos, #listaEquip { margin: 6px 0 0; padding-left: 20px; }
+  #tormentas button { padding: 0 6px; margin-left: 6px; }
+  #listaPuntos li { cursor: pointer; }
+  #listaPuntos li:hover { color: #ffd166; }
+  .resumen { margin-top: 8px; padding: 6px 8px; background: rgba(255,255,255,.08); border-radius: 6px; }
+  .c1 { color: #ffd166; } .c2 { color: #ff7b7b; }
+  #velocidad { position: fixed; right: 16px; bottom: 34px; padding: 8px 16px; border-radius: 10px;
+               background: rgba(0,0,0,.6); color: #fff; font-size: 28px; font-weight: 700; display: none; }
+  #velocidad small { font-size: 14px; font-weight: 400; opacity: .8; }
+  #tactil { position: fixed; left: 0; right: 0; bottom: 16px; display: none; justify-content: space-between;
+            padding: 0 16px; pointer-events: none; }
+  #tactil div { display: flex; gap: 10px; pointer-events: auto; }
+  #tactil button { width: 64px; height: 64px; font-size: 26px; border-radius: 50%; background: rgba(0,0,0,.45); }
+  .etiqueta { padding: 3px 8px; border-radius: 10px; background: rgba(20,30,50,.75); color: #fff;
+              font-size: 13px; white-space: nowrap; pointer-events: none; }
+  .marca { width: 24px; height: 24px; border-radius: 50%; background: #d7263d; color: #fff; font: 700 13px system-ui;
+           display: grid; place-items: center; border: 2px solid #fff; cursor: pointer; pointer-events: auto; }
+  details { margin-top: 10px; padding: 6px 8px; background: rgba(255,255,255,.06); border-radius: 6px; }
+  summary { cursor: pointer; color: #ffd166; font-weight: 600; }
+  button.activo { background: #2f9e5a; }
+  input[type=text], input[type=date] { font: inherit; font-size: 13px; padding: 2px 4px; }
+  #listaMedidas, #listaIncidencias { margin: 6px 0 0; padding-left: 20px; }
+  #listaMedidas button, #listaIncidencias button { padding: 0 6px; margin-left: 6px; }
+  #listaIncidencias li { cursor: pointer; }
+  .pin { width: 14px; height: 14px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid #fff;
+         pointer-events: auto; cursor: pointer; }
+  .icono { font-size: 18px; pointer-events: none; text-shadow: 0 0 3px #000; }
+  #explicacion { position: fixed; left: 12px; bottom: 34px; max-width: 420px; display: none; top: auto; right: auto; }
+  #explicacion ul { margin: 6px 0; padding-left: 18px; }
+  #cargando { position: fixed; inset: 0; display: grid; place-items: center; background: #bfe0f5; color: #234;
+              font-size: 18px; z-index: 10; }
+  #medicion { position: fixed; inset: 0; margin: auto; width: min(640px, calc(100vw - 32px)); height: fit-content;
+              max-height: calc(100vh - 40px); overflow: auto; display: none; top: 0; left: 0; right: 0; bottom: 0; }
+  #medicion table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
+  #medicion td, #medicion th { border-bottom: 1px solid rgba(255,255,255,.2); padding: 4px 6px; text-align: right; }
+  #medicion td:first-child, #medicion th:first-child { text-align: left; }
+  #grano { position: fixed; inset: 0; pointer-events: none; opacity: 0; mix-blend-mode: multiply; transition: opacity .4s;
+           background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  body.arte #grano { opacity: .3; }
+  #osm { position: fixed; right: 8px; bottom: 6px; font-size: 12px; color: #234; background: rgba(255,255,255,.7);
+         padding: 2px 6px; border-radius: 4px; }
+  #osm a { color: inherit; }
+  #informe { display: none; }
+  /* MAQUETA PÍXEL: interfaz clara con letra de píxel (como un diorama de pixel art) */
+  body.claro, body.claro #cargando { background: #eef0f4; }
+  body.claro .panel { background: rgba(251,251,253,.95); color: #1d2230; border: 1px solid #d6d9e0; border-radius: 3px;
+                      box-shadow: 0 3px 0 rgba(20,24,40,.08); }
+  body.claro .panel b, body.claro .c1, body.claro #listaPuntos li:hover { color: #b4441f; }
+  body.claro summary { color: #1d2230; font: 400 11px "Silkscreen", monospace; text-transform: uppercase; letter-spacing: .05em; }
+  body.claro .panel > b:first-child { font: 400 13px "Silkscreen", monospace; text-transform: uppercase; color: #1d2230; }
+  body.claro button { background: #fff; color: #1d2230; border: 1px solid #cdd1da; border-radius: 2px; }
+  body.claro button:hover { background: #e9ecf2; }
+  body.claro button.principal { background: #16181d; color: #fff; border-color: #16181d; }
+  body.claro button.activo { background: #2f9e5a; color: #fff; }
+  body.claro details, body.claro .resumen { background: #f3f4f7; border: 1px solid #e3e5eb; border-radius: 2px; }
+  body.claro .valor { color: #1f5fa8; } body.claro .c2 { color: #c62828; }
+  body.claro .etiqueta { background: #fff; color: #1d2230; border: 2px solid #1d2230; border-radius: 0;
+                         font: 400 10px "Silkscreen", monospace; text-transform: uppercase; }
+  body.claro #velocidad { background: #16181d; font-family: "Silkscreen", monospace; }
+  body.claro #osm { background: rgba(255,255,255,.9); }
+  body.claro #medicion td, body.claro #medicion th { border-bottom-color: #dde0e6; }
+  .tituloPixel { display: none; }
+  body.claro .tituloPixel { display: block; }
+  body.claro .tituloPixel small { font: 400 9px "Silkscreen", monospace; letter-spacing: .12em; color: #6b7184; }
+  body.claro .tituloPixel div { font: 700 30px/1 "Silkscreen", monospace; color: #16181d; margin: 2px 0 4px; letter-spacing: .02em; }
+  body.claro #idioma { position: relative; }
+  body.claro #mapa { max-width: 400px; font-size: 13px; }
+  body.claro #mapa .botones button { padding: 4px 8px; }
+  #vista { margin-top: 8px; }
+  #vista label { display: inline-block; margin-right: 10px; font-size: 13px; }
+  @media (max-width: 760px) {
+    #lluvia, #riesgo, .herramienta { top: auto; bottom: 12px; left: 12px; right: 12px; max-width: none; max-height: 45vh; }
+  }
+  @media print {
+    html, body { overflow: visible; height: auto; background: #fff; }
+    body > *:not(#informe) { display: none !important; }
+    #informe { display: block; color: #000; font: 11pt/1.4 system-ui, sans-serif; }
+    #informe h1 { font-size: 17pt; margin: 0 0 4px; }
+    #informe h2 { font-size: 12pt; margin: 14px 0 4px; border-bottom: 1px solid #999; }
+    #informe img { width: 100%; border: 1px solid #ccc; }
+    #informe table { border-collapse: collapse; width: 100%; }
+    #informe td, #informe th { border-bottom: 1px solid #ccc; padding: 2px 4px; text-align: left; }
+    #informe .aviso { border: 1px solid #c00; padding: 6px; margin-top: 10px; }
+  }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="cargando" data-t="cargando"></div>
+<div id="mapa" class="panel"><button id="idioma"></button>
+<div class="tituloPixel"><small data-t="kicker"></small><div>Ripollet</div></div><span data-t="titulo"></span><br>
+<span data-t="ayudaMapa"></span>
+<div id="tiempoReal"></div>
+<div id="trafico"></div>
+<div class="botones"><button class="principal" id="conducir" data-t="conducir"></button>
+<button class="principal" id="abrirRiesgo" style="background:#b8326a" data-t="riesgo"></button>
+<button class="principal" id="abrirLluvia" style="background:#3b6fb6" data-t="lluvia"></button>
+<button class="principal" id="arte" style="background:#e0703a"></button></div>
+<div class="botones" id="herramientas"></div>
+<div class="botones" id="ir"></div>
+<details id="vista"></details></div>
+
+<div id="hud" class="panel"><span data-t="hud1"></span><br><span data-t="hud2"></span>
+<div class="botones"><button id="camara" data-t="camara"></button><button id="reiniciar" data-t="salida"></button>
+<button id="arteCoche" data-t="estiloV"></button><button id="salir" data-t="salir"></button></div></div>
+<div id="velocidad">0 <small>km/h</small></div>
+<div id="tactil"><div><button data-tecla="ArrowLeft">◀</button><button data-tecla="ArrowRight">▶</button></div>
+<div><button data-tecla="ArrowDown">▼</button><button data-tecla="ArrowUp">▲</button></div></div>
+
+<div id="lluvia" class="panel"><b data-t="tituloLluvia"></b>
+<button class="cerrar" style="float:right">✕</button><br><span data-t="ayudaLluvia"></span>
+<label><span data-t="intensidad"></span>: <span class="valor" id="vIntensidad"></span>
+<input type="range" id="intensidad" min="10" max="300" step="10" value="100"></label>
+<label><span data-t="radio"></span>: <span class="valor" id="vRadio"></span>
+<input type="range" id="radio" min="50" max="600" step="10" value="200"></label>
+<label><span data-t="velocidadSim"></span>: <span class="valor" id="vPasos"></span>
+<input type="range" id="pasos" min="1" max="80" value="24"></label>
+<label><span data-t="ver"></span>: <select id="vista"><option value="0" data-t="aguaAhora"></option>
+<option value="1" data-t="inundMax"></option></select></label>
+<ol id="tormentas"></ol>
+<div class="botones"><button id="colocar" class="principal"></button><button id="pausa"></button>
+<button id="quitar" data-t="quitar"></button><button id="secar" data-t="secar"></button></div>
+<div id="estadoLluvia" class="nota"></div></div>
+
+<div id="riesgo" class="panel"><b data-t="tituloRiesgo"></b>
+<button class="cerrar" style="float:right">✕</button><br><span data-t="queEs"></span>
+<label><span data-t="escenario"></span> <select id="escenario"></select></label>
+<label><span data-t="fuente"></span> <select id="fuente"><option value="fisica" data-t="fuenteFisica"></option>
+<option value="neutro" data-t="fuenteNeutro"></option></select></label>
+<label id="filaOficial"><input type="checkbox" id="verOficial"> <span data-t="verOficial"></span></label>
+<div class="resumen" id="resumenRiesgo"></div>
+<div style="margin-top:8px"><b data-t="puntos"></b></div><ol id="listaPuntos"></ol>
+<div style="margin-top:8px"><b data-t="equipamientos"></b></div><ul id="listaEquip"></ul>
+<div class="botones"><button id="comprobar"></button><button id="imprimir" data-t="informe"></button>
+<button id="verMedicion" data-t="medicion"></button></div>
+<div id="estadoComprobacion" class="nota"></div>
+
+<details id="medidas"><summary data-t="tituloMedidas"></summary>
+<div class="nota" data-t="ayudaMedidas"></div>
+<div class="botones"><button data-herr="deposito" data-t="hDeposito"></button>
+<button data-herr="permeable" data-t="hPermeable"></button><button data-herr="imbornal" data-t="hImbornal"></button></div>
+<label><span data-t="radioMedida"></span>: <span class="valor" id="vRadioMedida"></span>
+<input type="range" id="radioMedida" min="10" max="120" step="5" value="30"></label>
+<label><span id="nombreValorMedida"></span>: <span class="valor" id="vValorMedida"></span>
+<input type="range" id="valorMedida"></label>
+<label><span data-t="alcantarillado"></span>: <span class="valor" id="vAlcantarillado"></span>
+<input type="range" id="alcantarillado" min="0" max="40" step="5" value="0"></label>
+<ol id="listaMedidas"></ol>
+<div class="botones"><button id="simularMedidas" class="principal" data-t="simularMedidas"></button>
+<button id="quitarMedidas" data-t="quitarMedidas"></button></div>
+<div id="estadoMedidas" class="nota"></div></details>
+
+<details id="incidencias"><summary data-t="tituloIncidencias"></summary>
+<div class="nota" data-t="ayudaIncidencias"></div>
+<label><span data-t="gravedad"></span> <select id="incGravedad"><option value="2" data-t="incInundado"></option>
+<option value="1" data-t="incCharco"></option></select></label>
+<label><span data-t="lluviaEpisodio"></span> <select id="incIntensidad"></select></label>
+<label><span data-t="fecha"></span> <input type="date" id="incFecha"></label>
+<label><span data-t="nota"></span> <input type="text" id="incNota" maxlength="120" style="width:95%"></label>
+<div class="botones"><button id="incMarcar" class="principal"></button><button id="incExportar" data-t="exportar"></button>
+<button id="incImportar" data-t="importar"></button><input type="file" id="incArchivo" accept=".json,application/json" hidden></div>
+<ol id="listaIncidencias"></ol>
+<div id="estadoIncidencias" class="nota"></div></details>
+<div class="nota" data-t="aviso"></div></div>
+
+<div id="explicacion" class="panel"></div>
+<div id="medicion" class="panel"></div>
+<div id="informe"></div>
+<div id="grano"></div>
+<div id="osm">© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ICGC · AMB · Catastro · <a href="https://open-meteo.com" target="_blank">Open-Meteo</a></div>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { MapControls } from "three/addons/controls/MapControls.js";
+import { CSS2DRenderer, CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
+import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+import { GPUComputationRenderer } from "three/addons/misc/GPUComputationRenderer.js";
+/*__MODULOS__*/
+// ===== visor =====
+const DATOS = __DATOS__;          // lugares, equipamientos, calles, tamaños (datos_visor/datos.json)
+const BLOBS = __BLOBS__;          // binarios comprimidos (null en la versión web: se piden aparte)
+const GLB = "__GLB__";
+const MEMORIA = __MEMORIA__;      // lo que aprendió Neutro (entrenar_neutro.mjs)
+const MEDICION = __MEDICION__;    // cómo se midió Neutro frente a un rival clásico
+const $ = (id) => document.getElementById(id);
+
+// ------------------------------------------------------------ idiomas (castellano / catalán)
+const TEXTOS = {
+  es: {
+    cargando: "Cargando Ripollet…",
+    titulo: "<b>Ripollet</b>: del centro a Pinetons, generado en Blender desde OpenStreetMap.",
+    ayudaMapa: "Arrastra para moverte · clic derecho para girar · rueda para zoom",
+    conducir: "🚗 Conducir", lluvia: "🌧 Lluvia", riesgo: "⚠️ Riesgo de inundación",
+    estiloArte: "🎨 Estilo artístico", estiloReal: "🏙 Estilo realista",
+    hud1: "<b>Conduciendo</b> · W/↑ acelerar · S/↓ frenar y marcha atrás · A D/← → girar",
+    hud2: "Espacio freno de mano · Shift turbo · C cámara · R volver a la salida",
+    camara: "Cámara (C)", salida: "Salida (R)", estiloV: "🎨 Estilo (V)", salir: "Salir del coche (Esc)",
+    tituloLluvia: "🌧 Simulación de lluvia",
+    ayudaLluvia: "Haz clic en el mapa para colocar una tormenta. El agua corre según el relieve real y los edificios.",
+    intensidad: "Intensidad", radio: "Radio de la tormenta", velocidadSim: "Velocidad", ver: "Ver",
+    aguaAhora: "Agua ahora", inundMax: "Inundación máxima alcanzada",
+    colocar: "Colocar con clic: {0}", si: "sí", no: "no", pausa: "⏸ Pausa", seguir: "▶ Seguir",
+    quitar: "Quitar tormentas", secar: "Secar todo", quitarEsta: "Quitar esta tormenta",
+    categorias: ["moderada", "fuerte", "muy fuerte", "torrencial"],
+    minPorSeg: "≈ {0} min simulados por segundo",
+    estadoLluvia: "Tiempo simulado: {0} h {1} min · agua caída: {2} m³", enPausa: " · en pausa",
+    tormentaItem: "{0} mm/h · radio {1} m",
+    tituloRiesgo: "⚠️ Riesgo de inundación por lluvia",
+    queEs: "Dónde se acumula el agua: <span class='c2'>inundado</span> (≥ 30 cm) o <span class='c1'>charco</span> (5–30 cm). Haz clic en el mapa o en un punto y Neutro te explica por qué.",
+    escenario: "Escenario:", opcionEscenario: "{0} mm/h durante 1 hora ({1})",
+    fuente: "Mapa:", fuenteFisica: "Simulación física (la referencia)", fuenteNeutro: "Predicción de Neutro",
+    fisicaDice: "Simulación física: hasta <b>{0}</b> de agua ({1})", neutroDice: "Neutro predice: <b>{0}</b>",
+    masDeUnMetro: "más de 1 m",
+    tituloMedidas: "🛠 ¿Y si…? Probar medidas",
+    ayudaMedidas: "Elige una medida, haz clic en el mapa para colocarla y simula: se compara el mismo escenario antes y después.",
+    hDeposito: "💧 Depósito / parque inundable", hPermeable: "🌱 Pavimento permeable", hImbornal: "🔽 Más imbornales",
+    radioMedida: "Radio", valorDeposito: "Profundidad", valorPermeable: "Infiltración", valorImbornal: "Capacidad",
+    alcantarillado: "Alcantarillado (lo que tragan las calzadas)", sinRed: "0 (red saturada)",
+    medDeposito: "💧 Depósito · radio {0} m · {1} m de profundidad (≈ {2} m³)",
+    medPermeable: "🌱 Pavimento permeable · radio {0} m · +{1} mm/h",
+    medImbornal: "🔽 Imbornales · radio {0} m · +{1} mm/h",
+    simularMedidas: "▶ Simular antes y después", quitarMedidas: "Quitar medidas",
+    simulandoAntes: "Simulando sin las medidas… {0} %", simulandoDespues: "Simulando con las medidas… {0} %",
+    fuenteMedidas: "Con las medidas (verde: deja de inundarse)",
+    resumenMedidas: "Con {0} mm/h{1}, antes → después:<br>Superficie inundada: {2} → <b>{3} ha</b><br>Edificios con agua en la fachada: {4} → <b>{5}</b><br>Equipamientos con el acceso inundado: {6} → <b>{7}</b><br><span style='color:#5ad17a'>■</span> deja de inundarse: {8} ha · <span style='color:#f28c38'>■</span> empeora: {9} ha",
+    conAlcantarillado: " y alcantarillado de {0} mm/h", secMedidas: "Medidas probadas", medida: "Medida",
+    tituloIncidencias: "📍 Incidencias reales",
+    ayudaIncidencias: "Marca dónde se ha inundado de verdad. Sirve para validar la simulación, y Neutro aprende de cada incidencia (excepción por lugar). Se guardan en este navegador: usa Exportar para compartirlas.",
+    gravedad: "Qué se vio:", incInundado: "Calle inundada (≥ 30 cm)", incCharco: "Charcos importantes (5–30 cm)",
+    lluviaEpisodio: "Lluvia del episodio:", fecha: "Fecha:", nota: "Nota:", marcarInc: "📍 Marcar con clic: {0}",
+    exportar: "Exportar", importar: "Importar", sinIncidencias: "Todavía no hay incidencias.",
+    estadoIncidencias: "Incidencias registradas: {0}. La simulación física marca agua junto a {1} de ellas (con la gravedad observada: {2}). Neutro, antes de conocerlas, acertaba {3}. Ahora tiene {4} excepciones de lugar y decide distinto en {5} celdas.",
+    porIncidencia: "📍 Corregido por incidencias reales ({0}): aquí Neutro hace una excepción por lugar, sin cambiar lo que sabe del resto de la ciudad.",
+    secIncidencias: "Incidencias reales registradas", simCerca: "Simulación física cerca",
+    importError: "El archivo no tiene incidencias válidas.",
+    verOficial: "Zonas inundables oficiales del río (ACA): <span style='color:#c9a3ff'>T10 · T100 · T500</span>",
+    oficialCelda: "Zona inundable oficial del río: periodo de retorno de {0} años (ACA)",
+    secOficial: "Comparación con la cartografía oficial",
+    textoOficial: "La ACA publica las zonas inundables por desbordamiento del río (fluviales), no por la lluvia sobre la ciudad. En esta zona ocupan {0} ha (T500), a lo largo del Ripoll y sin edificios dentro. De la superficie que esta simulación marca como inundada por la lluvia, el {1} % cae dentro de ellas: son riesgos distintos y complementarios. Para validar los puntos de lluvia hacen falta observaciones (episodios reales, avisos de los servicios municipales).",
+    notaHondonada: "⚠️ Punto bajo sin salida por superficie: el agua solo se va por el alcantarillado, que esta simulación no incluye. Es un punto donde la capacidad de los imbornales es decisiva.",
+    resumen: "Superficie inundada: <b>{0} ha</b> · con charcos: {1} ha<br>Edificios con ≥ 30 cm de agua junto a la fachada: <b>{2}</b> de {3}{4}",
+    conSotano: "<br>de ellos, con sótano o garaje (Catastro): <b>{0}</b>",
+    puntos: "Puntos críticos (de mayor a menor)", equipamientos: "Equipamientos con el acceso afectado",
+    ninguno: "Ninguno", sinCalle: "sin calle cercana",
+    comprobar: "🔬 Ver la simulación en directo", comprobando: "Simulando la física… {0} %",
+    resultadoComprobacion: "Neutro coincide con la simulación física en el {0} % de las celdas. De las zonas inundadas, marca el {1} %; de lo que marca, acierta el {2} %.",
+    informe: "🖨 Informe imprimible", medicion: "📏 Cómo se ha medido",
+    aviso: "Demostración técnica, no es un estudio oficial de inundabilidad: no incluye alcantarillado ni el caudal del río. Contrastado con las zonas inundables oficiales del río (ACA), que miden otro riesgo; falta validarlo con episodios reales.",
+    sinNeutro: "Neutro todavía no está entrenado (falta neutro_memoria.json).",
+    tipos: { educacion: "Educación", salud: "Salud", social: "Social", emergencia: "Emergencias" },
+    clases: ["seco", "charco", "inundado"],
+    conceptos: { "hondonada": "hondonada", "colector": "colector (le llega mucha agua)", "zona verde": "zona verde",
+                 "escorrentia": "calle que canaliza el agua", "pendiente fuerte": "pendiente fuerte", "llano": "llano urbano" },
+    suelos: { 0: "suelo urbano", 2: "césped", 3: "bosque", 4: "matorral", 6: "calzada (asfalto)", 8: "terreno sin edificar, de tierra (Catastro)" },
+    cuencas: ["le drena menos de 0,05 ha", "le drenan 0,05–0,5 ha", "le drenan 0,5–2 ha", "le drenan 2–10 ha",
+              "le drenan 10–50 ha", "le drenan más de 50 ha"],
+    hondonadas: ["sin hondonada", "hondonada leve (5–30 cm)", "hondonada marcada (30 cm–1 m)", "hondonada profunda (más de 1 m)"],
+    pendientes: ["plano (menos del 1 %)", "pendiente suave (1–4 %)", "pendiente media (4–10 %)", "pendiente fuerte (más del 10 %)"],
+    porQue: "Por qué lo decide Neutro", prediccion: "Con {0} mm/h: <b>{1}</b>", concepto: "Concepto: {0}",
+    visto: "En las simulaciones de entrenamiento vio esta situación {0} veces: {1}.", confianza: "Confianza: {0} %",
+    completado: "No había visto esta situación exacta: decide por la más parecida del mismo concepto (completado de patrones).",
+    nuncaVisto: "Sin experiencia parecida: decide «seco» por defecto.",
+    noAnaliza: "Aquí no se analiza: es un edificio, el cauce del río o un patio privado (desagua por la casa).", cerrar: "Cerrar", calle: "Calle",
+    tituloInforme: "Riesgo de inundación por lluvia — Ripollet (centro – Pinetons)", generado: "Generado el {0}",
+    secEscenario: "Escenario", secResumen: "Resumen", secPuntos: "Puntos críticos", secEquip: "Equipamientos con el acceso afectado",
+    secMetodo: "Método", secLimites: "Limitaciones", superficie: "Superficie", tipoPunto: "Tipo de punto", tipo: "Tipo",
+    profundidad: "Profundidad máx.", equipamiento: "Equipamiento", aguaAcceso: "Agua en el acceso (a menos de 16 m)",
+    peorCaso: "Peor caso: sin alcantarillado, el agua de la calle corre por la superficie. Sirve para priorizar qué accesos revisar.",
+    metodo: "Relieve: Modelo Digital del Terreno de 5 m del ICGC. Edificios: Catastro (huella, plantas y sótanos reales). Calzadas y aceras: bordillos de la cartografía 1:1000 del AMB (ICGC). Calles, zonas verdes y equipamientos: OpenStreetMap. Agua: simulación hidráulica de lámina superficial en celdas de 4 m, con infiltración según el suelo; los patios interiores sin salida desaguan por los edificios. El mapa es el de esta simulación. Explicación de cada punto: Neutro, una memoria de neuronas de concepto que aprende de las simulaciones; como predictor se midió frente a una regresión logística en zonas que no vio al aprender (ver «Cómo se ha medido»).",
+    limites: "No incluye el alcantarillado (equivale a la red saturada), ni el caudal del río Ripoll, ni detalles menores de 4 m (pasos inferiores, rampas de garaje); los bordillos se modelan como un escalón de 15 cm. Altura de los edificios a partir de las plantas del Catastro (planta baja de 4 m y 3 m las demás). Resultado orientativo: la cartografía oficial de la ACA solo cubre el desbordamiento del río (ver la comparación), así que los puntos de lluvia deben validarse con episodios reales y con el conocimiento de los servicios municipales.",
+    tituloMedicion: "Cómo se ha medido Neutro",
+    textoMedicion: "La verdad es la simulación física. Neutro aprende de unas celdas y se le examina en celdas que no vio (la mitad oeste y la mitad este, por turnos) y en una intensidad que no vio (60 mm/h). A su lado, un rival clásico: una regresión logística con los mismos rasgos. La predicción se escribió antes de medir.",
+    prediccionPrevia: "Predicción escrita antes de medir", metrica: "Medida", exactitud: "Exactitud",
+    precisionInund: "Precisión «inundado»", sensibInund: "Sensibilidad «inundado»", f1Inund: "F1 «inundado»",
+    pruebaEspacial: "Zonas no vistas", pruebaIntensidad: "Intensidad no vista (60 mm/h)", siempreSeco: "Siempre «seco»",
+    logistica: "Regresión logística", neuronas: "{0} neuronas · {1} ejemplos de entrenamiento · medido el {2}",
+    intervalo: "Diferencia Neutro − logística en F1 «inundado» (zonas no vistas): {0} (intervalo del 95 %: {1} a {2})",
+  },
+  ca: {
+    cargando: "Carregant Ripollet…",
+    titulo: "<b>Ripollet</b>: del centre a Pinetons, generat amb Blender a partir d'OpenStreetMap.",
+    ayudaMapa: "Arrossega per moure't · clic dret per girar · roda per fer zoom",
+    conducir: "🚗 Conduir", lluvia: "🌧 Pluja", riesgo: "⚠️ Risc d'inundació",
+    estiloArte: "🎨 Estil artístic", estiloReal: "🏙 Estil realista",
+    hud1: "<b>Conduint</b> · W/↑ accelerar · S/↓ frenar i marxa enrere · A D/← → girar",
+    hud2: "Espai fre de mà · Shift turbo · C càmera · R tornar a la sortida",
+    camara: "Càmera (C)", salida: "Sortida (R)", estiloV: "🎨 Estil (V)", salir: "Sortir del cotxe (Esc)",
+    tituloLluvia: "🌧 Simulació de pluja",
+    ayudaLluvia: "Fes clic al mapa per col·locar una tempesta. L'aigua corre segons el relleu real i els edificis.",
+    intensidad: "Intensitat", radio: "Radi de la tempesta", velocidadSim: "Velocitat", ver: "Veure",
+    aguaAhora: "Aigua ara", inundMax: "Inundació màxima assolida",
+    colocar: "Col·locar amb clic: {0}", si: "sí", no: "no", pausa: "⏸ Pausa", seguir: "▶ Continuar",
+    quitar: "Treure tempestes", secar: "Assecar-ho tot", quitarEsta: "Treure aquesta tempesta",
+    categorias: ["moderada", "forta", "molt forta", "torrencial"],
+    minPorSeg: "≈ {0} min simulats per segon",
+    estadoLluvia: "Temps simulat: {0} h {1} min · aigua caiguda: {2} m³", enPausa: " · en pausa",
+    tormentaItem: "{0} mm/h · radi {1} m",
+    tituloRiesgo: "⚠️ Risc d'inundació per pluja",
+    queEs: "On s'acumula l'aigua: <span class='c2'>inundat</span> (≥ 30 cm) o <span class='c1'>bassal</span> (5–30 cm). Fes clic al mapa o en un punt i Neutro t'explica per què.",
+    escenario: "Escenari:", opcionEscenario: "{0} mm/h durant 1 hora ({1})",
+    fuente: "Mapa:", fuenteFisica: "Simulació física (la referència)", fuenteNeutro: "Predicció de Neutro",
+    fisicaDice: "Simulació física: fins a <b>{0}</b> d'aigua ({1})", neutroDice: "Neutro prediu: <b>{0}</b>",
+    masDeUnMetro: "més d'1 m",
+    tituloMedidas: "🛠 I si…? Provar mesures",
+    ayudaMedidas: "Tria una mesura, fes clic al mapa per col·locar-la i simula: es compara el mateix escenari abans i després.",
+    hDeposito: "💧 Dipòsit / parc inundable", hPermeable: "🌱 Paviment permeable", hImbornal: "🔽 Més embornals",
+    radioMedida: "Radi", valorDeposito: "Fondària", valorPermeable: "Infiltració", valorImbornal: "Capacitat",
+    alcantarillado: "Clavegueram (el que empassen les calçades)", sinRed: "0 (xarxa saturada)",
+    medDeposito: "💧 Dipòsit · radi {0} m · {1} m de fondària (≈ {2} m³)",
+    medPermeable: "🌱 Paviment permeable · radi {0} m · +{1} mm/h",
+    medImbornal: "🔽 Embornals · radi {0} m · +{1} mm/h",
+    simularMedidas: "▶ Simular abans i després", quitarMedidas: "Treure mesures",
+    simulandoAntes: "Simulant sense les mesures… {0} %", simulandoDespues: "Simulant amb les mesures… {0} %",
+    fuenteMedidas: "Amb les mesures (verd: deixa d'inundar-se)",
+    resumenMedidas: "Amb {0} mm/h{1}, abans → després:<br>Superfície inundada: {2} → <b>{3} ha</b><br>Edificis amb aigua a la façana: {4} → <b>{5}</b><br>Equipaments amb l'accés inundat: {6} → <b>{7}</b><br><span style='color:#5ad17a'>■</span> deixa d'inundar-se: {8} ha · <span style='color:#f28c38'>■</span> empitjora: {9} ha",
+    conAlcantarillado: " i clavegueram de {0} mm/h", secMedidas: "Mesures provades", medida: "Mesura",
+    tituloIncidencias: "📍 Incidències reals",
+    ayudaIncidencias: "Marca on s'ha inundat de debò. Serveix per validar la simulació, i Neutro aprèn de cada incidència (excepció per lloc). Es desen en aquest navegador: fes servir Exportar per compartir-les.",
+    gravedad: "Què es va veure:", incInundado: "Carrer inundat (≥ 30 cm)", incCharco: "Bassals importants (5–30 cm)",
+    lluviaEpisodio: "Pluja de l'episodi:", fecha: "Data:", nota: "Nota:", marcarInc: "📍 Marcar amb clic: {0}",
+    exportar: "Exportar", importar: "Importar", sinIncidencias: "Encara no hi ha incidències.",
+    estadoIncidencias: "Incidències registrades: {0}. La simulació física marca aigua al costat de {1} (amb la gravetat observada: {2}). Neutro, abans de conèixer-les, n'encertava {3}. Ara té {4} excepcions de lloc i decideix diferent en {5} cel·les.",
+    porIncidencia: "📍 Corregit per incidències reals ({0}): aquí Neutro fa una excepció per lloc, sense canviar el que sap de la resta de la ciutat.",
+    secIncidencias: "Incidències reals registrades", simCerca: "Simulació física a prop",
+    importError: "El fitxer no té incidències vàlides.",
+    verOficial: "Zones inundables oficials del riu (ACA): <span style='color:#c9a3ff'>T10 · T100 · T500</span>",
+    oficialCelda: "Zona inundable oficial del riu: període de retorn de {0} anys (ACA)",
+    secOficial: "Comparació amb la cartografia oficial",
+    textoOficial: "L'ACA publica les zones inundables per desbordament del riu (fluvials), no per la pluja sobre la ciutat. En aquesta zona ocupen {0} ha (T500), al llarg del Ripoll i sense edificis a dins. De la superfície que aquesta simulació marca com a inundada per la pluja, el {1} % cau dins seu: són riscos diferents i complementaris. Per validar els punts de pluja calen observacions (episodis reals, avisos dels serveis municipals).",
+    notaHondonada: "⚠️ Punt baix sense sortida per superfície: l'aigua només marxa pel clavegueram, que aquesta simulació no inclou. És un punt on la capacitat dels embornals és decisiva.",
+    resumen: "Superfície inundada: <b>{0} ha</b> · amb bassals: {1} ha<br>Edificis amb ≥ 30 cm d'aigua tocant a la façana: <b>{2}</b> de {3}{4}",
+    conSotano: "<br>d'aquests, amb soterrani o garatge (Cadastre): <b>{0}</b>",
+    puntos: "Punts crítics (de més gran a més petit)", equipamientos: "Equipaments amb l'accés afectat",
+    ninguno: "Cap", sinCalle: "sense carrer proper",
+    comprobar: "🔬 Veure la simulació en directe", comprobando: "Simulant la física… {0} %",
+    resultadoComprobacion: "Neutro coincideix amb la simulació física en el {0} % de les cel·les. De les zones inundades, en marca el {1} %; del que marca, l'encerta el {2} %.",
+    informe: "🖨 Informe imprimible", medicion: "📏 Com s'ha mesurat",
+    aviso: "Demostració tècnica, no és un estudi oficial d'inundabilitat: no inclou el clavegueram ni el cabal del riu. Contrastat amb les zones inundables oficials del riu (ACA), que mesuren un altre risc; falta validar-ho amb episodis reals.",
+    sinNeutro: "Neutro encara no està entrenat (falta neutro_memoria.json).",
+    tipos: { educacion: "Educació", salud: "Salut", social: "Social", emergencia: "Emergències" },
+    clases: ["sec", "bassal", "inundat"],
+    conceptos: { "hondonada": "fondalada", "colector": "col·lector (hi arriba molta aigua)", "zona verde": "zona verda",
+                 "escorrentia": "carrer que canalitza l'aigua", "pendiente fuerte": "pendent fort", "llano": "pla urbà" },
+    suelos: { 0: "sòl urbà", 2: "gespa", 3: "bosc", 4: "matollar", 6: "calçada (asfalt)", 8: "terreny sense edificar, de terra (Cadastre)" },
+    cuencas: ["hi drena menys de 0,05 ha", "hi drenen 0,05–0,5 ha", "hi drenen 0,5–2 ha", "hi drenen 2–10 ha",
+              "hi drenen 10–50 ha", "hi drenen més de 50 ha"],
+    hondonadas: ["sense fondalada", "fondalada lleu (5–30 cm)", "fondalada marcada (30 cm–1 m)", "fondalada profunda (més d'1 m)"],
+    pendientes: ["pla (menys de l'1 %)", "pendent suau (1–4 %)", "pendent mitjà (4–10 %)", "pendent fort (més del 10 %)"],
+    porQue: "Per què ho decideix Neutro", prediccion: "Amb {0} mm/h: <b>{1}</b>", concepto: "Concepte: {0}",
+    visto: "A les simulacions d'entrenament va veure aquesta situació {0} vegades: {1}.", confianza: "Confiança: {0} %",
+    completado: "No havia vist aquesta situació exacta: decideix per la més semblant del mateix concepte (completació de patrons).",
+    nuncaVisto: "Sense experiència semblant: decideix «sec» per defecte.",
+    noAnaliza: "Aquí no s'analitza: és un edifici, la llera del riu o un pati privat (desguassa per la casa).", cerrar: "Tancar", calle: "Carrer",
+    tituloInforme: "Risc d'inundació per pluja — Ripollet (centre – Pinetons)", generado: "Generat el {0}",
+    secEscenario: "Escenari", secResumen: "Resum", secPuntos: "Punts crítics", secEquip: "Equipaments amb l'accés afectat",
+    secMetodo: "Mètode", secLimites: "Limitacions", superficie: "Superfície", tipoPunto: "Tipus de punt", tipo: "Tipus",
+    profundidad: "Fondària màx.", equipamiento: "Equipament", aguaAcceso: "Aigua a l'accés (a menys de 16 m)",
+    peorCaso: "Pitjor cas: sense clavegueram, l'aigua del carrer corre per la superfície. Serveix per prioritzar quins accessos revisar.",
+    metodo: "Relleu: Model Digital del Terreny de 5 m de l'ICGC. Edificis: Cadastre (petjada, plantes i soterranis reals). Calçades i voreres: vorades de la cartografia 1:1000 de l'AMB (ICGC). Carrers, zones verdes i equipaments: OpenStreetMap. Aigua: simulació hidràulica de làmina superficial en cel·les de 4 m, amb infiltració segons el sòl; els patis interiors sense sortida desguassen pels edificis. El mapa és el d'aquesta simulació. Explicació de cada punt: Neutro, una memòria de neurones de concepte que aprèn de les simulacions; com a predictor es va mesurar davant d'una regressió logística en zones que no va veure en aprendre (vegeu «Com s'ha mesurat»).",
+    limites: "No inclou el clavegueram (equival a la xarxa saturada), ni el cabal del riu Ripoll, ni detalls de menys de 4 m (passos inferiors, rampes de garatge); les vorades es modelen com un graó de 15 cm. Alçada dels edificis a partir de les plantes del Cadastre (planta baixa de 4 m i 3 m les altres). Resultat orientatiu: la cartografia oficial de l'ACA només cobreix el desbordament del riu (vegeu la comparació), de manera que els punts de pluja s'han de validar amb episodis reals i amb el coneixement dels serveis municipals.",
+    tituloMedicion: "Com s'ha mesurat Neutro",
+    textoMedicion: "La veritat és la simulació física. Neutro aprèn d'unes cel·les i se l'examina en cel·les que no va veure (la meitat oest i la meitat est, per torns) i en una intensitat que no va veure (60 mm/h). Al costat, un rival clàssic: una regressió logística amb els mateixos trets. La predicció es va escriure abans de mesurar.",
+    prediccionPrevia: "Predicció escrita abans de mesurar", metrica: "Mesura", exactitud: "Exactitud",
+    precisionInund: "Precisió «inundat»", sensibInund: "Sensibilitat «inundat»", f1Inund: "F1 «inundat»",
+    pruebaEspacial: "Zones no vistes", pruebaIntensidad: "Intensitat no vista (60 mm/h)", siempreSeco: "Sempre «sec»",
+    logistica: "Regressió logística", neuronas: "{0} neurones · {1} exemples d'entrenament · mesurat el {2}",
+    intervalo: "Diferència Neutro − logística en F1 «inundat» (zones no vistes): {0} (interval del 95 %: {1} a {2})",
+  },
+};
+// Textos de las herramientas: cada módulo trae los suyos y se suman a los del visor
+const LISTA_HERRAMIENTAS = globalThis.HERRAMIENTAS ?? [];
+for (const h of LISTA_HERRAMIENTAS) for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], h.textos[l]);
+for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_PIXEL[l], TEXTOS_TRAFICO[l],
+  { kicker: l === "es" ? "Maqueta · del centro a Pinetons" : "Maqueta · del centre als Pinetons" });
+let idioma = "es";
+try { idioma = localStorage.getItem("idioma") || (navigator.language.startsWith("ca") ? "ca" : "es"); } catch {}
+const t = (clave, ...args) => String(TEXTOS[idioma][clave] ?? clave).replace(/\{(\d)\}/g, (_, n) => args[n]);
+const tx = (clave) => TEXTOS[idioma][clave];
+const numero = (x, dec = 0) => x.toLocaleString(idioma === "ca" ? "ca-ES" : "es-ES", { maximumFractionDigits: dec, minimumFractionDigits: dec });
+
+function traducir() {
+  document.documentElement.lang = idioma;
+  for (const el of document.querySelectorAll("[data-t]")) el.innerHTML = t(el.dataset.t);
+  $("idioma").textContent = idioma === "es" ? "CA" : "ES";
+  $("idioma").title = idioma === "es" ? "Català" : "Castellano";
+  $("arte").textContent = t(estiloArte ? "estiloReal" : "estiloArte");
+  rotulosLluvia();
+  actualizarTormentas();
+  rellenarEscenarios();
+  rotulosMedidas();
+  rotulosIncidencias();
+  pintarIncidencias();
+  if ($("riesgo").style.display === "block") actualizarRiesgo();
+  if (ultimaExplicacion) explicar(...ultimaExplicacion);
+  for (const p of Object.values(PANELES_HERRAMIENTA)) p.creada?.traducir?.();
+  tiempoReal?.traducir();
+  pixelado?.traducir();
+  trafico?.traducir();
+}
+$("idioma").onclick = () => {
+  idioma = idioma === "es" ? "ca" : "es";
+  try { localStorage.setItem("idioma", idioma); } catch {}
+  traducir();
+};
+$("cargando").textContent = t("cargando");
+
+// ------------------------------------------------------------ datos
+const D = await cargarDatos(DATOS, BLOBS);
+const altura = crearAltura(D.terreno);
+const SIM = DATOS.sim;
+
+// ------------------------------------------------------------ escena
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const etiquetas = new CSS2DRenderer();
+etiquetas.setSize(innerWidth, innerHeight);
+Object.assign(etiquetas.domElement.style, { position: "fixed", top: "0", pointerEvents: "none" });
+document.body.appendChild(etiquetas.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xbfe0f5);
+scene.fog = new THREE.Fog(0xbfe0f5, 1800, 4500);
+
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 1, 10000);
+camera.position.set(900, 1300, 1500);
+const controls = new MapControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.45;
+controls.minDistance = 30;
+controls.maxDistance = 3500;
+
+const cielo = new THREE.HemisphereLight(0xffffff, 0x8a7a60, 1.6);
+scene.add(cielo);
+const sol = new THREE.DirectionalLight(0xfff2dd, 2.4);
+sol.castShadow = true;
+sol.shadow.mapSize.set(4096, 4096);
+sol.shadow.bias = -0.0005;
+scene.add(sol, sol.target);
+const radioMapa = Math.hypot(D.terreno.lx, D.terreno.ly);
+const dirSol = new THREE.Vector3(-0.4, 1, 0.3).normalize();   // hacia el sol; la mueve el tiempo real
+
+function sombrasMapa() {
+  sol.target.position.set(0, 0, 0);
+  sol.position.copy(dirSol).multiplyScalar(1.15 * radioMapa);
+  Object.assign(sol.shadow.camera, { left: -radioMapa, right: radioMapa, top: radioMapa, bottom: -radioMapa,
+                                     near: 1, far: 3 * radioMapa });
+  sol.shadow.camera.updateProjectionMatrix();
+}
+sombrasMapa();
+
+// ------------------------------------------------------------ aceras y calzada reales (bordillos del AMB)
+// La rejilla de 1 m se pinta en el material del suelo: panot en las aceras, asfalto en la calzada. Con filtrado
+// lineal, los bordes salen suaves aunque la rejilla sea de 1 m.
+const S1 = DATOS.aceras;
+const texSuelo1m = new THREE.DataTexture(Uint8Array.from(D.suelo1m, (v) => (v === 1 ? 128 : v === 2 ? 255 : 0)),
+                                         S1.nx, S1.ny, THREE.RedFormat, THREE.UnsignedByteType);
+Object.assign(texSuelo1m, { magFilter: THREE.LinearFilter, minFilter: THREE.LinearFilter, generateMipmaps: false,
+                            unpackAlignment: 1, needsUpdate: true });
+// CAPA DE 1 m de las herramientas (sombra, accesibilidad…): RGBA sobre el suelo, la pinta la que esté abierta
+const datosCapa1m = new Uint8Array(S1.nx * S1.ny * 4);
+const texCapa1m = new THREE.DataTexture(datosCapa1m, S1.nx, S1.ny, THREE.RGBAFormat, THREE.UnsignedByteType);
+Object.assign(texCapa1m, { magFilter: THREE.LinearFilter, minFilter: THREE.LinearFilter, generateMipmaps: false, colorSpace: THREE.SRGBColorSpace, needsUpdate: true });
+const capa1mActiva = { value: 0 };
+// CAPA DE CUBIERTAS (2 m): mapa solar, edificios en la franja de incendio… encima de tejados y azoteas
+const datosCapaTechos = new Uint8Array((S1.nx / 2) * (S1.ny / 2) * 4);
+const texCapaTechos = new THREE.DataTexture(datosCapaTechos, S1.nx / 2, S1.ny / 2, THREE.RGBAFormat, THREE.UnsignedByteType);
+Object.assign(texCapaTechos, { generateMipmaps: false, colorSpace: THREE.SRGBColorSpace, needsUpdate: true });
+const capaTechosActiva = { value: 0 };
+const uniformesTechos = () => ({ tCapaTechos: { value: texCapaTechos }, uCapaTechosActiva: capaTechosActiva,
+  uOrigen1m: { value: new THREE.Vector2(SIM.x0, SIM.z0) }, uTam1m: { value: new THREE.Vector2(S1.nx, S1.ny) } });
+const GLSL_TECHOS = `
+  uniform sampler2D tCapaTechos;
+  uniform vec2 uOrigen1m, uTam1m;
+  uniform float uCapaTechosActiva;
+  vec3 conTechos(vec3 c) {
+    vec4 k = texture2D(tCapaTechos, (vMundo.xz - uOrigen1m) / uTam1m);
+    return mix(c, k.rgb, k.a * uCapaTechosActiva);
+  }
+`;
+const uniformesAceras = () => ({ tSuelo1m: { value: texSuelo1m }, uOrigen1m: { value: new THREE.Vector2(SIM.x0, SIM.z0) },
+                                 uTam1m: { value: new THREE.Vector2(S1.nx, S1.ny) },
+                                 tCapa1m: { value: texCapa1m }, uCapa1mActiva: capa1mActiva });
+const GLSL_ACERAS = `
+  uniform sampler2D tSuelo1m, tCapa1m;
+  uniform vec2 uOrigen1m, uTam1m;
+  uniform float uCapa1mActiva;
+  vec3 conCapa(vec3 c) {   // la capa de la herramienta abierta, encima del suelo
+    vec4 k = texture2D(tCapa1m, (vMundo.xz - uOrigen1m) / uTam1m);
+    return mix(c, k.rgb, k.a * uCapa1mActiva);
+  }
+  float tipoSuelo() { return texture2D(tSuelo1m, (vMundo.xz - uOrigen1m) / uTam1m).r; }   // 0 nada · 0,5 acera · 1 calzada
+`;
+const VERTICE_MUNDO = ["#include <project_vertex>", `#include <project_vertex>
+  #ifdef USE_INSTANCING
+    vMundo = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
+  #else
+    vMundo = (modelMatrix * vec4(transformed, 1.0)).xyz;
+  #endif`];
+
+/** Suelo realista: panot (la textura de las aceras peatonales) y asfalto con grano donde dicen los bordillos. */
+function pintarAceras(material, panot) {
+  material.onBeforeCompile = (s) => {
+    Object.assign(s.uniforms, uniformesAceras(), { tPanot: { value: panot } });
+    s.vertexShader = "varying vec3 vMundo;\n" + s.vertexShader.replace(...VERTICE_MUNDO);
+    s.fragmentShader = "varying vec3 vMundo;\nuniform sampler2D tPanot;\n" + GLSL_ACERAS + s.fragmentShader.replace(
+      "#include <map_fragment>", `#include <map_fragment>
+      {
+        float t = tipoSuelo();
+        if (t > 0.75) {
+          float g = fract(sin(dot(floor(vMundo.xz * 3.0), vec2(12.9898, 78.233))) * 43758.5453);
+          diffuseColor.rgb = vec3(0.07, 0.075, 0.085) * (0.85 + 0.3 * g);     // asfalto con grano
+        } else if (t > 0.25) diffuseColor.rgb = texture2D(tPanot, vec2(vMundo.x, -vMundo.z) / 2.0).rgb;   // panot
+        diffuseColor.rgb = conCapa(diffuseColor.rgb);
+      }`);
+  };
+  material.customProgramCacheKey = () => "suelo-aceras";
+  material.needsUpdate = true;
+}
+
+/** Cubiertas realistas: la capa de cubiertas de la herramienta abierta, encima de la textura. */
+function pintarTechos(material) {
+  material.onBeforeCompile = (s) => {
+    Object.assign(s.uniforms, uniformesTechos());
+    s.vertexShader = "varying vec3 vMundo;\n" + s.vertexShader.replace(...VERTICE_MUNDO);
+    s.fragmentShader = "varying vec3 vMundo;\n" + GLSL_TECHOS + s.fragmentShader.replace(
+      "#include <map_fragment>", "#include <map_fragment>\n diffuseColor.rgb = conTechos(diffuseColor.rgb);");
+  };
+  material.customProgramCacheKey = () => "techos";
+  material.needsUpdate = true;
+}
+const ES_TECHO = (nombre) => nombre === "tejado" || nombre === "azotea";
+
+let sueloMalla = null;
+const mallasModelo = [];
+let estiloArte = new URLSearchParams(location.search).has("arte");   // ?arte abre ya en estilo artístico
+const draco = new DRACOLoader().setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/");
+new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
+  gltf.scene.traverse((o) => {
+    if (!o.isMesh) return;
+    o.castShadow = !["suelo", "calzada", "peatonal", "cesped", "bosque", "matorral", "pista", "agua", "aparcamiento"].includes(o.name);
+    o.receiveShadow = true;
+    // Texturas nítidas aunque se vean muy de lado (el asfalto desde el coche)
+    if (o.material.map) o.material.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    if (o.name === "suelo") sueloMalla = o;               // para colocar tormentas y preguntar a Neutro con clic
+    if (ES_TECHO(o.material.name) && !o.material.userData.techo) { o.material.userData.techo = true; pintarTechos(o.material); }
+    mallasModelo.push(o);
+  });
+  const peatonal = mallasModelo.find((o) => o.name === "peatonal");
+  if (sueloMalla && peatonal?.material.map) pintarAceras(sueloMalla.material, peatonal.material.map);
+  scene.add(gltf.scene);
+  if (estiloArte) aplicarEstilo(true);
+  $("cargando").style.display = "none";
+});
+
+// ------------------------------------------------------------ árboles (instancias)
+// Una geometría por tipo, repetida en la GPU: miles de árboles sin pesar en el GLB.
+{
+  const A = D.arboles, n = A.length / 5;
+  const mat = (nombre, color) => Object.assign(
+    new THREE.MeshStandardMaterial({ color: new THREE.Color().setRGB(...color), flatShading: true, roughness: 0.95 }),
+    { name: nombre });
+  const formas = {
+    tronco: [new THREE.CylinderGeometry(0.22, 0.3, 1, 3, 1, true), mat("tronco", [0.40, 0.26, 0.15])],
+    pino: [new THREE.ConeGeometry(1, 1, 5, 1, true), mat("copa_pino", [0.18, 0.42, 0.24])],
+    cono_copa: [new THREE.ConeGeometry(1, 1, 6, 1, true), mat("copa", [0.30, 0.58, 0.28])],
+    cono_copa_clara: [new THREE.ConeGeometry(1, 1, 6, 1, true), mat("copa_clara", [0.50, 0.70, 0.30])],
+    bola_copa: [new THREE.IcosahedronGeometry(1, 1), mat("copa", [0.30, 0.58, 0.28])],
+    bola_copa_clara: [new THREE.IcosahedronGeometry(1, 1), mat("copa_clara", [0.50, 0.70, 0.30])],
+    arbusto: [new THREE.IcosahedronGeometry(1, 0), mat("arbusto", [0.48, 0.58, 0.30])],
+  };
+  const matrices = Object.fromEntries(Object.keys(formas).map((k) => [k, []]));
+  const m = new THREE.Matrix4();
+  for (let k = 0; k < n; k++) {
+    const x = A[k * 5] / 10, z = A[k * 5 + 1] / 10, tipo = DATOS.tiposArbol[A[k * 5 + 2]];
+    const r = A[k * 5 + 3] / 100, alto = A[k * 5 + 4] / 100, y = altura(x, z);
+    if (DATOS.arbolesReales) {
+      // Árboles medidos con LiDAR: alto = altura total; la copa arriba y el tronco debajo, más grueso si es grande
+      const q = new THREE.Quaternion(), grueso = THREE.MathUtils.clamp(r / 2.5, 0.8, 2.2);
+      if (tipo === "arbusto") {
+        matrices.arbusto.push(m.clone().compose(new THREE.Vector3(x, y + alto / 2, z), q, new THREE.Vector3(r, Math.max(alto / 2, 0.4), r)));
+        continue;
+      }
+      const copa = tipo === "pino" ? alto * 0.6 : tipo.startsWith("cono") ? alto * 0.75 : Math.min(2 * r, alto * 0.7);
+      const fuste = alto - copa;
+      matrices.tronco.push(m.clone().compose(new THREE.Vector3(x, y + (fuste + 0.3) / 2 - 0.25, z), q, new THREE.Vector3(grueso, fuste + 0.3, grueso)));
+      const forma = tipo === "pino" || tipo.startsWith("cono") ? new THREE.Vector3(r, copa, r) : new THREE.Vector3(r, copa / 2, r);
+      matrices[tipo].push(m.clone().compose(new THREE.Vector3(x, y + fuste + copa / 2, z), q, forma));
+      continue;
+    }
+    if (tipo !== "arbusto") {
+      const ht = tipo === "pino" ? 2.5 : 2.1;
+      matrices.tronco.push(m.clone().compose(new THREE.Vector3(x, y + ht / 2 - 0.25, z), new THREE.Quaternion(), new THREE.Vector3(1, ht, 1)));
+    }
+    let base = y + 1.6 + r, escala = new THREE.Vector3(r, r, r);
+    if (tipo === "arbusto") base = y + 0.5;
+    else if (tipo === "pino") { base = y + 1.6 + alto / 2; escala = new THREE.Vector3(r, alto, r); }
+    else if (tipo.startsWith("cono")) { base = y + 1.4 + alto / 2; escala = new THREE.Vector3(r, alto, r); }
+    matrices[tipo].push(m.clone().compose(new THREE.Vector3(x, base, z), new THREE.Quaternion(), escala));
+  }
+  for (const [tipo, lista] of Object.entries(matrices)) {
+    if (!lista.length) continue;
+    const malla = new THREE.InstancedMesh(formas[tipo][0], formas[tipo][1], lista.length);
+    lista.forEach((mm, i) => malla.setMatrixAt(i, mm));
+    malla.castShadow = true;
+    malla.receiveShadow = true;
+    scene.add(malla);
+    mallasModelo.push(malla);
+  }
+}
+
+// ------------------------------------------------------------ etiquetas y vuelos
+for (const l of DATOS.lugares) {
+  const div = document.createElement("div");
+  div.className = "etiqueta";
+  div.textContent = l.nombre;
+  const obj = new CSS2DObject(div);
+  obj.position.fromArray(l.pos);
+  scene.add(obj);
+  const b = document.createElement("button");
+  b.textContent = l.nombre;
+  b.onclick = () => volarA(new THREE.Vector3(l.pos[0], 0, l.pos[2]));
+  $("ir").appendChild(b);
+}
+
+// ------------------------------------------------------------ puentes: altura del tablero
+// Encima de un puente (a menos de medio ancho de su eje) la altura que cuenta es la del tablero, no la del río.
+const PUENTES = (DATOS.puentes || []).flatMap((b) => b.p.slice(1).map((q, k) => ({ a: b.p[k], b: q, r: b.ancho / 2 })));
+function alturaSuelo(x, z) {
+  for (const { a, b, r } of PUENTES) {
+    const dx = b[0] - a[0], dz = b[1] - a[1], l2 = dx * dx + dz * dz || 1;
+    const t = ((x - a[0]) * dx + (z - a[1]) * dz) / l2;
+    if (t < 0 || t > 1) continue;
+    const px = a[0] + dx * t - x, pz = a[1] + dz * t - z;
+    if (px * px + pz * pz <= r * r) return Math.max(altura(x, z), a[2] + (b[2] - a[2]) * t);
+  }
+  return altura(x, z);
+}
+
+let vuelo = null;
+const vista = { escala: 1 };     // > 1 con el teleobjetivo de la maqueta: la cámara va más lejos
+function volarA(destino, distancia = 1) {
+  const desplaz = new THREE.Vector3(180, 220, 260).multiplyScalar(distancia * vista.escala);
+  destino.y = altura(destino.x, destino.z);
+  vuelo = { t: 0, desdeT: controls.target.clone(), desdeC: camera.position.clone(),
+            haciaT: destino, haciaC: destino.clone().add(desplaz) };
+}
+
+// ------------------------------------------------------------ choques con edificios
+// Rejilla de 1 m (D.suelo1m: 3 = edificio, de Catastro). El coche es un círculo de 8 puntos y el centro.
+const enEdificio = (x, z) => {
+  const i = Math.floor(x - SIM.x0), j = Math.floor(z - SIM.z0);
+  return i >= 0 && i < S1.nx && j >= 0 && j < S1.ny && D.suelo1m[j * S1.nx + i] === 3;
+};
+function choca(x, z, radio) {
+  if (enEdificio(x, z)) return true;
+  for (let a = 0; a < 8; a++)
+    if (enEdificio(x + radio * Math.cos(a * Math.PI / 4), z + radio * Math.sin(a * Math.PI / 4))) return true;
+  return false;
+}
+
+// ------------------------------------------------------------ coche low-poly
+function crearCoche() {
+  const m = (color, extra = {}) => new THREE.MeshStandardMaterial({ color, flatShading: true, roughness: 0.6, ...extra });
+  const caja = (w, h, l, mat, x, y, z) => {
+    const malla = new THREE.Mesh(new THREE.BoxGeometry(w, h, l), mat);
+    malla.position.set(x, y, z);
+    malla.castShadow = true;
+    return malla;
+  };
+  const grupo = new THREE.Group();
+  grupo.rotation.order = "YXZ";                                  // rumbo, cabeceo, alabeo
+  const rojo = m(0xd64545), cristal = m(0x2b3a4a, { roughness: 0.2 });
+  grupo.add(caja(1.8, 0.6, 4.2, rojo, 0, 0.6, 0));              // carrocería
+  grupo.add(caja(1.6, 0.55, 2.1, cristal, 0, 1.17, -0.25));     // cabina acristalada
+  grupo.add(caja(1.64, 0.08, 1.9, rojo, 0, 1.47, -0.3));        // techo
+  grupo.add(caja(1.82, 0.12, 0.25, m(0x333333), 0, 0.4, 2.1));  // parachoques
+  for (const x of [-0.6, 0.6]) {
+    grupo.add(caja(0.35, 0.15, 0.05, m(0xfff3b0, { emissive: 0xfff3b0, emissiveIntensity: 0.6 }), x, 0.68, 2.11));
+    grupo.add(caja(0.35, 0.12, 0.05, m(0xff3030, { emissive: 0xff2020, emissiveIntensity: 0.5 }), x, 0.7, -2.11));
+  }
+  const ruedas = [];
+  const geoRueda = new THREE.CylinderGeometry(0.38, 0.38, 0.3, 10).rotateZ(Math.PI / 2);
+  for (const [x, z] of [[-0.85, 1.35], [0.85, 1.35], [-0.85, -1.35], [0.85, -1.35]]) {
+    const pivote = new THREE.Group();
+    pivote.position.set(x, 0.38, z);
+    const malla = new THREE.Mesh(geoRueda, m(0x222222));
+    malla.castShadow = true;
+    pivote.add(malla);
+    grupo.add(pivote);
+    ruedas.push({ pivote, malla, delantera: z > 0 });
+  }
+  return { grupo, ruedas };
+}
+
+const coche = crearCoche();
+coche.grupo.visible = false;
+scene.add(coche.grupo);
+const estado = { pos: new THREE.Vector3(), rumbo: 0, vel: 0, giro: 0 };
+
+function aLaSalida() {
+  const S = DATOS.salida;
+  estado.pos.set(S.pos[0], altura(S.pos[0], S.pos[1]), S.pos[1]);
+  estado.rumbo = S.rumbo;
+  estado.vel = estado.giro = 0;
+}
+
+// ------------------------------------------------------------ controles
+const teclas = new Set();
+let modo = "mapa", vistaConductor = false;
+
+addEventListener("keydown", (e) => {
+  if (modo !== "coche") return;
+  if (e.code === "KeyC") vistaConductor = !vistaConductor;
+  else if (e.code === "KeyV") alternarEstilo();
+  else if (e.code === "KeyR") aLaSalida();
+  else if (e.code === "Escape") salirDelCoche();
+  teclas.add(e.code);
+  if (e.code.startsWith("Arrow") || e.code === "Space") e.preventDefault();
+});
+addEventListener("keyup", (e) => teclas.delete(e.code));
+addEventListener("blur", () => teclas.clear());
+for (const b of document.querySelectorAll("#tactil button")) {
+  b.addEventListener("pointerdown", () => teclas.add(b.dataset.tecla));
+  for (const ev of ["pointerup", "pointerleave", "pointercancel"]) b.addEventListener(ev, () => teclas.delete(b.dataset.tecla));
+}
+const pulsada = (...codigos) => codigos.some((c) => teclas.has(c));
+
+const PANELES_HERRAMIENTA = {};   // id → { div, h }
+let tiempoReal = null, pixelado = null, trafico = null;
+function mostrarPanel(id) {
+  for (const p of ["lluvia", "riesgo"]) $(p).style.display = p === id ? "block" : "none";
+  for (const [pid, p] of Object.entries(PANELES_HERRAMIENTA)) {
+    const abierto = p.div.style.display === "block";
+    p.div.style.display = pid === id ? "block" : "none";
+    if (abierto && pid !== id) p.creada?.alOcultar?.();
+    if (!abierto && pid === id) p.h.alMostrar?.();
+  }
+  capaRiesgo.visible = id === "riesgo";
+  marcas.visible = id === "riesgo";
+  capaOficial.visible = id === "riesgo" && $("verOficial").checked;
+  grupoMedidas.visible = grupoIncidencias.visible = id === "riesgo";
+  if (id !== "riesgo") $("explicacion").style.display = "none";
+  tiempoReal?.aplicar();          // la herramienta de sombra mueve el sol mientras está abierta
+}
+
+function entrarAlCoche() {
+  pixelado?.alEntrarCoche();
+  modo = "coche";
+  aLaSalida();
+  coche.grupo.visible = true;
+  controls.enabled = false;
+  vuelo = null;
+  camera.near = 0.1;
+  camera.fov = 65;
+  camera.updateProjectionMatrix();
+  scene.fog.near = 300;
+  scene.fog.far = 1500;
+  Object.assign(sol.shadow.camera, { left: -120, right: 120, top: 120, bottom: -120, near: 1, far: 600 });
+  sol.shadow.camera.updateProjectionMatrix();
+  $("mapa").style.display = "none";
+  mostrarPanel(null);
+  $("hud").style.display = "block";
+  $("velocidad").style.display = "block";
+  if (matchMedia("(pointer: coarse)").matches) $("tactil").style.display = "flex";
+}
+
+function salirDelCoche() {
+  modo = "mapa";
+  teclas.clear();
+  coche.grupo.visible = false;
+  controls.enabled = true;
+  camera.near = 1;
+  camera.fov = 40;
+  camera.updateProjectionMatrix();
+  scene.fog.near = 1800;
+  scene.fog.far = 4500;
+  sombrasMapa();
+  tiempoReal?.aplicar();
+  controls.target.copy(estado.pos);
+  camera.position.copy(estado.pos).add(new THREE.Vector3(150, 180, 200));
+  pixelado?.alSalirCoche();
+  tiempoReal?.aplicar();
+  $("mapa").style.display = "block";
+  $("hud").style.display = "none";
+  $("velocidad").style.display = "none";
+  $("tactil").style.display = "none";
+}
+
+$("conducir").onclick = entrarAlCoche;
+$("salir").onclick = salirDelCoche;
+$("camara").onclick = () => { vistaConductor = !vistaConductor; };
+$("reiniciar").onclick = aLaSalida;
+for (const b of document.querySelectorAll(".cerrar")) b.onclick = () => mostrarPanel(null);
+
+// ------------------------------------------------------------ física del coche
+const ADELANTE = new THREE.Vector3(), DERECHA = new THREE.Vector3(), ARRIBA = new THREE.Vector3(0, 1, 0);
+
+function conducir(dt) {
+  const turbo = pulsada("ShiftLeft", "ShiftRight");
+  const maxima = turbo ? 30 : 19;                       // m/s (≈ 108 / 68 km/h)
+  if (pulsada("KeyW", "ArrowUp")) estado.vel += (estado.vel < 0 ? 16 : turbo ? 11 : 7) * dt;
+  else if (pulsada("KeyS", "ArrowDown")) estado.vel -= (estado.vel > 0 ? 16 : 5) * dt;
+  else estado.vel -= Math.sign(estado.vel) * Math.min(Math.abs(estado.vel), 3 * dt);
+  if (pulsada("Space")) estado.vel -= Math.sign(estado.vel) * Math.min(Math.abs(estado.vel), 22 * dt);
+  estado.vel = THREE.MathUtils.clamp(estado.vel, -7, maxima);
+
+  const objetivo = (pulsada("KeyA", "ArrowLeft") ? 1 : 0) - (pulsada("KeyD", "ArrowRight") ? 1 : 0);
+  estado.giro += (objetivo - estado.giro) * Math.min(1, dt * 6);
+  // El giro depende de la velocidad y se suaviza a velocidades altas
+  estado.rumbo += estado.giro * (estado.vel / 2.6) * 0.55 / (1 + Math.abs(estado.vel) / 14) * dt;
+
+  ADELANTE.set(Math.sin(estado.rumbo), 0, Math.cos(estado.rumbo));
+  const antes = estado.pos.clone();
+  estado.pos.addScaledVector(ADELANTE, estado.vel * dt);
+  if (choca(estado.pos.x, estado.pos.z, 1.7)) {
+    // Desliza por el eje que quede libre; si no hay ninguno, rebota
+    if (!choca(estado.pos.x, antes.z, 1.7)) { estado.pos.z = antes.z; estado.vel *= 0.85; }
+    else if (!choca(antes.x, estado.pos.z, 1.7)) { estado.pos.x = antes.x; estado.vel *= 0.85; }
+    else { estado.pos.copy(antes); estado.vel *= Math.abs(estado.vel) > 3 ? -0.3 : 0.5; }
+  }
+  estado.pos.x = THREE.MathUtils.clamp(estado.pos.x, -D.terreno.lx + 3, D.terreno.lx - 3);
+  estado.pos.z = THREE.MathUtils.clamp(estado.pos.z, -D.terreno.ly + 3, D.terreno.ly - 3);
+
+  // Seguir el relieve: altura en el centro e inclinación según delante/detrás e izquierda/derecha
+  DERECHA.crossVectors(ADELANTE, ARRIBA);
+  const h = (dx, dz) => alturaSuelo(estado.pos.x + dx, estado.pos.z + dz);
+  const delante = h(ADELANTE.x * 1.6, ADELANTE.z * 1.6), detras = h(-ADELANTE.x * 1.6, -ADELANTE.z * 1.6);
+  const dcha = h(DERECHA.x * 0.9, DERECHA.z * 0.9), izq = h(-DERECHA.x * 0.9, -DERECHA.z * 0.9);
+  estado.pos.y = (delante + detras + dcha + izq) / 4;
+
+  coche.grupo.position.copy(estado.pos);
+  coche.grupo.rotation.set(-Math.atan2(delante - detras, 3.2), estado.rumbo, -Math.atan2(dcha - izq, 1.8));
+  for (const r of coche.ruedas) {
+    r.malla.rotation.x += (estado.vel * dt) / 0.38;
+    if (r.delantera) r.pivote.rotation.y = estado.giro * 0.5;
+  }
+
+  const suave = 1 - Math.exp(-dt * 5);
+  if (vistaConductor) {
+    camera.position.copy(estado.pos).addScaledVector(ARRIBA, 1.25).addScaledVector(DERECHA, -0.4)
+      .addScaledVector(ADELANTE, -0.1);
+    camera.lookAt(estado.pos.clone().addScaledVector(ADELANTE, 25).addScaledVector(ARRIBA, 1));
+  } else {
+    const deseada = estado.pos.clone().addScaledVector(ADELANTE, -10).addScaledVector(ARRIBA, 4.5);
+    camera.position.lerp(deseada, suave);
+    camera.lookAt(estado.pos.clone().addScaledVector(ADELANTE, 4).addScaledVector(ARRIBA, 1.2));
+  }
+  sol.target.position.copy(estado.pos);                  // sombras nítidas alrededor del coche
+  sol.position.copy(estado.pos).addScaledVector(dirSol, 200);
+  $("velocidad").firstChild.textContent = Math.round(Math.abs(estado.vel) * 3.6) + " ";
+}
+
+// ------------------------------------------------------------ estilo artístico (ilustración plana)
+// Cada material se sustituye por uno "toon" con colores de paleta muy saturados. Si tiene textura, su luminancia
+// decide entre 3 tonos (oscuro / base / claro): ventanas, juntas o líneas de la calzada quedan como formas planas.
+// Encima van motas de color.  umbral: [lum < x → oscuro, lum > y → claro] (sin umbral = color plano)
+const RECETAS = {
+  calzada:    { base: 0x2f55d4, claro: 0xf4f4f4, mota: 0x4068ea, motas: 0.10, escala: 0.9, umbral: [0, 0.45] },
+  peatonal:   { base: 0xd4735e, oscuro: 0xb15544, mota: 0xe9a08a, motas: 0.18, escala: 0.7, umbral: [0.3, 2] },
+  cesped:     { base: 0x37b24d, mota: 0x9ad552, motas: 0.35, escala: 0.8 },
+  pista:      { base: 0x2f9e5a, mota: 0x5cc679, motas: 0.20, escala: 1.0 },
+  bosque:     { base: 0x1f8f6a, mota: 0x63c48e, motas: 0.40, escala: 0.9 },
+  matorral:   { base: 0xa6cf3a, mota: 0x6f9e28, motas: 0.45, escala: 0.8 },
+  suelo:      { base: 0x96d062, mota: 0x7fbd52, motas: 0.18, escala: 1.5 },
+  agua:       { base: 0x2c7bd6, mota: 0x8cc0f2, motas: 0.25, escala: 1.6 },
+  aparcamiento: { base: 0x3a62d8, mota: 0x4a72e8, motas: 0.08, escala: 0.9 },
+  puente:     { base: 0xe8dcc8, mota: 0xcfc2ab, motas: 0.12, escala: 0.6 },
+  tierra:     { base: 0xc4633a, oscuro: 0x8f3f22, claro: 0xd9814f, umbral: [0.22, 0.45] },
+  tejado:     { base: 0xe05a33, oscuro: 0xa63a22, claro: 0xf27c4b, umbral: [0.12, 0.9] },
+  azotea:     { base: 0xead9b8, oscuro: 0xc7b08a, umbral: [0.45, 2] },
+  tronco:     { base: 0xe8693c, mota: 0xf59a63, motas: 0.20, escala: 0.4 },
+  copa:       { base: 0x2e9e78, mota: 0xa8d85c, motas: 0.50, escala: 0.45 },
+  copa_clara: { base: 0xd2a92e, mota: 0xf2d466, motas: 0.50, escala: 0.45 },
+  copa_pino:  { base: 0x1c7a6e, mota: 0x47b48f, motas: 0.45, escala: 0.5 },
+  arbusto:    { base: 0x5db84f, mota: 0xbadf5c, motas: 0.45, escala: 0.4 },
+};
+const PARED = { crema: 0xf6c445, melocoton: 0xf28c4e, blanco: 0xf5efe2, ocre: 0xe7a43a, rosa: 0xee7f95,
+                gris: 0x86b6d8, nave: 0x6fa3c9 };
+
+function receta(nombre) {
+  if (RECETAS[nombre]) return RECETAS[nombre];
+  const m = /^muro_([a-z]+)_/.exec(nombre);
+  if (!m || !PARED[m[1]]) return null;
+  return { base: PARED[m[1]], oscuro: 0x24325f, claro: 0xfaf6ec,
+           mota: new THREE.Color(PARED[m[1]]).multiplyScalar(0.9).getHex(),
+           motas: 0.08, escala: 0.6, umbral: [0.2, 0.8] };     // 0.2: el reflejo del cristal también es ventana
+}
+
+const materialesArte = new Map();
+function materialArtistico(original) {
+  if (materialesArte.has(original)) return materialesArte.get(original);
+  const r = receta(original.name);
+  if (!r) return original;
+  // side: igual que el original (el GLB trae caras a doble cara). El GLB no lleva normales: sombreado plano a la
+  // fuerza con FLAT_SHADED (MeshToonMaterial no tiene la opción flatShading y la ignoraría)
+  const m = new THREE.MeshToonMaterial({ map: original.map, color: 0xffffff, side: original.side });
+  m.defines = { FLAT_SHADED: "" };
+  m.onBeforeCompile = (s) => {
+    Object.assign(s.uniforms, {
+      uBase: { value: new THREE.Color(r.base) },
+      uOscuro: { value: new THREE.Color(r.oscuro ?? r.base) },
+      uClaro: { value: new THREE.Color(r.claro ?? r.base) },
+      uMota: { value: new THREE.Color(r.mota ?? r.base) },
+      uMotas: { value: r.motas ?? 0 },
+      uEscala: { value: r.escala ?? 1 },
+      uUmbral: { value: new THREE.Vector2(...(r.umbral ?? [-1, 2])) },
+    });
+    if (original.name === "suelo") Object.assign(s.uniforms, uniformesAceras());
+    if (ES_TECHO(original.name)) Object.assign(s.uniforms, uniformesTechos());
+    s.vertexShader = "varying vec3 vMundo;\n" + s.vertexShader.replace(...VERTICE_MUNDO);
+    s.fragmentShader = `varying vec3 vMundo;
+      ${original.name === "suelo" ? "#define CON_ACERAS\n" + GLSL_ACERAS : ""}
+      ${ES_TECHO(original.name) ? "#define CON_TECHOS\n" + GLSL_TECHOS : ""}
+      uniform vec3 uBase, uOscuro, uClaro, uMota;
+      uniform float uMotas, uEscala;
+      uniform vec2 uUmbral;
+      ` + s.fragmentShader.replace("#include <map_fragment>", `#include <map_fragment>
+      {
+        // 3 tonos según la luminancia de la textura (ventanas, juntas, líneas...)
+        float lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
+        vec3 c = lum < uUmbral.x ? uOscuro : (lum > uUmbral.y ? uClaro : uBase);
+        #ifdef CON_ACERAS
+          float ts = tipoSuelo();
+          if (ts > 0.75) c = vec3(0.028, 0.093, 0.66);        // calzada azul (0x2f55d4, en lineal)
+          else if (ts > 0.25) c = vec3(0.66, 0.18, 0.11);     // acera terracota (0xd4735e, en lineal)
+        #endif
+        // Motas: una por celda como mucho, proyectadas en el plano que más mira la superficie
+        vec3 an = abs(normalize(cross(dFdx(vMundo), dFdy(vMundo))));
+        vec2 p = (an.y > max(an.x, an.z) ? vMundo.xz : (an.x > an.z ? vMundo.zy : vMundo.xy)) / uEscala;
+        vec2 celda = floor(p), f = fract(p);
+        float h = fract(sin(dot(celda, vec2(127.1, 311.7))) * 43758.5453);
+        vec2 centro = 0.25 + 0.5 * vec2(fract(h * 17.13), fract(h * 31.71));
+        float mota = step(length(f - centro), 0.22) * step(1.0 - uMotas, fract(h * 7.77));
+        mota *= 1.0 - smoothstep(0.25, 0.7, length(fwidth(p)));   // de lejos se funden (sin parpadeo)
+        diffuseColor.rgb = mix(c, uMota, mota);
+        #ifdef CON_ACERAS
+          diffuseColor.rgb = conCapa(diffuseColor.rgb);
+        #endif
+        #ifdef CON_TECHOS
+          diffuseColor.rgb = conTechos(diffuseColor.rgb);
+        #endif
+      }`);
+  };
+  m.customProgramCacheKey = () => (original.name === "suelo" ? "estilo-arte-suelo"      // el suelo lleva aceras
+                                  : ES_TECHO(original.name) ? "estilo-arte-techos" : "estilo-arte");
+  materialesArte.set(original, m);
+  return m;
+}
+
+let alCambiarEstilo = null;     // el tiempo real vuelve a poner su cielo encima
+function aplicarEstilo(activo) {
+  estiloArte = activo;
+  document.body.classList.toggle("arte", activo);
+  for (const o of mallasModelo) {
+    o.userData.materialOriginal ??= o.material;
+    o.material = activo ? materialArtistico(o.userData.materialOriginal) : o.userData.materialOriginal;
+  }
+  scene.background.set(activo ? 0x5f93dc : 0xbfe0f5);
+  scene.fog.color.set(activo ? 0x9cc0ec : 0xbfe0f5);
+  cielo.groundColor.set(activo ? 0x9fc3e8 : 0x8a7a60);     // sombras azuladas, como en la ilustración
+  cielo.intensity = activo ? 2.2 : 1.6;
+  sol.intensity = activo ? 2.0 : 2.4;
+  $("arte").textContent = t(activo ? "estiloReal" : "estiloArte");
+  alCambiarEstilo?.();
+}
+const alternarEstilo = () => aplicarEstilo(!estiloArte);
+$("arte").onclick = alternarEstilo;
+$("arteCoche").onclick = alternarEstilo;
+
+// ------------------------------------------------------------ simulación de lluvia (GPU)
+const simulacion = crearSimulacion(renderer, SIM, D.codigos, altura, D.suelo4m);
+
+// Malla de celdas: la usan la lámina de agua y la capa de riesgo de Neutro
+const geoCeldas = new THREE.BufferGeometry();
+{
+  const { nx, ny } = SIM;
+  const pos = new Float32Array(nx * ny * 3), uv = new Float32Array(nx * ny * 2);
+  for (let j = 0; j < ny; j++)
+    for (let i = 0; i < nx; i++) {
+      const k = j * nx + i, x = SIM.x0 + (i + 0.5) * SIM.celda, z = SIM.z0 + (j + 0.5) * SIM.celda;
+      pos.set([x, altura(x, z), z], k * 3);
+      uv.set([(i + 0.5) / nx, (j + 0.5) / ny], k * 2);
+    }
+  const idx = new Uint32Array((nx - 1) * (ny - 1) * 6);
+  let n = 0;
+  for (let j = 0; j < ny - 1; j++)
+    for (let i = 0; i < nx - 1; i++) {
+      const a = j * nx + i, b = a + 1, c = a + nx, d = c + 1;
+      idx.set([a, c, b, b, c, d], n);
+      n += 6;
+    }
+  geoCeldas.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  geoCeldas.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+  geoCeldas.setIndex(new THREE.BufferAttribute(idx, 1));
+}
+const matVistaAgua = new THREE.ShaderMaterial({
+  transparent: true,
+  depthWrite: false,
+  uniforms: { tAgua: { value: null }, modoVista: { value: 0 },
+              sol: { value: new THREE.Vector3(-0.4, 1, 0.3).normalize() } },
+  vertexShader: `
+    uniform sampler2D tAgua;
+    uniform int modoVista;
+    varying float vD;
+    varying float vV;
+    varying vec3 vPos;
+    void main() {
+      vec4 a = texture2D(tAgua, uv);
+      vD = modoVista == 0 ? a.r : a.b;
+      vV = modoVista == 0 ? a.g : 0.0;
+      // La lámina va un poco por encima de calles y aceras para que se vea
+      vPos = (modelMatrix * vec4(position + vec3(0.0, 0.45 + vD, 0.0), 1.0)).xyz;
+      gl_Position = projectionMatrix * viewMatrix * vec4(vPos, 1.0);
+    }`,
+  fragmentShader: `
+    uniform vec3 sol;
+    varying float vD;
+    varying float vV;
+    varying vec3 vPos;
+    void main() {
+      if (vD < 0.015) discard;                      // menos de 1,5 cm: no se dibuja
+      vec3 n = normalize(cross(dFdx(vPos), dFdy(vPos)));
+      if (n.y < 0.0) n = -n;
+      float luz = 0.65 + 0.35 * max(dot(n, sol), 0.0);
+      vec3 color = mix(vec3(0.55, 0.82, 0.97), vec3(0.04, 0.22, 0.52), smoothstep(0.015, 1.5, vD));
+      color = mix(color, vec3(0.95, 0.97, 1.0), 0.6 * smoothstep(1.0, 3.0, vV));   // espuma donde corre rápido
+      gl_FragColor = vec4(color * luz, mix(0.55, 0.9, smoothstep(0.015, 0.8, vD)));
+    }`,
+});
+const mallaAgua = new THREE.Mesh(geoCeldas, matVistaAgua);
+mallaAgua.frustumCulled = false;
+mallaAgua.renderOrder = 2;
+scene.add(mallaAgua);
+
+// ------------------------------------------------------------ tormentas: nube, cortina y gotas
+const tiempoGotas = { value: 0 };
+const ALTO_NUBE = 160;
+const matNube = new THREE.MeshStandardMaterial({ color: 0x7b8494, flatShading: true, roughness: 1 });
+const matGotas = new THREE.ShaderMaterial({
+  transparent: true,
+  depthWrite: false,
+  uniforms: { tiempo: tiempoGotas, alto: { value: ALTO_NUBE } },
+  vertexShader: `
+    attribute vec2 gota;   // fase, extremo (0 = cabeza, 1 = cola)
+    uniform float tiempo;
+    uniform float alto;
+    varying float vA;
+    void main() {
+      float y = alto - mod(tiempo * 35.0 + gota.x * alto, alto) + gota.y * 5.0;
+      vA = 1.0 - gota.y;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position.x, y, position.z, 1.0);
+    }`,
+  fragmentShader: `
+    varying float vA;
+    void main() { gl_FragColor = vec4(0.78, 0.86, 0.95, 0.15 + 0.55 * vA); }`,
+});
+const tormentas = [];
+
+function crearTormenta(x, z, radio, intensidad) {
+  if (tormentas.length >= MAX_NUBES) quitarTormenta(tormentas[0]);
+  const grupo = new THREE.Group();
+  grupo.position.set(x, altura(x, z), z);
+  for (let k = 0; k < 12; k++) {
+    const bola = new THREE.Mesh(new THREE.IcosahedronGeometry(radio * (0.2 + Math.random() * 0.18), 1), matNube);
+    const a = Math.random() * Math.PI * 2, r = Math.sqrt(Math.random()) * radio * 0.75;
+    bola.position.set(Math.cos(a) * r, ALTO_NUBE + Math.random() * 15, Math.sin(a) * r);
+    bola.scale.y = 0.45;
+    bola.castShadow = true;
+    grupo.add(bola);
+  }
+  const cortina = new THREE.Mesh(
+    new THREE.CylinderGeometry(radio * 0.85, radio * 0.85, ALTO_NUBE, 32, 1, true),
+    new THREE.MeshBasicMaterial({ color: 0x9fb3c8, transparent: true, depthWrite: false, side: THREE.DoubleSide,
+                                  opacity: 0.06 + 0.14 * intensidad / 300 }));
+  cortina.position.y = ALTO_NUBE / 2;
+  grupo.add(cortina);
+  const n = Math.round(THREE.MathUtils.clamp((radio * radio * intensidad) / 4000, 400, 6000));
+  const pos = new Float32Array(n * 6), gota = new Float32Array(n * 4);
+  for (let k = 0; k < n; k++) {
+    const a = Math.random() * Math.PI * 2, r = Math.sqrt(Math.random()) * radio * 0.85, fase = Math.random();
+    for (let e = 0; e < 2; e++) {
+      pos.set([Math.cos(a) * r, 0, Math.sin(a) * r], (k * 2 + e) * 3);
+      gota.set([fase, e], (k * 2 + e) * 2);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute("gota", new THREE.BufferAttribute(gota, 2));
+  const gotas = new THREE.LineSegments(geo, matGotas);
+  gotas.frustumCulled = false;
+  grupo.add(gotas);
+  scene.add(grupo);
+  tormentas.push({ x, z, radio, intensidad, grupo });
+  actualizarTormentas();
+}
+
+function quitarTormenta(tt) {
+  scene.remove(tt.grupo);
+  tt.grupo.traverse((o) => {
+    o.geometry?.dispose();
+    if (o.material && o.material !== matNube && o.material !== matGotas) o.material.dispose();
+  });
+  tormentas.splice(tormentas.indexOf(tt), 1);
+  actualizarTormentas();
+}
+
+function actualizarTormentas() {
+  simulacion.fijarNubes(tormentas);
+  $("tormentas").replaceChildren(...tormentas.map((tt) => {
+    const li = document.createElement("li");
+    li.textContent = t("tormentaItem", tt.intensidad, tt.radio);
+    const b = document.createElement("button");
+    b.textContent = "✕";
+    b.title = t("quitarEsta");
+    b.onclick = () => quitarTormenta(tt);
+    li.appendChild(b);
+    return li;
+  }));
+}
+
+// ------------------------------------------------------------ panel de lluvia
+let tiempoSim = 0, volumenCaido = 0, pausa = false, colocando = true, refrescoPanel = 0;
+const categoria = (mmh) => tx("categorias")[mmh < 15 ? 0 : mmh < 30 ? 1 : mmh < 60 ? 2 : 3];   // umbrales de AEMET
+function rotulosLluvia() {
+  const i = +$("intensidad").value;
+  $("vIntensidad").textContent = `${i} mm/h (${categoria(i)})`;
+  $("vRadio").textContent = `${$("radio").value} m`;
+  $("vPasos").textContent = t("minPorSeg", numero(+$("pasos").value * DT_SIM, 1));
+  $("colocar").textContent = t("colocar", t(colocando ? "si" : "no"));
+  $("pausa").textContent = t(pausa ? "seguir" : "pausa");
+}
+for (const id of ["intensidad", "radio", "pasos"]) $(id).oninput = rotulosLluvia;
+
+$("abrirLluvia").onclick = () => mostrarPanel("lluvia");
+$("vista").onchange = () => { matVistaAgua.uniforms.modoVista.value = +$("vista").value; };
+$("colocar").onclick = () => { colocando = !colocando; rotulosLluvia(); };
+$("pausa").onclick = () => { pausa = !pausa; rotulosLluvia(); };
+$("quitar").onclick = () => { while (tormentas.length) quitarTormenta(tormentas[0]); };
+$("secar").onclick = () => { simulacion.secar(); tiempoSim = 0; volumenCaido = 0; };
+
+function actualizarLluvia(dt) {
+  tiempoGotas.value += dt;
+  if (comprobacion) avanzarComprobacion();
+  else if (!pausa) {
+    const pasos = +$("pasos").value;
+    for (let k = 0; k < pasos; k++) simulacion.paso();
+    tiempoSim += pasos * DT_SIM;
+    // Volumen aproximado: intensidad × área efectiva (el borde suave cuenta ~85 % del radio)
+    for (const tt of tormentas) volumenCaido += (tt.intensidad / 3.6e6) * Math.PI * (0.875 * tt.radio) ** 2 * pasos * DT_SIM;
+  }
+  matVistaAgua.uniforms.tAgua.value = simulacion.textura();
+  refrescoPanel -= dt;
+  if (refrescoPanel <= 0 && $("lluvia").style.display === "block") {
+    refrescoPanel = 0.25;
+    const h = Math.floor(tiempoSim / 3600), m = Math.floor((tiempoSim % 3600) / 60);
+    $("estadoLluvia").textContent = t("estadoLluvia", h, String(m).padStart(2, "0"), numero(Math.round(volumenCaido)))
+      + (pausa ? t("enPausa") : "");
+  }
+}
+
+// ------------------------------------------------------------ Neutro: riesgo de inundación
+const neutro = crearNeutro();
+if (MEMORIA) cargarMemoria(neutro, MEMORIA);
+let mapaRiesgo = null, iEscenario = 2, ultimaExplicacion = null, comprobacion = null;
+// Resultado de la simulación física de cada escenario (profundidad máxima en pasos de 2 cm); null si no está
+const FISICA = await Promise.all(INTENSIDADES.map((mmh) =>
+  BLOBS && !BLOBS["fisica_" + mmh] ? null : cargarBinario("fisica_" + mmh, Uint8Array, BLOBS).catch(() => null)));
+/** Profundidad máxima simulada de una celda en el mapa que se está viendo (con medidas si es el caso), o null. */
+function profundidadFisica(celda) {
+  if ($("fuente").value === "medidas" && resultadoMedidas) return resultadoMedidas.despuesMax[celda];
+  return FISICA[iEscenario] ? FISICA[iEscenario][celda] * 0.02 : null;
+}
+if (!FISICA[iEscenario]) $("fuente").value = "neutro";
+$("fuente").onchange = () => actualizarRiesgo();
+
+// Zonas inundables oficiales del río (0 fuera · 1 T500 · 2 T100 · 3 T10), de obtener_oficial.py
+const OFICIAL = BLOBS && !BLOBS.oficial ? null : await cargarBinario("oficial", Uint8Array, BLOBS).catch(() => null);
+const PERIODOS = [null, 500, 100, 10];
+// Sótanos y garajes por edificio (Catastro): un edificio afectado con sótano es mucho más vulnerable
+const SOTANOS = BLOBS && !BLOBS.sotanos ? null : await cargarBinario("sotanos", Uint8Array, BLOBS).catch(() => null);
+// Sección censal de cada celda de 4 m (0 = fuera de Ripollet), de obtener_vulnerabilidad.py
+const SECCIONES_4M = BLOBS && !BLOBS.secciones ? null : await cargarBinario("secciones", Uint8Array, BLOBS).catch(() => null);
+// Por edificio: año, viviendas, certificados, certificados E–G, letra + placas + uso (obtener_rehabilitacion.py)
+const REHAB = BLOBS && !BLOBS.rehab ? null : await cargarBinario("rehab", Uint16Array, BLOBS).catch(() => null);
+// Tiendas y lugares de interés de OSM (obtener_lugares.py): JSON comprimido
+const LUGARES_OSM = BLOBS && !BLOBS.lugares ? null : await cargarBinario("lugares", Uint8Array, BLOBS)
+  .then((b) => JSON.parse(new TextDecoder().decode(b))).catch(() => null);
+// Autobuses: paradas, líneas, trazados y horarios (GTFS de la AMB y de la Generalitat, obtener_transporte.py)
+// Zona de capacidad acústica de cada celda de 4 m (obtener_ambiente.py)
+const ACUSTICA_4M = BLOBS && !BLOBS.acustica ? null : await cargarBinario("acustica", Uint8Array, BLOBS).catch(() => null);
+const TRANSPORTE = BLOBS && !BLOBS.transporte ? null : await cargarBinario("transporte", Uint8Array, BLOBS)
+  .then((b) => JSON.parse(new TextDecoder().decode(b))).catch(() => null);
+const textoSotanos = (afectados) => (SOTANOS ? t("conSotano", numero([...afectados].filter((id) => SOTANOS[id - 1]).length)) : "");
+const texOficial = new THREE.DataTexture(OFICIAL || new Uint8Array(SIM.nx * SIM.ny), SIM.nx, SIM.ny,
+                                         THREE.RedFormat, THREE.UnsignedByteType);
+texOficial.unpackAlignment = 1;
+texOficial.needsUpdate = true;
+const capaOficial = new THREE.Mesh(geoCeldas, new THREE.ShaderMaterial({
+  transparent: true,
+  depthWrite: false,
+  uniforms: { tOficial: { value: texOficial } },
+  vertexShader: `
+    uniform sampler2D tOficial;
+    varying float vO;
+    varying vec2 vXZ;
+    void main() {
+      vO = texture2D(tOficial, uv).r * 255.0;
+      vXZ = position.xz;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position + vec3(0.0, 0.8, 0.0), 1.0);
+    }`,
+  fragmentShader: `
+    varying float vO;
+    varying vec2 vXZ;
+    void main() {
+      if (vO < 0.5) discard;
+      // rayado diagonal: más oscuro cuanto más frecuente (T10 > T100 > T500)
+      vec3 color = vO > 2.5 ? vec3(0.36, 0.13, 0.62) : (vO > 1.5 ? vec3(0.55, 0.30, 0.85) : vec3(0.78, 0.64, 1.0));
+      float raya = step(mod(vXZ.x + vXZ.y, 8.0), 4.0);
+      gl_FragColor = vec4(color, mix(0.25, 0.75, raya));
+    }`,
+}));
+capaOficial.frustumCulled = false;
+capaOficial.renderOrder = 1;
+capaOficial.visible = false;
+scene.add(capaOficial);
+$("filaOficial").style.display = OFICIAL ? "block" : "none";
+$("verOficial").onchange = () => { capaOficial.visible = $("verOficial").checked && $("riesgo").style.display === "block"; };
+
+/** Superficie oficial (T500) y qué parte de lo inundado en el mapa actual cae dentro de ella. */
+function comparacionOficial() {
+  if (!OFICIAL || !mapaRiesgo) return null;
+  let oficial = 0, inundado = 0, dentro = 0;
+  for (let k = 0; k < OFICIAL.length; k++) {
+    if (OFICIAL[k] && D.codigos[k] !== 1) oficial++;
+    if (mapaRiesgo[k] === 2) { inundado++; if (OFICIAL[k]) dentro++; }
+  }
+  return { ha: (oficial * SIM.celda ** 2) / 1e4, pct: (100 * dentro) / (inundado || 1) };
+}
+
+const texRiesgo = new THREE.DataTexture(new Uint8Array(SIM.nx * SIM.ny).fill(255), SIM.nx, SIM.ny,
+                                        THREE.RedFormat, THREE.UnsignedByteType);
+texRiesgo.unpackAlignment = 1;                      // filas de 1 byte por celda (el ancho no es múltiplo de 4)
+const capaRiesgo = new THREE.Mesh(geoCeldas, new THREE.ShaderMaterial({
+  transparent: true,
+  depthWrite: false,
+  uniforms: { tRiesgo: { value: texRiesgo } },
+  vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position + vec3(0.0, 0.6, 0.0), 1.0);
+    }`,
+  fragmentShader: `
+    // 1 charco · 2 inundado · 3 deja de inundarse (medidas) · 4 empeora (medidas); 0 y 255 no se pintan.
+    // Se lee por píxel (textura sin filtrar): cada celda de 4 m con su color, sin mezclas entre vecinas.
+    uniform sampler2D tRiesgo;
+    varying vec2 vUv;
+    void main() {
+      float c = floor(texture2D(tRiesgo, vUv).r * 255.0 + 0.5);
+      if (c < 0.5 || c > 4.5) discard;
+      vec3 color = c < 1.5 ? vec3(1.0, 0.78, 0.25) : c < 2.5 ? vec3(0.86, 0.12, 0.2)
+                 : c < 3.5 ? vec3(0.35, 0.82, 0.48) : vec3(0.95, 0.55, 0.22);
+      gl_FragColor = vec4(color, c < 1.5 ? 0.55 : 0.8);
+    }`,
+}));
+capaRiesgo.frustumCulled = false;
+capaRiesgo.renderOrder = 1;
+capaRiesgo.visible = false;
+scene.add(capaRiesgo);
+const marcas = new THREE.Group();
+marcas.visible = false;
+scene.add(marcas);
+
+function rellenarEscenarios() {
+  $("escenario").replaceChildren(...INTENSIDADES.map((mmh, i) => {
+    const o = document.createElement("option");
+    o.value = i;
+    o.textContent = t("opcionEscenario", mmh, categoria(mmh));
+    o.selected = i === iEscenario;
+    return o;
+  }));
+}
+$("escenario").onchange = () => { iEscenario = +$("escenario").value; actualizarRiesgo(); };
+$("abrirRiesgo").onclick = () => { mostrarPanel("riesgo"); actualizarRiesgo(); };
+
+const nombreCalle = (id) => (id ? DATOS.calles[id - 1] : t("sinCalle"));
+const puntoBajo = (celda) => rasgosDe(situacion(0, D.codigos[celda], D.rasgos[celda])).hondonada >= 2;
+function textoProfundidad(celda, prefijo = "") {
+  const prof = profundidadFisica(celda);
+  if (prof === null) return "";
+  return prefijo + (prof > 1 ? t("masDeUnMetro") : `${numero(Math.round(prof * 100))} cm`);
+}
+let analisis = null;
+
+function actualizarRiesgo() {
+  if (resultadoMedidas && resultadoMedidas.iEscenario !== iEscenario) olvidarResultadoMedidas();
+  const fuente = $("fuente").value;
+  const fisica = fuente === "fisica" && FISICA[iEscenario];
+  if (fuente === "neutro" && !MEMORIA) { $("resumenRiesgo").textContent = t("sinNeutro"); return; }
+  let vista;
+  if (fuente === "medidas" && resultadoMedidas) {
+    // Mapa con las medidas, y en la vista la diferencia con el de antes
+    mapaRiesgo = resultadoMedidas.despues;
+    const antes = resultadoMedidas.antes;
+    vista = Uint8Array.from(mapaRiesgo, (d, k) => (d === 255 ? 255 : antes[k] === 2 && d < 2 ? 3 : d === 2 && antes[k] < 2 ? 4 : d));
+  } else {
+    mapaRiesgo = fisica
+      ? clasesDeProfundidad(Float32Array.from(FISICA[iEscenario], (v) => v * 0.02), D.codigos)
+      : predecirMapa(neutro, iEscenario, D.codigos, D.rasgos, SIM.nx);
+    vista = mapaRiesgo;
+  }
+  texRiesgo.image.data.set(vista);
+  texRiesgo.needsUpdate = true;
+  const area = (c) => mapaRiesgo.reduce((a, v) => a + (v === c), 0) * SIM.celda ** 2 / 1e4;
+  const afectados = edificiosAfectados(mapaRiesgo, SIM, D.edificios), edificios = afectados.size;
+  const puntos = puntosCriticos(mapaRiesgo, SIM, D.calles).slice(0, 12);
+  const equip = equipamientosAfectados(mapaRiesgo, SIM, DATOS.equipamientos).filter((e) => e.clase >= 1)
+    .sort((a, b) => b.clase - a.clase);
+  analisis = { area2: area(2), area1: area(1), edificios, sotanos: textoSotanos(afectados), puntos, equip };
+  $("resumenRiesgo").innerHTML = fuente === "medidas" && resultadoMedidas ? textoResultadoMedidas()
+    : t("resumen", numero(analisis.area2, 1), numero(analisis.area1, 1), numero(edificios), numero(DATOS.edificios),
+        analisis.sotanos);
+  $("listaPuntos").replaceChildren(...puntos.map((p, n) => {
+    const li = document.createElement("li");
+    li.textContent = `${puntoBajo(p.celda) ? "⚠️ " : ""}${nombreCalle(p.calle)} · ${numero(p.area)} m²${textoProfundidad(p.celda, " · ")}`;
+    li.onclick = () => { volarA(new THREE.Vector3(p.x, 0, p.z), 0.35); explicar(p.celda, n + 1); };
+    return li;
+  }));
+  $("listaEquip").replaceChildren(...(equip.length ? equip.map((e) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span class="c${e.clase}">●</span> ${e.nombre} (${tx("tipos")[e.tipo]}) — ${tx("clases")[e.clase]}`;
+    li.style.cursor = "pointer";
+    li.onclick = () => volarA(new THREE.Vector3(e.x, 0, e.z), 0.35);
+    return li;
+  }) : [Object.assign(document.createElement("li"), { textContent: t("ninguno") })]));
+  // Marcas numeradas en el mapa
+  marcas.clear();
+  puntos.forEach((p, n) => {
+    const div = document.createElement("div");
+    div.className = "marca";
+    div.textContent = n + 1;
+    div.onclick = () => explicar(p.celda, n + 1);
+    const obj = new CSS2DObject(div);
+    obj.position.set(p.x, altura(p.x, p.z) + 8, p.z);
+    marcas.add(obj);
+  });
+  $("comprobar").textContent = t("comprobar");
+}
+
+/** La explicación de Neutro para una celda: su concepto, sus rasgos y lo que vio al aprender. */
+function explicar(celda, numeroPunto = null) {
+  ultimaExplicacion = [celda, numeroPunto];
+  const caja = $("explicacion");
+  const cod = D.codigos[celda];
+  let html = `<button class="cerrarExp" style="float:right">✕</button><b>${numeroPunto ? `${numeroPunto} · ` : ""}${t("porQue")}</b><br>`;
+  html += `${t("calle")}: ${nombreCalle(D.calles[celda])}<br>`;
+  if (OFICIAL && OFICIAL[celda]) html += `<span style="color:#c9a3ff">${t("oficialCelda", PERIODOS[OFICIAL[celda]])}</span><br>`;
+  if (!celdaAnalizable(cod)) html += t("noAnaliza");
+  else {
+    const s = situacion(iEscenario, cod, D.rasgos[celda]);
+    const { accion, neurona, excepcion } = decidir(neutro, s, firmaDe(celda, SIM.nx));
+    const r = rasgosDe(s);
+    const prof = profundidadFisica(celda);
+    if (prof !== null)
+      html += t("fisicaDice", prof > 1 ? t("masDeUnMetro") : `${numero(Math.round(prof * 100))} cm`,
+                tx("clases")[claseDeProfundidad(prof)]) + "<br>";
+    html += t("neutroDice", tx("clases")[ACCIONES.indexOf(accion)]) + ` (${INTENSIDADES[iEscenario]} mm/h)<br>`;
+    if (excepcion) {
+      const fechas = neurona.incidencias.map((id) => incidencias.find((i) => i.id === id)?.fecha).filter(Boolean);
+      html += `<span style="color:#5ad17a">${t("porIncidencia", fechas.join(", "))}</span><br>`;
+    }
+    html += t("concepto", tx("conceptos")[percepcion.nombrar(s)]);
+    html += `<ul><li>${tx("suelos")[r.suelo] ?? ""}</li><li>${tx("cuencas")[r.cuenca]}</li>`
+          + `<li>${tx("hondonadas")[r.hondonada]}</li><li>${tx("pendientes")[r.pendiente]}</li></ul>`;
+    if (!neurona) html += t("nuncaVisto");
+    else {
+      const a = neurona.aciertos || {};
+      const veces = ACCIONES.reduce((x, k) => x + (a[k] || 0), 0);
+      const reparto = ACCIONES.map((k, i) => `${tx("clases")[i]} ${numero(a[k] || 0)}`).join(" · ");
+      const conf = ((a[accion] || 0) + 1) / ((a[accion] || 0) + (neurona.fallos[accion] || 0) + 2);
+      if (!neutro.neuronas.has(s)) html += t("completado") + "<br>";
+      html += t("visto", numero(veces), reparto) + " " + t("confianza", Math.round(conf * 100));
+    }
+    if (r.hondonada >= 2) html += `<div class="nota">${t("notaHondonada")}</div>`;
+  }
+  caja.innerHTML = html;
+  caja.querySelector(".cerrarExp").onclick = () => { caja.style.display = "none"; ultimaExplicacion = null; };
+  caja.style.display = "block";
+}
+
+// ------------------------------------------------------------ simulaciones de escenario (comprobación, medidas)
+// Una simulación completa del escenario (1 h de lluvia + 30 min de escorrentía) repartida entre fotogramas para
+// que la página no se congele; al terminar devuelve la profundidad máxima de cada celda.
+const SIN_CAMBIOS = { bajar: null, desague: null, alcantarillado: 0 };
+function lanzarSimulacion(mmh, campo, salida, etiqueta, alTerminar) {
+  simulacion.aplicar(campo.bajar, campo.desague, campo.alcantarillado);
+  simulacion.secar();
+  simulacion.fijarNubes([]);
+  simulacion.lluviaGlobal = mmh;
+  comprobacion = { paso: 0, lluvia: DURACION_LLUVIA / DT_SIM, total: (DURACION_LLUVIA + DURACION_ESCORRENTIA) / DT_SIM,
+                   salida, etiqueta, alTerminar };
+  matVistaAgua.uniforms.modoVista.value = 0;
+}
+function avanzarComprobacion() {
+  const c = comprobacion;
+  for (let k = 0; k < 200 && c.paso < c.total; k++, c.paso++) {
+    if (c.paso === c.lluvia) simulacion.lluviaGlobal = 0;
+    simulacion.paso();
+  }
+  $(c.salida).textContent = t(c.etiqueta, Math.round((100 * c.paso) / c.total));
+  if (c.paso < c.total) return;
+  const maxima = simulacion.leer().maxima;
+  comprobacion = null;
+  aplicarCampoActual();                                   // la lluvia libre vuelve con las medidas puestas
+  simulacion.fijarNubes(tormentas);
+  matVistaAgua.uniforms.modoVista.value = 1;              // deja a la vista la inundación máxima simulada
+  $("vista").value = "1";
+  c.alTerminar(maxima);
+}
+
+// Comprobación: la simulación física del mismo escenario (sin medidas), y cuánto coincide con Neutro
+$("comprobar").onclick = () => {
+  if (comprobacion || !mapaRiesgo) return;
+  const neutroMapa = predecirMapa(neutro, iEscenario, D.codigos, D.rasgos, SIM.nx);
+  lanzarSimulacion(INTENSIDADES[iEscenario], SIN_CAMBIOS, "estadoComprobacion", "comprobando", (maxima) => {
+    const r = comparar(neutroMapa, clasesDeProfundidad(maxima, D.codigos));
+    $("estadoComprobacion").textContent = t("resultadoComprobacion", Math.round(r.exactitud * 100),
+                                             Math.round(r.sensibilidad * 100), Math.round(r.precision * 100));
+  });
+};
+
+// ------------------------------------------------------------ ¿y si…? medidas
+const MEDIDA = {   // valor: profundidad (m) o mm/h extra que se lleva el agua
+  deposito: { valor: "valorDeposito", min: 0.5, max: 4, paso: 0.5, def: 2, unidad: "m", color: 0x2f7fd6, icono: "💧" },
+  permeable: { valor: "valorPermeable", min: 10, max: 100, paso: 10, def: 50, unidad: "mm/h", color: 0x3fae55, icono: "🌱" },
+  imbornal: { valor: "valorImbornal", min: 20, max: 200, paso: 10, def: 80, unidad: "mm/h", color: 0x8a8f99, icono: "🔽" },
+};
+const medidas = [];
+let herramienta = null, resultadoMedidas = null;
+const grupoMedidas = new THREE.Group();
+grupoMedidas.visible = false;
+scene.add(grupoMedidas);
+
+function rotulosMedidas() {
+  const h = MEDIDA[herramienta || "deposito"];
+  $("nombreValorMedida").textContent = t(h.valor);
+  $("vValorMedida").textContent = `${numero(+$("valorMedida").value, 1)} ${h.unidad}`;
+  $("vRadioMedida").textContent = `${$("radioMedida").value} m`;
+  const alc = +$("alcantarillado").value;
+  $("vAlcantarillado").textContent = alc ? `${alc} mm/h` : t("sinRed");
+  for (const b of document.querySelectorAll("[data-herr]")) b.classList.toggle("activo", b.dataset.herr === herramienta);
+  $("listaMedidas").replaceChildren(...medidas.map((m) => {
+    const li = document.createElement("li");
+    li.textContent = textoMedida(m);
+    const b = document.createElement("button");
+    b.textContent = "✕";
+    b.onclick = () => quitarMedida(m);
+    li.appendChild(b);
+    return li;
+  }));
+}
+function elegirHerramienta(h) {
+  herramienta = herramienta === h ? null : h;
+  if (herramienta) {
+    const m = MEDIDA[herramienta], r = $("valorMedida");
+    Object.assign(r, { min: m.min, max: m.max, step: m.paso });
+    r.value = m.def;
+    marcandoInc = false;
+    rotulosIncidencias();
+  }
+  rotulosMedidas();
+}
+for (const b of document.querySelectorAll("[data-herr]")) b.onclick = () => elegirHerramienta(b.dataset.herr);
+for (const id of ["radioMedida", "valorMedida"]) $(id).oninput = rotulosMedidas;
+$("alcantarillado").oninput = () => { rotulosMedidas(); aplicarCampoActual(); olvidarResultadoMedidas(); };
+
+/** Celdas en las que actúa una medida (nunca dentro de edificios ni en el cauce). */
+const celdasMedida = (m) => celdasEnCirculo(SIM, m.x, m.z, m.radio).filter((k) => celdaAnalizable(D.codigos[k]));
+function textoMedida(m) {
+  if (m.tipo === "deposito")
+    return t("medDeposito", m.radio, numero(m.valor, 1), numero(Math.round(celdasMedida(m).length * SIM.celda ** 2 * m.valor)));
+  return t(m.tipo === "permeable" ? "medPermeable" : "medImbornal", m.radio, m.valor);
+}
+
+/** El campo de modificaciones de todas las medidas + el alcantarillado, para la simulación. */
+function campoMedidas() {
+  const n = SIM.nx * SIM.ny, bajar = new Float32Array(n), desague = new Float32Array(n);
+  for (const m of medidas)
+    for (const k of celdasMedida(m)) {
+      if (m.tipo === "deposito") bajar[k] = Math.max(bajar[k], m.valor);
+      else desague[k] += m.valor / 3.6e6;
+    }
+  return { bajar: medidas.length ? bajar : null, desague: medidas.length ? desague : null,
+           alcantarillado: +$("alcantarillado").value };
+}
+const aplicarCampoActual = () => { const c = campoMedidas(); simulacion.aplicar(c.bajar, c.desague, c.alcantarillado); };
+
+function crearMedida(x, z) {
+  const m = { tipo: herramienta, x, z, radio: +$("radioMedida").value, valor: +$("valorMedida").value };
+  const def = MEDIDA[m.tipo];
+  m.grupo = new THREE.Group();
+  // Disco translúcido y borde, dibujados por encima de todo (como una selección) para verlos entre edificios
+  const sobreTodo = (opacidad) => new THREE.MeshBasicMaterial({ color: def.color, transparent: true, opacity: opacidad,
+                                                                  side: THREE.DoubleSide, depthTest: false, depthWrite: false });
+  const disco = new THREE.Mesh(new THREE.CircleGeometry(m.radio, 48).rotateX(-Math.PI / 2), sobreTodo(0.22));
+  const anillo = new THREE.Mesh(new THREE.RingGeometry(m.radio - 1.5, m.radio, 48).rotateX(-Math.PI / 2), sobreTodo(0.9));
+  for (const malla of [disco, anillo]) { malla.position.set(x, altura(x, z) + 1.2, z); malla.renderOrder = 3; }
+  const icono = Object.assign(document.createElement("div"), { className: "icono", textContent: def.icono });
+  const etiqueta = new CSS2DObject(icono);
+  etiqueta.position.set(x, altura(x, z) + 4, z);
+  m.grupo.add(disco, anillo, etiqueta);
+  grupoMedidas.add(m.grupo);
+  medidas.push(m);
+  aplicarCampoActual();
+  olvidarResultadoMedidas();
+  rotulosMedidas();
+}
+function quitarMedida(m) {
+  grupoMedidas.remove(m.grupo);
+  m.grupo.traverse((o) => { o.geometry?.dispose(); o.material?.dispose(); });
+  medidas.splice(medidas.indexOf(m), 1);
+  aplicarCampoActual();
+  olvidarResultadoMedidas();
+  rotulosMedidas();
+}
+$("quitarMedidas").onclick = () => { while (medidas.length) quitarMedida(medidas[0]); };
+
+function olvidarResultadoMedidas() {
+  if (!resultadoMedidas) return;
+  resultadoMedidas = null;
+  $("fuente").querySelector("option[value=medidas]")?.remove();
+  if ($("fuente").value === "medidas" || !$("fuente").value) $("fuente").value = FISICA[iEscenario] ? "fisica" : "neutro";
+  $("estadoMedidas").textContent = "";
+}
+
+// Antes y después: el "antes" es la simulación ya hecha si no hay alcantarillado; si lo hay, se simula también
+$("simularMedidas").onclick = () => {
+  if (comprobacion) return;
+  const mmh = INTENSIDADES[iEscenario], campo = campoMedidas();
+  const despues = (antesMax) => lanzarSimulacion(mmh, campo, "estadoMedidas", "simulandoDespues", (despuesMax) => {
+    // El hueco del depósito se llena por diseño: no cuenta como zona inundada
+    const dentroDeposito = new Set(medidas.filter((m) => m.tipo === "deposito").flatMap(celdasMedida));
+    const clases = (max) => Uint8Array.from(clasesDeProfundidad(max, D.codigos), (c, k) => (dentroDeposito.has(k) ? 255 : c));
+    resultadoMedidas = { iEscenario, mmh, alcantarillado: campo.alcantarillado, antes: clases(antesMax),
+                         despues: clases(despuesMax), despuesMax, medidas: medidas.map(textoMedida) };
+    $("estadoMedidas").textContent = "";
+    simulacion.secar();                                 // sin agua encima: se ve el mapa de diferencias
+    matVistaAgua.uniforms.modoVista.value = 0;
+    $("vista").value = "0";
+    if (!$("fuente").querySelector("option[value=medidas]")) {
+      const o = document.createElement("option");
+      o.value = "medidas";
+      o.dataset.t = "fuenteMedidas";
+      o.textContent = t("fuenteMedidas");
+      $("fuente").appendChild(o);
+    }
+    $("fuente").value = "medidas";
+    actualizarRiesgo();
+  });
+  if (!campo.alcantarillado && FISICA[iEscenario]) despues(Float32Array.from(FISICA[iEscenario], (v) => v * 0.02));
+  else lanzarSimulacion(mmh, { ...SIN_CAMBIOS, alcantarillado: campo.alcantarillado }, "estadoMedidas", "simulandoAntes", despues);
+};
+
+function textoResultadoMedidas() {
+  const r = resultadoMedidas, ha = (n) => numero((n * SIM.celda ** 2) / 1e4, 2);
+  const cuenta = (mapa, c) => mapa.reduce((a, v) => a + (v === c), 0);
+  const equip = (mapa) => equipamientosAfectados(mapa, SIM, DATOS.equipamientos).filter((e) => e.clase === 2).length;
+  let mejora = 0, empeora = 0;
+  for (let k = 0; k < r.antes.length; k++) {
+    if (r.despues[k] === 255) continue;
+    if (r.antes[k] === 2 && r.despues[k] < 2) mejora++;
+    else if (r.despues[k] === 2 && r.antes[k] < 2) empeora++;
+  }
+  return t("resumenMedidas", r.mmh, r.alcantarillado ? t("conAlcantarillado", r.alcantarillado) : "",
+           ha(cuenta(r.antes, 2)), ha(cuenta(r.despues, 2)),
+           numero(edificiosAfectados(r.antes, SIM, D.edificios).size), numero(edificiosAfectados(r.despues, SIM, D.edificios).size),
+           numero(equip(r.antes)), numero(equip(r.despues)), ha(mejora), ha(empeora));
+}
+
+// ------------------------------------------------------------ incidencias reales (Neutro aprende de ellas)
+const CLAVE_INCIDENCIAS = "ripollet-incidencias";
+let incidencias = [], marcandoInc = false, estadoAprendizaje = { excepciones: 0, cambios: 0 };
+try { incidencias = JSON.parse(localStorage.getItem(CLAVE_INCIDENCIAS)) || []; } catch {}
+const neutroBase = crearNeutro();                       // Neutro antes de conocer las incidencias (para comparar)
+if (MEMORIA) cargarMemoria(neutroBase, MEMORIA);
+const grupoIncidencias = new THREE.Group();
+grupoIncidencias.visible = false;
+scene.add(grupoIncidencias);
+$("incFecha").value = new Date().toISOString().slice(0, 10);
+
+const guardarIncidencias = () => { try { localStorage.setItem(CLAVE_INCIDENCIAS, JSON.stringify(incidencias)); } catch {} };
+const valida = (i) => i && Number.isFinite(i.x) && Number.isFinite(i.z) && [1, 2].includes(i.gravedad)
+  && Number.isInteger(i.intensidad) && i.intensidad >= 0 && i.intensidad < INTENSIDADES.length;
+
+/** Peor clase en el entorno de una incidencia según un mapa dado. */
+function claseCerca(inc, clasePorCelda) {
+  let peor = 0;
+  for (const k of celdasEnCirculo(SIM, inc.x, inc.z, 12)) if (celdaAnalizable(D.codigos[k])) peor = Math.max(peor, clasePorCelda(k));
+  return peor;
+}
+
+/** Vuelve a cargar lo que Neutro aprendió de las simulaciones y le enseña todas las incidencias. */
+function reaprender() {
+  if (!MEMORIA) return;
+  cargarMemoria(neutro, MEMORIA);                       // (deja también las excepciones vacías)
+  let cambios = 0;
+  for (const inc of incidencias) cambios += aprenderDeIncidencia(neutro, inc, SIM, D.codigos, D.rasgos);
+  estadoAprendizaje = { excepciones: neutro.excepciones.size, cambios };
+}
+
+function rotulosIncidencias() {
+  $("incMarcar").textContent = t("marcarInc", t(marcandoInc ? "si" : "no"));
+  $("incMarcar").classList.toggle("activo", marcandoInc);
+  const elegida = $("incIntensidad").value || String(iEscenario);      // se conserva la opción al traducir
+  $("incIntensidad").replaceChildren(...INTENSIDADES.map((mmh, i) => Object.assign(document.createElement("option"),
+    { value: i, textContent: `${mmh} mm/h (${categoria(mmh)})`, selected: String(i) === elegida })));
+  $("listaIncidencias").replaceChildren(...incidencias.map((inc) => {
+    const li = document.createElement("li");
+    li.textContent = `${inc.fecha} · ${tx("clases")[inc.gravedad]} · ${INTENSIDADES[inc.intensidad]} mm/h${inc.nota ? ` · ${inc.nota}` : ""}`;
+    li.onclick = () => volarA(new THREE.Vector3(inc.x, 0, inc.z), 0.35);
+    const b = document.createElement("button");
+    b.textContent = "✕";
+    b.onclick = (e) => { e.stopPropagation(); incidencias.splice(incidencias.indexOf(inc), 1); cambioIncidencias(); };
+    li.appendChild(b);
+    return li;
+  }));
+  // Validación: ¿la simulación física (y Neutro sin incidencias) ve agua donde la hubo?
+  if (!incidencias.length) { $("estadoIncidencias").textContent = t("sinIncidencias"); return; }
+  let agua = 0, gravedad = 0, neutroAntes = 0;
+  for (const inc of incidencias) {
+    const f = FISICA[inc.intensidad];
+    const cf = f ? claseCerca(inc, (k) => claseDeProfundidad(f[k] * 0.02)) : 0;
+    if (cf >= 1) agua++;
+    if (cf >= inc.gravedad) gravedad++;
+    const cn = claseCerca(inc, (k) => ACCIONES.indexOf(decidir(neutroBase, situacion(inc.intensidad, D.codigos[k], D.rasgos[k])).accion));
+    if (cn >= inc.gravedad) neutroAntes++;
+  }
+  $("estadoIncidencias").textContent = t("estadoIncidencias", incidencias.length, agua, gravedad, neutroAntes,
+                                         numero(estadoAprendizaje.excepciones), numero(estadoAprendizaje.cambios));
+}
+
+function pintarIncidencias() {
+  grupoIncidencias.clear();
+  for (const inc of incidencias) {
+    const div = document.createElement("div");
+    div.className = "pin";
+    div.style.background = inc.gravedad === 2 ? "#d7263d" : "#f2b632";
+    div.title = `${inc.fecha} · ${tx("clases")[inc.gravedad]}${inc.nota ? ` · ${inc.nota}` : ""}`;
+    div.onclick = () => explicar(Math.floor((inc.z - SIM.z0) / SIM.celda) * SIM.nx + Math.floor((inc.x - SIM.x0) / SIM.celda));
+    const obj = new CSS2DObject(div);
+    obj.position.set(inc.x, altura(inc.x, inc.z) + 6, inc.z);
+    grupoIncidencias.add(obj);
+  }
+}
+
+function cambioIncidencias() {
+  guardarIncidencias();
+  reaprender();
+  pintarIncidencias();
+  rotulosIncidencias();
+  if ($("riesgo").style.display === "block") actualizarRiesgo();
+}
+
+function crearIncidencia(x, z) {
+  incidencias.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                     x: Math.round(x * 10) / 10, z: Math.round(z * 10) / 10,
+                     fecha: $("incFecha").value || new Date().toISOString().slice(0, 10),
+                     gravedad: +$("incGravedad").value, intensidad: +$("incIntensidad").value,
+                     nota: $("incNota").value.trim().slice(0, 120) });
+  $("incNota").value = "";
+  cambioIncidencias();
+}
+
+$("incMarcar").onclick = () => {
+  marcandoInc = !marcandoInc;
+  if (marcandoInc) herramienta = null;
+  rotulosIncidencias();
+  rotulosMedidas();
+};
+$("incExportar").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(incidencias, null, 1)], { type: "application/json" }));
+  a.download = `incidencias_ripollet_${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+$("incImportar").onclick = () => $("incArchivo").click();
+$("incArchivo").onchange = async () => {
+  const archivo = $("incArchivo").files[0];
+  $("incArchivo").value = "";
+  if (!archivo) return;
+  let lista = [];
+  try { lista = JSON.parse(await archivo.text()); } catch {}
+  const nuevas = (Array.isArray(lista) ? lista : []).filter(valida)
+    .map((i) => ({ id: String(i.id || Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), x: i.x, z: i.z,
+                   fecha: String(i.fecha || "").slice(0, 10), gravedad: i.gravedad, intensidad: i.intensidad,
+                   nota: String(i.nota || "").slice(0, 120) }))
+    .filter((i) => !incidencias.some((j) => j.id === i.id));
+  if (!nuevas.length && !(Array.isArray(lista) && lista.length)) { alert(t("importError")); return; }
+  incidencias.push(...nuevas);
+  cambioIncidencias();
+};
+reaprender();
+pintarIncidencias();
+
+// Informe imprimible
+$("imprimir").onclick = () => {
+  if (!analisis) return;
+  renderer.render(scene, camera);
+  const imagen = renderer.domElement.toDataURL("image/jpeg", 0.85);
+  const fila = (celdas) => `<tr>${celdas.map((c) => `<td>${c}</td>`).join("")}</tr>`;
+  const mmh = INTENSIDADES[iEscenario];
+  $("informe").innerHTML = `
+    <h1>${t("tituloInforme")}</h1><div>${t("generado", new Date().toLocaleDateString(idioma === "ca" ? "ca-ES" : "es-ES"))}</div>
+    <h2>${t("secEscenario")}</h2><div>${t("opcionEscenario", mmh, categoria(mmh))} · ${t("fuente")}
+      ${t($("fuente").value === "fisica" ? "fuenteFisica" : "fuenteNeutro")}</div>
+    <h2>${t("secResumen")}</h2><div>${t("resumen", numero(analisis.area2, 1), numero(analisis.area1, 1),
+                                         numero(analisis.edificios), numero(DATOS.edificios), analisis.sotanos)}</div>
+    <img src="${imagen}">
+    <h2>${t("secPuntos")}</h2><table><tr><th>#</th><th>${t("calle")}</th><th>${t("superficie")}</th><th>${t("profundidad")}</th><th>${t("tipoPunto")}</th></tr>
+    ${analisis.puntos.map((p, n) => fila([n + 1, nombreCalle(p.calle), `${numero(p.area)} m²`, textoProfundidad(p.celda) || "—",
+       (puntoBajo(p.celda) ? "⚠️ " : "") + tx("conceptos")[percepcion.nombrar(situacion(iEscenario, D.codigos[p.celda], D.rasgos[p.celda]))]])).join("")}</table>
+    <div style="font-size:9pt">${t("notaHondonada")}</div>
+    <h2>${t("secEquip")}</h2><div style="font-size:9pt">${t("peorCaso")}</div>
+    <table><tr><th>${t("equipamiento")}</th><th>${t("tipo")}</th><th>${t("aguaAcceso")}</th></tr>
+    ${analisis.equip.map((e) => fila([e.nombre, tx("tipos")[e.tipo], tx("clases")[e.clase]])).join("") || fila([t("ninguno"), "", ""])}</table>
+    ${resultadoMedidas ? `<h2>${t("secMedidas")}</h2><div>${textoResultadoMedidas()}</div>
+      <table><tr><th>${t("medida")}</th></tr>${resultadoMedidas.medidas.map((m) => fila([m])).join("")}</table>` : ""}
+    ${incidencias.length ? `<h2>${t("secIncidencias")}</h2><div style="font-size:9pt">${$("estadoIncidencias").textContent}</div>
+      <table><tr><th>${t("fecha")}</th><th>${t("calle")}</th><th>${t("gravedad")}</th><th>${t("lluviaEpisodio")}</th><th>${t("simCerca")}</th></tr>
+      ${incidencias.map((inc) => {
+        const k = Math.floor((inc.z - SIM.z0) / SIM.celda) * SIM.nx + Math.floor((inc.x - SIM.x0) / SIM.celda);
+        const f = FISICA[inc.intensidad];
+        const cf = f ? claseCerca(inc, (q) => claseDeProfundidad(f[q] * 0.02)) : null;
+        return fila([inc.fecha, nombreCalle(D.calles[k]), tx("clases")[inc.gravedad], `${INTENSIDADES[inc.intensidad]} mm/h`,
+                     cf === null ? "—" : tx("clases")[cf]]);
+      }).join("")}</table>` : ""}
+    ${(() => { const o = comparacionOficial(); return o ? `<h2>${t("secOficial")}</h2><div>${t("textoOficial", numero(o.ha, 1), numero(o.pct, 1))}</div>` : ""; })()}
+    <h2>${t("secMetodo")}</h2><div>${t("metodo")}</div>
+    <h2>${t("secLimites")}</h2><div class="aviso">${t("limites")}</div>
+    <div style="margin-top:10px;font-size:9pt">© OpenStreetMap (ODbL) · ICGC (MDT 5 m, cartografía 1:1000 del AMB) · Dirección General del Catastro · Neutro</div>`;
+  print();
+};
+
+// Cómo se ha medido
+$("verMedicion").onclick = () => {
+  const caja = $("medicion");
+  if (!MEDICION) { caja.innerHTML = t("sinNeutro"); caja.style.display = "block"; return; }
+  const pc = (x) => `${numero(x * 100, 1)} %`;
+  const filas = (prueba) => [["exactitud", "exactitud"], ["precisionInund", "precision"], ["sensibInund", "sensibilidad"], ["f1Inund", "f1"]]
+    .map(([clave, campo]) => `<tr><td>${t(clave)}</td><td><b>${pc(prueba.neutro[campo])}</b></td><td>${pc(prueba.logistica[campo])}</td><td>${pc(prueba.seco[campo])}</td></tr>`).join("");
+  const tabla = (titulo, prueba) => `<h4 style="margin:10px 0 0">${titulo}</h4><table><tr><th>${t("metrica")}</th><th>Neutro</th><th>${t("logistica")}</th><th>${t("siempreSeco")}</th></tr>${filas(prueba)}</table>`;
+  const ic = MEDICION.espacial.diferenciaF1;
+  caja.innerHTML = `<button class="cerrarMed" style="float:right">✕</button><b>${t("tituloMedicion")}</b><p>${t("textoMedicion")}</p>
+    <p><i>${t("prediccionPrevia")}:</i> ${MEDICION.prediccion[idioma] || MEDICION.prediccion.es}</p>
+    ${tabla(t("pruebaEspacial"), MEDICION.espacial)}
+    <div class="nota">${t("intervalo", numero(ic.media * 100, 1), numero(ic.ic[0] * 100, 1), numero(ic.ic[1] * 100, 1))}</div>
+    ${tabla(t("pruebaIntensidad"), MEDICION.intensidad)}
+    <div class="nota">${t("neuronas", numero(MEDICION.neuronas), numero(MEDICION.ejemplos), MEDICION.fecha)}</div>`;
+  caja.querySelector(".cerrarMed").onclick = () => { caja.style.display = "none"; };
+  caja.style.display = "block";
+};
+
+// ------------------------------------------------------------ herramientas (sombra, accesibilidad, incendio…)
+// Cada módulo de js/ se apunta en globalThis.HERRAMIENTAS con { id, textos, crear(ctx, div) }; crear devuelve los
+// ganchos que quiera: alMostrar, alOcultar, alClic(x, z), traducir, cadaFrame(dt). Las capas son compartidas: solo
+// las pinta la herramienta abierta.
+const CTX = {
+  THREE, scene, camera, renderer, controls, CSS2DObject, D, DATOS, SIM, S1, altura, sol, sombrasMapa, geoCeldas,
+  simulacion, FISICA, INTENSIDADES, volarA, $, t, tx, numero, idioma: () => idioma, estiloArte: () => estiloArte,
+  nombreCalle, choca, SOTANOS, secciones4m: SECCIONES_4M, rehab: REHAB, lugaresOsm: LUGARES_OSM, transporte: TRANSPORTE, acustica4m: ACUSTICA_4M,
+  capa1m: { datos: datosCapa1m, actualizar: () => { texCapa1m.needsUpdate = true; },
+            ver: (v) => { capa1mActiva.value = v ? 1 : 0; } },
+  capaTechos: { datos: datosCapaTechos, nx: S1.nx / 2, ny: S1.ny / 2, actualizar: () => { texCapaTechos.needsUpdate = true; },
+                ver: (v) => { capaTechosActiva.value = v ? 1 : 0; } },
+  /** Capa RGBA propia sobre las celdas de 4 m (incendio, rutas…): se pinta en `datos` y se llama a actualizar(). */
+  capa4m() {
+    const datos = new Uint8Array(SIM.nx * SIM.ny * 4);
+    const tex = new THREE.DataTexture(datos, SIM.nx, SIM.ny, THREE.RGBAFormat, THREE.UnsignedByteType);
+    tex.needsUpdate = true;
+    const malla = new THREE.Mesh(geoCeldas, new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, uniforms: { t: { value: tex } },
+      vertexShader: `varying vec2 vUv;
+        void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position + vec3(0.0, 0.7, 0.0), 1.0); }`,
+      fragmentShader: `uniform sampler2D t; varying vec2 vUv;
+        void main() { vec4 c = texture2D(t, vUv); if (c.a < 0.02) discard; gl_FragColor = c; }`,
+    }));
+    Object.assign(malla, { frustumCulled: false, renderOrder: 1, visible: false });
+    scene.add(malla);
+    return { datos, malla, actualizar: () => { tex.needsUpdate = true; } };
+  },
+  /** Primer punto del modelo (suelo, tejados, fachadas) bajo el ratón, o null. */
+  impacto(e) {
+    puntero.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+    rayo.setFromCamera(puntero, camera);
+    return rayo.intersectObjects(mallasModelo.filter((o) => !o.isInstancedMesh), false)[0]?.point ?? null;
+  },
+  /** Índice (1…) del edificio en (x, z) según la rejilla de 4 m, o 0. */
+  edificioEn(x, z) {
+    const i = Math.floor((x - SIM.x0) / SIM.celda), j = Math.floor((z - SIM.z0) / SIM.celda);
+    return i >= 0 && i < SIM.nx && j >= 0 && j < SIM.ny ? D.edificios[j * SIM.nx + i] : 0;
+  },
+};
+for (const h of LISTA_HERRAMIENTAS) {
+  const div = document.createElement("div");
+  div.className = "panel herramienta";
+  div.id = h.id;
+  document.body.appendChild(div);
+  const boton = document.createElement("button");
+  boton.dataset.t = h.id + "Boton";
+  boton.onclick = () => mostrarPanel(div.style.display === "block" ? null : h.id);
+  $("herramientas").appendChild(boton);
+  // Se prepara la primera vez que se abre (cada una precalcula sus rejillas): la carga inicial no espera a ninguna
+  PANELES_HERRAMIENTA[h.id] = {
+    div, creada: null,
+    get h() {
+      if (!this.creada) {
+        this.creada = h.crear(CTX, div) || {};
+        for (const el of div.querySelectorAll("[data-t]")) el.innerHTML = t(el.dataset.t);
+      }
+      return this.creada;
+    },
+  };
+}
+
+// ------------------------------------------------------------ tiempo real: sol y tiempo de ahora en el mapa
+tiempoReal = crearTiempoReal({
+  ...CTX, cielo, dirSol, tiempoGotas,
+  enMapa: () => modo === "mapa",
+  solLibre: () => modo !== "mapa" || PANELES_HERRAMIENTA.sombra?.div.style.display !== "block",
+  restaurarEstilo: () => { alCambiarEstilo = null; aplicarEstilo(estiloArte); alCambiarEstilo = tiempoReal.aplicar; },
+}, $("tiempoReal"));
+alCambiarEstilo = tiempoReal.aplicar;
+CTX.clima = tiempoReal.clima;
+CTX.hora = tiempoReal.hora;
+pixelado = crearPixelado({ ...CTX, vista, enMapa: () => modo === "mapa" }, $("vista"));
+tiempoReal.aplicar();     // la niebla, ya con la escala de la maqueta
+trafico = crearTrafico({ ...CTX, altura: alturaSuelo, hora: tiempoReal.hora, cochePropio: () => (modo === "coche" ? estado.pos : null) }, $("trafico"));
+tiempoReal.alCambiarHora = trafico.recalcular;
+// Farolas reales del AMB (x, z en dm y tipo: 0 columna · 1 fachada), si se descargaron
+const DATOS_FAROLAS = BLOBS && !BLOBS.farolas ? null : await cargarBinario("farolas", Int16Array, BLOBS).catch(() => null);
+const farolas = crearFarolas({ ...CTX, altura: alturaSuelo, noche: tiempoReal.noche }, DATOS_FAROLAS);
+
+// ------------------------------------------------------------ clic en el mapa: tormenta o pregunta a Neutro
+let pulsacion = null;
+const rayo = new THREE.Raycaster(), puntero = new THREE.Vector2();
+renderer.domElement.addEventListener("pointerdown", (e) => { pulsacion = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+renderer.domElement.addEventListener("pointerup", (e) => {
+  if (!pulsacion || !sueloMalla || modo !== "mapa" || e.button !== 0) return;
+  if (Math.hypot(e.clientX - pulsacion.x, e.clientY - pulsacion.y) > 6 || performance.now() - pulsacion.t > 400) return;
+  puntero.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+  rayo.setFromCamera(puntero, camera);
+  const impacto = rayo.intersectObject(sueloMalla)[0];
+  if (!impacto) return;
+  const { x, z } = impacto.point;
+  const abierta = Object.values(PANELES_HERRAMIENTA).find((p) => p.div.style.display === "block");
+  if (abierta) return abierta.h.alClic?.(x, z, e);
+  if ($("lluvia").style.display === "block" && colocando) crearTormenta(x, z, +$("radio").value, +$("intensidad").value);
+  else if ($("riesgo").style.display === "block") {
+    if (herramienta) return crearMedida(x, z);
+    if (marcandoInc) return crearIncidencia(x, z);
+    const i = Math.floor((x - SIM.x0) / SIM.celda), j = Math.floor((z - SIM.z0) / SIM.celda);
+    if (i >= 0 && i < SIM.nx && j >= 0 && j < SIM.ny) explicar(j * SIM.nx + i);
+  }
+});
+
+// ------------------------------------------------------------ bucle
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  etiquetas.setSize(innerWidth, innerHeight);
+});
+
+traducir();
+// ?ir=x,z (metros de la maqueta) abre el visor mirando ese punto, para compartir un sitio concreto
+{
+  const ir = new URLSearchParams(location.search).get("ir")?.split(",").map(Number);
+  if (ir?.length === 2 && ir.every(Number.isFinite)) volarA(new THREE.Vector3(ir[0], 0, ir[1]), 0.35);
+}
+const reloj = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(reloj.getDelta(), 0.05);
+  if (modo === "coche") conducir(dt);
+  else {
+    if (vuelo) {
+      vuelo.t = Math.min(1, vuelo.t + dt / 1.5);
+      const k = vuelo.t * vuelo.t * (3 - 2 * vuelo.t);
+      controls.target.lerpVectors(vuelo.desdeT, vuelo.haciaT, k);
+      camera.position.lerpVectors(vuelo.desdeC, vuelo.haciaC, k);
+      if (vuelo.t === 1) vuelo = null;
+    }
+    controls.update();
+  }
+  actualizarLluvia(dt);
+  for (const p of Object.values(PANELES_HERRAMIENTA)) p.creada?.cadaFrame?.(dt);
+  tiempoReal.cadaFrame(dt);
+  pixelado.cadaFrame(dt);
+  trafico.cadaFrame(dt);
+  farolas.cadaFrame(dt);
+  if (pixelado.activo) pixelado.render();
+  else renderer.render(scene, camera);
+  etiquetas.render(scene, camera);
+});
+</script>
+</body>
+</html>

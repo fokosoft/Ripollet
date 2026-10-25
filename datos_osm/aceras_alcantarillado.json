@@ -1,0 +1,1080 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-25T12:24:36Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 2020686678,
+  "tags": {
+    "crossing": "uncontrolled",
+    "crossing:markings": "zebra",
+    "highway": "crossing",
+    "kerb": "flush",
+    "tactile_paving": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9515025747,
+  "tags": {
+    "crossing": "uncontrolled",
+    "crossing:markings": "zebra",
+    "highway": "crossing",
+    "kerb": "flush",
+    "tactile_paving": "no",
+    "traffic_calming": "table"
+  }
+},
+{
+  "type": "way",
+  "id": 33189675,
+  "tags": {
+    "cycleway:both": "no",
+    "highway": "residential",
+    "maxspeed": "30",
+    "name": "Carrer Monturiol",
+    "name:ca": "Carrer Monturiol",
+    "name:etymology:wikidata": "Q713959",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 44454890,
+  "tags": {
+    "access": "yes",
+    "bicycle": "yes",
+    "foot": "designated",
+    "highway": "footway",
+    "horse": "permissive",
+    "motor_vehicle": "no",
+    "sidewalk": "right",
+    "surface": "dirt"
+  }
+},
+{
+  "type": "way",
+  "id": 56303834,
+  "tags": {
+    "highway": "residential",
+    "lit": "yes",
+    "maxspeed": "30",
+    "name": "Carrer del Calvari",
+    "name:ca": "Carrer del Calvari",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "source": "Yahoo",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 69600981,
+  "tags": {
+    "highway": "residential",
+    "lit": "yes",
+    "name": "Rambla de les Vinyes",
+    "name:ca": "Rambla de les Vinyes",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 69600982,
+  "tags": {
+    "highway": "residential",
+    "lit": "yes",
+    "name": "Rambla de les Vinyes",
+    "name:ca": "Rambla de les Vinyes",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139268931,
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "30",
+    "name": "Rambla de Sant Jordi",
+    "name:ca": "Rambla de Sant Jordi",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139272794,
+  "tags": {
+    "highway": "residential",
+    "maxspeed": "30",
+    "name": "Carrer de la Lluna",
+    "name:ca": "Carrer de la Lluna",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139272800,
+  "tags": {
+    "highway": "residential",
+    "lit": "yes",
+    "name": "Carrer de l'Estrella",
+    "name:ca": "Carrer de l'Estrella",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 191499477,
+  "tags": {
+    "cycleway": "shared_lane",
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "30",
+    "noname": "yes",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 191499481,
+  "tags": {
+    "highway": "residential",
+    "lane_markings": "no",
+    "lit": "yes",
+    "name": "Carrer de Maragall",
+    "name:ca": "Carrer de Maragall",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 207874330,
+  "tags": {
+    "highway": "residential",
+    "maxspeed": "30",
+    "name": "Carrer del Padró",
+    "name:ca": "Carrer del Padró",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 346012050,
+  "tags": {
+    "highway": "residential",
+    "lit": "yes",
+    "name": "Carrer de Sant Enric",
+    "name:ca": "Carrer de Sant Enric",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 348351392,
+  "tags": {
+    "highway": "residential",
+    "name": "Carrer de Sant Joan",
+    "name:ca": "Carrer de Sant Joan",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "source": "Yahoo",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 348351393,
+  "tags": {
+    "highway": "residential",
+    "lit": "yes",
+    "name": "Carrer de l'Estrella",
+    "name:ca": "Carrer de l'Estrella",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 398702675,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 452156511,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 494479536,
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "lit": "yes",
+    "maxspeed": "30",
+    "name": "Avinguda de la Creu Roja",
+    "name:ca": "Avinguda de la Creu Roja",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 521049807,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 568654070,
+  "tags": {
+    "highway": "residential",
+    "lit": "yes",
+    "name": "Avinguda Maria Torras",
+    "name:ca": "Avinguda Maria Torras",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 568663050,
+  "tags": {
+    "highway": "residential",
+    "junction": "roundabout",
+    "lit": "yes",
+    "name": "Plaça de Josep Maria Brull",
+    "name:ca": "Plaça de Josep Maria Brull",
+    "oneway": "yes",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 593045149,
+  "tags": {
+    "area:highway": "traffic_island"
+  }
+},
+{
+  "type": "way",
+  "id": 730852060,
+  "tags": {
+    "area:highway": "pedestrian",
+    "noname": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 754115868,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 754115869,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 777725422,
+  "tags": {
+    "highway": "residential",
+    "name": "Carrer de Montcada",
+    "name:ca": "Carrer de Montcada",
+    "oneway": "yes",
+    "sidewalk": "both"
+  }
+},
+{
+  "type": "way",
+  "id": 846141497,
+  "tags": {
+    "highway": "residential",
+    "lane_markings": "no",
+    "lit": "yes",
+    "name": "Carrer Nou",
+    "name:ca": "Carrer Nou",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1030347120,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1030347123,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Rafael Alberti",
+    "name:ca": "Carrer de Rafael Alberti",
+    "name:etymology:wikidata": "Q118936"
+  }
+},
+{
+  "type": "way",
+  "id": 1030347124,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1030348445,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1030958588,
+  "tags": {
+    "bridge": "yes",
+    "footway": "sidewalk",
+    "highway": "footway",
+    "layer": "1",
+    "lit": "yes",
+    "name": "Carrer de Tarragona",
+    "name:ca": "Carrer de Tarragona",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1030958589,
+  "tags": {
+    "bridge": "yes",
+    "footway": "sidewalk",
+    "highway": "footway",
+    "layer": "1",
+    "lit": "yes",
+    "name": "Carrer de Tarragona",
+    "name:ca": "Carrer de Tarragona",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1030958591,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Tarragona",
+    "name:ca": "Carrer de Tarragona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1030958594,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Tarragona",
+    "name:ca": "Carrer de Tarragona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1030958595,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Tarragona",
+    "name:ca": "Carrer de Tarragona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1032710334,
+  "tags": {
+    "cycleway:both": "no",
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Rambla de Sant Jordi",
+    "name:ca": "Rambla de Sant Jordi",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1104516995,
+  "tags": {
+    "access": "yes",
+    "bicycle": "yes",
+    "foot": "designated",
+    "highway": "footway",
+    "horse": "permissive",
+    "motor_vehicle": "no",
+    "sidewalk": "right",
+    "surface": "dirt"
+  }
+},
+{
+  "type": "way",
+  "id": 1121503558,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1121503561,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1124866483,
+  "tags": {
+    "bridge": "yes",
+    "footway": "sidewalk",
+    "highway": "footway",
+    "layer": "1"
+  }
+},
+{
+  "type": "way",
+  "id": 1124866485,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1124993621,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1124993622,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1124993628,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1124993648,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1124993662,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1124993663,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1124993665,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1124993666,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1124993668,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1125200983,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1125230242,
+  "tags": {
+    "footway": "sidewalk",
+    "handrail": "yes",
+    "highway": "footway",
+    "incline": "down",
+    "ramp": "yes",
+    "ramp:stroller": "yes",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1126081709,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1126081711,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1126081714,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1126081716,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1126671278,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1128072917,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1128072919,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1128072920,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "layer": "-1",
+    "tunnel": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1128072922,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1128072923,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1128337374,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1195938930,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Carretera de Barcelona",
+    "name:ca": "Carretera de Barcelona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1241929873,
+  "tags": {
+    "highway": "living_street",
+    "lit": "yes",
+    "name": "Carrer del Calvari",
+    "name:ca": "Carrer del Calvari",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "source": "Yahoo",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1385579110,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer del Doctor Gil",
+    "name:ca": "Carrer del Doctor Gil",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498887544,
+  "tags": {
+    "bicycle": "yes",
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Carrer de Sant Sebastià",
+    "name:ca": "Carrer de Sant Sebastià",
+    "segregated": "no",
+    "surface": "paving_stones",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1498908622,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Carretera de Barcelona",
+    "name:ca": "Carretera de Barcelona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498908623,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer del Doctor Gil",
+    "name:ca": "Carrer del Doctor Gil",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498908624,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Avinguda de la Creu Roja",
+    "name:ca": "Avinguda de la Creu Roja",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498908625,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Carretera de Barcelona",
+    "name:ca": "Carretera de Barcelona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498908626,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Avinguda de la Creu Roja",
+    "name:ca": "Avinguda de la Creu Roja",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498908628,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de la Nostra Senyora dels Àngels",
+    "name:ca": "Carrer de la Nostra Senyora dels Àngels",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921736,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Prat de la Riba",
+    "name:ca": "Carrer de Prat de la Riba",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921738,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Avinguda de la Creu Roja",
+    "name:ca": "Avinguda de la Creu Roja",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921739,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Avinguda de la Creu Roja",
+    "name:ca": "Avinguda de la Creu Roja",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921740,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de la Verge de Montserrat",
+    "name:ca": "Carrer de la Verge de Montserrat",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921741,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de la Mare de Déu de Montserrat",
+    "name:ca": "Carrer de la Mare de Déu de Montserrat",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921743,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de la Verge de Montserrat",
+    "name:ca": "Carrer de la Verge de Montserrat",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921749,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Sant Sebastià",
+    "name:ca": "Carrer de Sant Sebastià",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921750,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Plaça d'Emma Maleras",
+    "name:ca": "Plaça d'Emma Maleras",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921751,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Prat de la Riba",
+    "name:ca": "Carrer de Prat de la Riba",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1498921752,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de la Nostra Senyora dels Àngels",
+    "name:ca": "Carrer de la Nostra Senyora dels Àngels",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1501423273,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Tarragona",
+    "name:ca": "Carrer de Tarragona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1501423277,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Balmes",
+    "name:ca": "Carrer de Balmes",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1501423278,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Balmes",
+    "name:ca": "Carrer de Balmes",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1501423280,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Tarragona",
+    "name:ca": "Carrer de Tarragona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1501423281,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Tarragona",
+    "name:ca": "Carrer de Tarragona",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1503814571,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+},
+{
+  "type": "way",
+  "id": 1505402468,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Carretera de Barcelona",
+    "name:ca": "Carretera de Barcelona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1505402469,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Clos",
+    "name:ca": "Carrer de Clos",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1505402471,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "lit": "yes",
+    "name": "Carretera de Barcelona",
+    "name:ca": "Carretera de Barcelona",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1505402473,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Clos",
+    "name:ca": "Carrer de Clos",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1507165907,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Sant Jaume",
+    "name:ca": "Carrer de Sant Jaume",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1507165908,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Sant Jaume",
+    "name:ca": "Carrer de Sant Jaume",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1507165915,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "name": "Carrer de Sant Jaume",
+    "name:ca": "Carrer de Sant Jaume",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1507582839,
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway"
+  }
+}
+
+  ]
+}
