@@ -106,7 +106,8 @@ const herramientaSombra = {
         if (tipoA === "arbusto") continue;
         const cima = ctx.DATOS.arbolesReales ? y + alto                    // altura total medida (LiDAR)
           : tipoA === "pino" || tipoA.startsWith("cono") ? y + 1.5 + alto : y + 1.6 + 2 * r;
-        plantarCopa(x, z, Math.max(r, 1), cima);
+        // La copa, donde la vio el LiDAR (puede estar inclinada sobre la calzada)
+        plantarCopa(x + (D.copas?.[2 * k] ?? 0) / 10, z + (D.copas?.[2 * k + 1] ?? 0) / 10, Math.max(r, 1), cima);
       }
     }
     let maxOcluye = 0;

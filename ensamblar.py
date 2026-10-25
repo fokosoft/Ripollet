@@ -71,7 +71,7 @@ def construir():
     datos = leer(os.path.join(DATOS, "datos.json"))
     comprimidos = {b: zlib.compress(leer(os.path.join(DATOS, b + ".bin"), "rb"), 9) for b in BLOBS}
     comprimidos.update({b: zlib.compress(v, 9) for b, v in fisica().items()})
-    for opcional in ("oficial", "sotanos", "farolas", "secciones", "rehab", "lugares", "transporte", "acustica", "direcciones"):   # zonas inundables oficiales, sótanos (Catastro), farolas (AMB)
+    for opcional in ("oficial", "sotanos", "farolas", "secciones", "rehab", "lugares", "transporte", "acustica", "direcciones", "copas", "cobertes"):   # zonas inundables oficiales, sótanos (Catastro), farolas (AMB)
         if os.path.exists(os.path.join(DATOS, opcional + ".bin")):
             comprimidos[opcional] = zlib.compress(leer(os.path.join(DATOS, opcional + ".bin"), "rb"), 9)
     memoria = opcional_json("neutro_memoria.json")       # lo que aprendió Neutro (entrenar_neutro.mjs)

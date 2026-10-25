@@ -1,0 +1,28 @@
+{
+ "fuente": "ICGC, Mapa de cobertes del sòl de Catalunya 2024 (CC BY 4.0)",
+ "clases": {
+  "463. (38) Cursos d'aigua": 5,
+  "346. (26) Zones verdes": 2,
+  "464. (39) Basses": 5,
+  "234. (20) Zones humides": 2,
+  "221. (7) Boscos densos d'aciculifolis": 3,
+  "348. (28) Zones esportives i de lleure": 1,
+  "222. (8) Boscos densos de caducifolis, planifolis": 3,
+  "223. (9) Boscos densos d'esclerofil·les i laurifolis": 3,
+  "347. (27) Zones industrials, comercials i/o de serveis": 1,
+  "224. (10) Matollar": 2,
+  "351. (31) Xarxa viària": 1,
+  "113. (3) Vinyes": 2,
+  "228. (14) Prats i herbassars": 2,
+  "112. (2) Horta, vivers i conreus forçats": 2,
+  "115. (5) Altres conreus llenyosos": 2,
+  "341. (21) Casc urbà": 1,
+  "350. (30) Zones en transformació": 4,
+  "342. (22) Eixample": 1,
+  "230. (16) Sòl nu forestal": 4,
+  "343. (23) Zones Urbanes laxes": 1,
+  "344. (24) Edificacions aïllades en l'espai rural": 1,
+  "352. (32) Sòl nu urbà": 4,
+  "111. (1) Conreus herbacis": 2
+ }
+}

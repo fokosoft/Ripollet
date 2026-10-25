@@ -503,8 +503,60 @@ def dibujar_edificio(partes, tipo, id_osm, semilla, sotano=0, ref=None):
     n_edificios += 1
 
 
+def valores_en(p, matriz, celda=1.0):
+    """Valores de las celdas cuyo centro cae dentro del polígono (mismo barrido que rasterizar)."""
+    alto_m, ancho_m = matriz.shape
+    pz = [(x, -y) for x, y in p]
+    zs = [z for _, z in pz]
+    trozos = []
+    for j in range(max(0, int((min(zs) + LIM[1]) / celda)), min(alto_m - 1, int((max(zs) + LIM[1]) / celda)) + 1):
+        zc = -LIM[1] + (j + 0.5) * celda
+        cortes = sorted(xa + (zc - za) * (xb - xa) / (zb - za)
+                        for (xa, za), (xb, zb) in zip(pz, pz[1:] + pz[:1]) if (za > zc) != (zb > zc))
+        for a, b in zip(cortes[::2], cortes[1::2]):
+            i0 = max(0, math.ceil((a + LIM[0]) / celda - 0.5))
+            i1 = min(ancho_m - 1, math.floor((b + LIM[0]) / celda - 0.5))
+            if i1 >= i0:
+                trozos.append(matriz[j, i0:i1 + 1])
+    return np.concatenate(trozos) if trozos else np.zeros(0, np.float32)
+
+
+# ALTURAS MEDIDAS: modelo de superficie del LiDAR del ICGC (terreno + edificios, 1 m; las teselas que bajó
+# obtener_arboles.py). Cubierta de cada parte = mediana de las celdas de dentro; si hay pocas celdas o sale menos de
+# 2,5 m sobre el suelo, se queda la del Catastro (plantas × 3 m).
+DSM_EDIF = None
+_teselas = os.path.join(DIR, "datos_arboles", "teselas")
+if all(os.path.exists(os.path.join(_teselas, f"edif_{tx}_{ty}.npy")) for tx in range(6) for ty in range(8)):
+    DSM_EDIF = np.zeros((N1Y, N1X), np.float32)
+    for ty in range(8):
+        for tx in range(6):
+            DSM_EDIF[ty * N1Y // 8:(ty + 1) * N1Y // 8, tx * N1X // 6:(tx + 1) * N1X // 6] = \
+                np.load(os.path.join(_teselas, f"edif_{tx}_{ty}.npy"))
+    DSM_EDIF -= ELEV_MIN                     # misma referencia que altura()
+ALTURAS_LIDAR = [0, 0, []]                   # partes con LiDAR, partes con el Catastro, diferencias
+
+
+def alto_parte(p, plantas):
+    catastro = 4 + (plantas - 1) * PLANTA + 0.6
+    if DSM_EDIF is None:
+        return catastro
+    v = valores_en(p, DSM_EDIF)
+    if len(v) < 6:
+        ALTURAS_LIDAR[1] += 1
+        return catastro
+    suelo = max(altura(x, y) for x, y in p)
+    medido = float(np.median(v)) - suelo
+    if not 2.5 <= medido <= 80:
+        ALTURAS_LIDAR[1] += 1
+        return catastro
+    ALTURAS_LIDAR[0] += 1
+    ALTURAS_LIDAR[2].append(medido - catastro)
+    return medido
+
+
 if os.path.exists(RUTA_CATASTRO):
-    # CATASTRO: cada parte con sus plantas reales (planta baja de 4 m, las demás de 3 m) y sus sótanos
+    # CATASTRO: cada parte con su altura medida con LiDAR (o sus plantas reales: planta baja de 4 m, las demás de
+    # 3 m) y sus sótanos
     import zlib
     with open(RUTA_CATASTRO, encoding="utf-8") as f:
         grupos = {}
@@ -520,9 +572,13 @@ if os.path.exists(RUTA_CATASTRO):
             if len(p) < 3 or abs(area_firmada(p)) < 2:
                 continue
             g = grupos.setdefault(parte["ref"], {"partes": [], "sotano": 0})
-            g["partes"].append((p, 4 + (parte["plantas"] - 1) * PLANTA + 0.6))
+            g["partes"].append((p, alto_parte(p, parte["plantas"])))
             g["sotano"] = max(g["sotano"], 1 if parte["sotanos"] > 0 else 0)
     REFS_CON_EDIFICIO.update(grupos)
+    if ALTURAS_LIDAR[2]:
+        d = np.array(ALTURAS_LIDAR[2])
+        print(f"ALTURAS LiDAR: {ALTURAS_LIDAR[0]} partes medidas, {ALTURAS_LIDAR[1]} con el Catastro · diferencia con "
+              f"plantas×3 m: mediana {np.median(d):+.1f} m, |dif| > 3 m en {100 * (np.abs(d) > 3).mean():.0f} %")
     for ref, g in grupos.items():
         mayor = max(g["partes"], key=lambda q: abs(area_firmada(q[0])))[0]
         t, id_osm = osm_en(sum(x for x, _ in mayor) / len(mayor), sum(y for _, y in mayor) / len(mayor))
@@ -1270,10 +1326,12 @@ def arboles_en_su_sitio(lista):
     anillos = sorted(((di, dj) for dj in range(-8, 9) for di in range(-8, 9) if di * di + dj * dj <= 64),
                      key=lambda d: d[0] ** 2 + d[1] ** 2)
     salida, movidos, quitados = [], 0, 0
+    COPAS.clear()
     for a in lista:
         i, j = int(a[0] / 10 + LIM[0]), int(a[1] / 10 + LIM[1])
         if not (0 <= i < N1X and 0 <= j < N1Y) or aceras_1m[j, i] in (0, 1):
             salida.append(a)
+            COPAS.append((0, 0))
             continue
         if TIPOS_ARBOL[a[2]] == "arbusto":
             quitados += 1
@@ -1291,13 +1349,18 @@ def arboles_en_su_sitio(lista):
             quitados += 1
             continue
         movidos += 1
-        salida.append((round((sitio[0] + 0.5 - LIM[0]) * 10), round((sitio[1] + 0.5 - LIM[1]) * 10), *a[2:]))
+        nuevo = (round((sitio[0] + 0.5 - LIM[0]) * 10), round((sitio[1] + 0.5 - LIM[1]) * 10))
+        salida.append((*nuevo, *a[2:]))
+        # La copa se queda donde la vio el LiDAR (sobre la calzada): el tronco se inclina hacia ella
+        COPAS.append((max(-127, min(127, a[0] - nuevo[0])), max(-127, min(127, a[1] - nuevo[1]))))
     print(f"ÁRBOLES: {movidos} llevados de la calzada a la acera, {quitados} quitados (sin sitio cerca)")
     return salida
 
 
+COPAS = []    # por árbol: desplazamiento de la copa respecto al tronco (x, z en dm)
 arboles = arboles_en_su_sitio(arboles)
 guardar("arboles", np.array(arboles, np.int16))
+guardar("copas", np.array(COPAS, np.int8))
 
 
 def farolas_reales():
@@ -1356,7 +1419,8 @@ if os.path.exists(RUTA_SECCIONES):
 RUTA_LUGARES = os.path.join(DIR, "datos_osm", "lugares.json")
 if os.path.exists(RUTA_LUGARES):
     with open(RUTA_LUGARES, encoding="utf-8") as f:
-        dentro = [l for l in json.load(f) if abs(l["x"]) < LIM[0] and abs(l["z"]) < LIM[1]]
+        dentro = [l for l in json.load(f) if abs(l["x"]) < LIM[0] and abs(l["z"]) < LIM[1]
+                  and l.get("t") != "townhall" and not re.search(r"ajuntament|ayuntamiento", l.get("n", ""), re.I)]
     with open(os.path.join(SALIDA_DATOS, "lugares.bin"), "wb") as f:
         f.write(json.dumps(dentro, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
     print(f"LUGARES DE INTERÉS: {len(dentro)}")
@@ -1401,6 +1465,12 @@ if os.path.exists(RUTA_DIR):
     with open(os.path.join(SALIDA_DATOS, "direcciones.bin"), "wb") as f:
         f.write(json.dumps(lista, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
     print(f"DIRECCIONES: {len(lista)} portales con calle · {sum(1 for q in lista if q[4])} con su edificio")
+
+# COBERTURAS DEL SUELO (obtener_cobertes.py): rejilla de 2 m, para pintar el suelo que OSM no describe
+RUTA_COBERTES = os.path.join(DIR, "datos_publicos", "cobertes_2m.bin")
+if os.path.exists(RUTA_COBERTES):
+    import shutil
+    shutil.copyfile(RUTA_COBERTES, os.path.join(SALIDA_DATOS, "cobertes.bin"))
 
 # TRANSPORTE PÚBLICO (obtener_transporte.py): paradas, líneas y horarios, como JSON comprimido (blob «transporte»)
 RUTA_TRANSPORTE = os.path.join(DIR, "datos_publicos", "transporte.json")

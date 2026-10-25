@@ -291,7 +291,17 @@ const herramientaMinutos = {
     const nodoPie = nodosDe(G, (e) => G.pie[e]);
     const lugares = Object.fromEntries(CATEGORIAS.map((c) => [c, []]));
     for (const e of ctx.DATOS.equipamientos) if (lugares[e.tipo]) lugares[e.tipo].push(e);
-    for (const s of ctx.DATOS.servicios) lugares[s.tipo === "farmacia" ? "salud" : s.tipo]?.push(s);
+    // Comida y salud: tiendas y lugares de OSM (obtener_lugares.py); parques infantiles: los de la descarga principal
+    const L = ctx.lugaresOsm ?? [];
+    const SALUD = new Set(["pharmacy", "clinic", "doctors", "hospital", "dentist"]);
+    for (const l of L) {
+      const p = { nombre: l.n || l.t, x: l.x, z: l.z };
+      if (l.c === "comida") lugares.alimentacion.push(p);
+      else if (l.c === "salud" && SALUD.has(l.t)) lugares.salud.push(p);
+      else if (l.t === "playground") lugares.juegos.push(p);
+    }
+    for (const s of ctx.DATOS.servicios)
+      if (s.tipo === "juegos" || !L.length) lugares[s.tipo === "farmacia" ? "salud" : s.tipo]?.push(s);
     for (const c of CATEGORIAS) for (const l of lugares[c]) Object.assign(l, nodoCercano(G, l.x, l.z, nodoPie));
     const edificios = centrosEdificios(D, SIM, ctx.DATOS.edificios).map((e) => ({ ...e, ...nodoCercano(G, e.x, e.z, nodoPie) }));
     const porId = new Map(edificios.map((e) => [e.b, e]));

@@ -98,8 +98,8 @@ const herramientaMicasa = {
     const destinos = {
       educacion: ctx.DATOS.equipamientos.filter((e) => e.tipo === "educacion"),
       salud: ctx.DATOS.equipamientos.filter((e) => e.tipo === "salud"),
-      comida: ctx.DATOS.servicios.filter((s) => s.tipo === "alimentacion"),
-      farmacia: ctx.DATOS.servicios.filter((s) => s.tipo === "farmacia"),
+      comida: (ctx.lugaresOsm ?? []).filter((l) => l.c === "comida").map((l) => ({ nombre: l.n || l.t, x: l.x, z: l.z })),
+      farmacia: (ctx.lugaresOsm ?? []).filter((l) => l.t === "pharmacy").map((l) => ({ nombre: l.n, x: l.x, z: l.z })),
       bus: (ctx.transporte?.paradas ?? []).map((p) => ({ nombre: p.n, x: p.x, z: p.z })),
       refugio: ctx.DATOS.equipamientos.filter((e) => e.tipo === "social" && REFUGIO.test(e.nombre)),
     };

@@ -110,6 +110,8 @@ python obtener_catastro.py
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_transporte.py   # GTFS AMB + Generalitat (≈ 35 MB)
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_ambiente.py     # zonas acústicas (Generalitat)
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_direcciones.py  # portales del Catastro
+#    Coberturas del suelo (ICGC) para el suelo que OSM no describe
+python obtener_cobertes.py
 #    Aparcamientos y plazas de OSM que no vienen en la descarga principal (datos_osm/superficies.json)
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_superficies.py
 # 1. Maqueta, datos del visor y ensamblado (≈ 1 min). Descarga y guarda en caché el relieve del ICGC.
@@ -186,6 +188,8 @@ cada herramienta, no se descarga.
 | Bordillos → calzada real y aceras | Cartografía topográfica 1:1000 del AMB, WMS del ICGC | `obtener_bordillos.py`: un estilo SLD con filtro dibuja solo el código `COM_17LS_LN` (vorada) a 0,25 m/píxel |
 | Parcelas: patios privados y terreno sin edificar | Catastro, servicio INSPIRE CP (WFS) | `obtener_catastro.py`: 2 096 parcelas. Patio privado = espacio libre de una parcela recogida (≤ 1 500 m² libres o ≥ 40 % edificada): muro de 1 m hacia la calle, desagüe propio, fuera del análisis. Parcela sin edificio = tierra (15 mm/h) |
 | Árboles: posición, altura y copa | ICGC, LiDAR territorial 2021–2023 (1 m), WMS «elevacions-territorial» | `obtener_arboles.py`: altura de la vegetación = modelo con vegetación − modelo sin vegetación (las imágenes llegan en grises autoescalados: cada tesela se calibra a metros con GetFeatureInfo en su punto más bajo y más alto, error < 4 cm). Cimas = máximos locales; la copa de cada cima, por cercanía. **8 090 árboles** (media 7,6 m) con su altura y radio; arbustos (0,8–3 m) solo en zonas verdes de OSM. En OSM solo hay 23 árboles mapeados. Pinos en el bosque; «esbeltos» (cipreses, chopos) si son mucho más altos que anchos; la especie no se sabe. También dan sombra en la herramienta de sombra y en el cálculo solar |
+| Altura de cada edificio | ICGC, LiDAR 2021–2023, modelo «terreno + edificios» (1 m), las mismas teselas que los árboles | `osm_ripollet.py`: cubierta = mediana de las celdas de cada parte del Catastro; 7 014 partes medidas (976 con pocas celdas o valores raros se quedan con plantas × 3 m). Mediana de la diferencia con la estimación: −0,1 m; el 21 % difiere más de 3 m |
+| Suelo sin datos de OSM | ICGC, Mapa de cobertes del sòl 2024 (WMS «cobertes-sol») | `obtener_cobertes.py` (necesita Pillow): cada color de la imagen se identifica con GetFeatureInfo y se agrupa en urbano, vegetación baja, arbolado, suelo desnudo y agua; colorea el suelo base (no cambia la simulación) |
 | Relieve | ICGC, MDT 5 m | `osm_ripollet.py`: malla visual de 12 m; la simulación usa el MDT muestreado a 4 m |
 | Zonas inundables del río | ACA en el SNCZI (MITECO), servicio IDEE | `obtener_oficial.py` |
 | **Alcantarillado** | **No es público** (ni Catastro, ni ICGC, ni OSM) | Habría que pedirlo a quien gestiona la red |

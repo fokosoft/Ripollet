@@ -588,6 +588,9 @@ $("cargando").textContent = t("cargando");
 
 // ------------------------------------------------------------ datos
 const D = await cargarDatos(DATOS, BLOBS);
+// Copa de cada árbol respecto a su tronco (dm; el tronco se movió a la acera) y coberturas del suelo a 2 m (ICGC)
+D.copas = BLOBS && !BLOBS.copas ? null : await cargarBinario("copas", Int8Array, BLOBS).catch(() => null);
+D.cobertes = BLOBS && !BLOBS.cobertes ? null : await cargarBinario("cobertes", Uint8Array, BLOBS).catch(() => null);
 const altura = crearAltura(D.terreno);
 const SIM = DATOS.sim;
 
@@ -648,6 +651,11 @@ const datosCapa1m = new Uint8Array(S1.nx * S1.ny * 4);
 const texCapa1m = new THREE.DataTexture(datosCapa1m, S1.nx, S1.ny, THREE.RGBAFormat, THREE.UnsignedByteType);
 Object.assign(texCapa1m, { magFilter: THREE.LinearFilter, minFilter: THREE.LinearFilter, generateMipmaps: false, colorSpace: THREE.SRGBColorSpace, needsUpdate: true });
 const capa1mActiva = { value: 0 };
+// Coberturas del suelo (ICGC) a 2 m: 0 sin dato · 1 urbano · 2 vegetación baja · 3 arbolado · 4 suelo desnudo · 5 agua
+const texCobertes = new THREE.DataTexture(D.cobertes ?? new Uint8Array((S1.nx / 2) * (S1.ny / 2)), S1.nx / 2, S1.ny / 2,
+                                          THREE.RedFormat, THREE.UnsignedByteType);
+Object.assign(texCobertes, { magFilter: THREE.NearestFilter, minFilter: THREE.NearestFilter, generateMipmaps: false,
+                             unpackAlignment: 1, needsUpdate: true });
 // CAPA DE CUBIERTAS (2 m): mapa solar, edificios en la franja de incendio… encima de tejados y azoteas
 const datosCapaTechos = new Uint8Array((S1.nx / 2) * (S1.ny / 2) * 4);
 const texCapaTechos = new THREE.DataTexture(datosCapaTechos, S1.nx / 2, S1.ny / 2, THREE.RGBAFormat, THREE.UnsignedByteType);
@@ -666,11 +674,22 @@ const GLSL_TECHOS = `
 `;
 const uniformesAceras = () => ({ tSuelo1m: { value: texSuelo1m }, uOrigen1m: { value: new THREE.Vector2(SIM.x0, SIM.z0) },
                                  uTam1m: { value: new THREE.Vector2(S1.nx, S1.ny) },
-                                 tCapa1m: { value: texCapa1m }, uCapa1mActiva: capa1mActiva });
+                                 tCapa1m: { value: texCapa1m }, uCapa1mActiva: capa1mActiva, tCobertes: { value: texCobertes } });
 const GLSL_ACERAS = `
-  uniform sampler2D tSuelo1m, tCapa1m;
+  uniform sampler2D tSuelo1m, tCapa1m, tCobertes;
   uniform vec2 uOrigen1m, uTam1m;
   uniform float uCapa1mActiva;
+  // Cobertura del suelo (ICGC) bajo este punto: 0–5
+  float cobertura() { return floor(texture2D(tCobertes, (vMundo.xz - uOrigen1m) / uTam1m).r * 255.0 + 0.5); }
+  // Color del suelo sin calle ni acera según la cobertura (realista); 0 = el de la textura
+  vec3 colorCobertura(vec3 c, float k, float g) {
+    if (k > 4.5) return vec3(0.16, 0.30, 0.42);                         // agua
+    if (k > 3.5) return vec3(0.46, 0.35, 0.24) * (0.88 + 0.24 * g);     // suelo desnudo, tierra
+    if (k > 2.5) return vec3(0.16, 0.30, 0.13) * (0.85 + 0.3 * g);      // arbolado
+    if (k > 1.5) return vec3(0.33, 0.48, 0.22) * (0.85 + 0.3 * g);      // prados, jardines, cultivos
+    if (k > 0.5) return mix(c, vec3(0.62, 0.62, 0.61), 0.6) * (0.92 + 0.16 * g);   // urbano pavimentado
+    return c;
+  }
   vec3 conCapa(vec3 c) {   // la capa de la herramienta abierta, encima del suelo
     vec4 k = texture2D(tCapa1m, (vMundo.xz - uOrigen1m) / uTam1m);
     return mix(c, k.rgb, k.a * uCapa1mActiva);
@@ -697,6 +716,10 @@ function pintarAceras(material, panot) {
           float g = fract(sin(dot(floor(vMundo.xz * 3.0), vec2(12.9898, 78.233))) * 43758.5453);
           diffuseColor.rgb = vec3(0.07, 0.075, 0.085) * (0.85 + 0.3 * g);     // asfalto con grano
         } else if (t > 0.25) diffuseColor.rgb = texture2D(tPanot, vec2(vMundo.x, -vMundo.z) / 2.0).rgb;   // panot
+        else {
+          float g = fract(sin(dot(floor(vMundo.xz * 1.5), vec2(12.9898, 78.233))) * 43758.5453);
+          diffuseColor.rgb = colorCobertura(diffuseColor.rgb, cobertura(), g);
+        }
         diffuseColor.rgb = conCapa(diffuseColor.rgb);
       }`);
   };
@@ -769,9 +792,14 @@ new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
       }
       const copa = tipo === "pino" ? alto * 0.6 : tipo.startsWith("cono") ? alto * 0.75 : Math.min(2 * r, alto * 0.7);
       const fuste = alto - copa;
-      matrices.tronco.push(m.clone().compose(new THREE.Vector3(x, y + (fuste + 0.3) / 2 - 0.25, z), q, new THREE.Vector3(grueso, fuste + 0.3, grueso)));
+      // Copa donde la midió el LiDAR: si el tronco se llevó a la acera, se inclina hacia ella (como en la calle)
+      const dx = (D.copas?.[2 * k] ?? 0) / 10, dz = (D.copas?.[2 * k + 1] ?? 0) / 10;
+      const eje = new THREE.Vector3(dx, fuste + 0.3, dz), largo = eje.length();
+      const qt = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), eje.clone().normalize());
+      matrices.tronco.push(m.clone().compose(new THREE.Vector3(x + dx / 2, y + (fuste + 0.3) / 2 - 0.25, z + dz / 2), qt,
+                                             new THREE.Vector3(grueso, largo, grueso)));
       const forma = tipo === "pino" || tipo.startsWith("cono") ? new THREE.Vector3(r, copa, r) : new THREE.Vector3(r, copa / 2, r);
-      matrices[tipo].push(m.clone().compose(new THREE.Vector3(x, y + fuste + copa / 2, z), q, forma));
+      matrices[tipo].push(m.clone().compose(new THREE.Vector3(x + dx, y + fuste + copa / 2, z + dz), q, forma));
       continue;
     }
     if (tipo !== "arbusto") {
@@ -975,11 +1003,33 @@ function adornarHerramienta(panel) {
 function ponerAsa(panel) {
   let asa = panel.querySelector(":scope > .asa");
   if (!asa) { asa = document.createElement("div"); asa.className = "asa"; panel.prepend(asa); }
-  asa.onclick = () => {
-    const mini = panel.classList.contains("mini"), completa = panel.classList.contains("completa");
-    panel.classList.toggle("completa", !mini && !completa);
-    panel.classList.toggle("mini", completa);
+  // Tocar: media → entera → plegada. Arrastrar: hacia arriba despliega, hacia abajo pliega (y sigue al dedo).
+  const poner = (estado) => {
+    panel.classList.toggle("mini", estado === "mini");
+    panel.classList.toggle("completa", estado === "completa");
   };
+  const estadoDe = () => (panel.classList.contains("mini") ? "mini" : panel.classList.contains("completa") ? "completa" : "media");
+  let y0 = null, movido = false;
+  asa.onpointerdown = (e) => {
+    y0 = e.clientY; movido = false; panel.style.transition = "none";
+    try { asa.setPointerCapture(e.pointerId); } catch {}
+  };
+  asa.onpointermove = (e) => {
+    if (y0 === null) return;
+    const dy = e.clientY - y0;
+    if (Math.abs(dy) > 6) movido = true;
+    if (movido) panel.style.transform = `translateY(${Math.max(dy, -40)}px)`;
+  };
+  asa.onpointerup = asa.onpointercancel = (e) => {
+    if (y0 === null) return;
+    const dy = e.clientY - y0, antes = estadoDe();
+    y0 = null;
+    panel.style.transform = panel.style.transition = "";
+    if (!movido) return poner({ media: "completa", completa: "mini", mini: "media" }[antes]);
+    if (dy < -40) poner(antes === "mini" ? "media" : "completa");
+    else if (dy > 40) poner(antes === "completa" ? "media" : "mini");
+  };
+  asa.onclick = null;
 }
 
 function entrarAlCoche() {
@@ -1162,6 +1212,14 @@ function materialArtistico(original) {
           float ts = tipoSuelo();
           if (ts > 0.75) c = vec3(0.028, 0.093, 0.66);        // calzada azul (0x2f55d4, en lineal)
           else if (ts > 0.25) c = vec3(0.66, 0.18, 0.11);     // acera terracota (0xd4735e, en lineal)
+          else {                                               // suelo según la cobertura, en la paleta del estilo
+            float k = cobertura();
+            if (k > 4.5) c = vec3(0.03, 0.2, 0.67);
+            else if (k > 3.5) c = vec3(0.56, 0.12, 0.04);
+            else if (k > 2.5) c = vec3(0.02, 0.27, 0.15);
+            else if (k > 1.5) c = vec3(0.3, 0.63, 0.12);
+            else if (k > 0.5) c = vec3(0.74, 0.62, 0.48);
+          }
         #endif
         // Motas: una por celda como mucho, proyectadas en el plano que más mira la superficie
         vec3 an = abs(normalize(cross(dFdx(vMundo), dFdy(vMundo))));
