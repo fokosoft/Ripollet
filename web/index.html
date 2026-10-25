@@ -102,9 +102,70 @@
   body.claro #mapa .botones button { padding: 4px 8px; }
   #vista { margin-top: 8px; }
   #vista label { display: inline-block; margin-right: 10px; font-size: 13px; }
+
+  /* ===== INTERFAZ: barra superior, navegación por secciones y hojas (pensada primero para el móvil) ===== */
+  #barra, #nav { display: flex; align-items: center; }
+  #barra { top: 12px; left: 12px; right: auto; width: 420px; max-width: none; gap: 8px; padding: 8px 12px;
+           border-radius: 10px 10px 0 0; z-index: 4; }
+  .marcaApp { flex: 1; display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+  .marcaApp b { font-size: 18px; letter-spacing: .02em; color: inherit; }
+  .marcaApp small { font-size: 10px; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  body.claro .marcaApp b { font: 700 20px/1 "Silkscreen", monospace; color: #16181d; }
+  body.claro .marcaApp small { font: 400 8px "Silkscreen", monospace; letter-spacing: .1em; }
+  .chip { border-radius: 999px !important; padding: 4px 10px !important; font-size: 13px; white-space: nowrap; }
+  #idioma { float: none; }
+  #nav { top: 60px; left: 12px; right: auto; width: 420px; max-width: none; gap: 4px; padding: 4px 8px 8px;
+         border-radius: 0; z-index: 4; }
+  #nav button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 4px;
+                font-size: 13px; }
+  #nav button.activo { background: #2f5fa8; color: #fff; }
+  body.claro #nav button.activo { background: #16181d; color: #fff; border-color: #16181d; }
+  #nav .ico { font-size: 16px; }
+  #mapa { top: 104px; left: 12px; right: auto; width: 420px; max-width: none; max-height: calc(100vh - 130px);
+          overflow: auto; border-radius: 0 0 10px 10px; display: none; }
+  #mapa.abierta { display: block; }
+  #mapa section[hidden] { display: none; }
+  .subtitulo { margin: 12px 0 0; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; opacity: .75; }
+  .rejilla { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+  .rejilla button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+                    min-height: 70px; padding: 8px 4px; font-size: 12px; line-height: 1.2; text-align: center;
+                    white-space: normal; border-radius: 10px !important; }
+  .rejilla button .ico { font-size: 24px; line-height: 1; }
+  .rejilla.grandes button { color: #fff !important; font-weight: 600; border: 0 !important; }
+  #conducir { background: #d64545 !important; } #abrirLluvia { background: #3b6fb6 !important; } #abrirRiesgo { background: #b8326a !important; }
+  .asa { display: none; }
+  .pista { position: fixed; left: 50%; transform: translateX(-50%); bottom: 76px; z-index: 8; padding: 10px 16px;
+           border-radius: 999px; background: rgba(20,24,40,.9); color: #fff; font-size: 14px; display: none;
+           box-shadow: 0 4px 16px rgba(0,0,0,.25); white-space: nowrap; }
+  body.conduciendo #barra, body.conduciendo #nav, body.conduciendo #mapa { display: none !important; }
   @media (max-width: 760px) {
-    #lluvia, #riesgo, .herramienta { top: auto; bottom: 12px; left: 12px; right: 12px; max-width: none; max-height: 45vh; }
+    #barra { top: 0; left: 0; right: 0; width: auto; border-radius: 0; padding: 6px 12px;
+             padding-top: max(6px, env(safe-area-inset-top)); }
+    #nav { top: auto; bottom: 0; left: 0; right: 0; width: auto; padding: 4px 4px max(4px, env(safe-area-inset-bottom));
+           border-radius: 0; gap: 0; z-index: 7; }
+    #nav button { flex-direction: column; gap: 2px; font-size: 11px; padding: 6px 2px; background: none !important;
+                  border: 0 !important; border-radius: 8px !important; }
+    #nav .ico { font-size: 22px; }
+    #nav button.activo { color: #ffd166 !important; }
+    body.claro #nav button.activo { color: #b4441f !important; }
+    #nav button.activo .ico { transform: scale(1.12); }
+    /* Hojas desde abajo: la del menú y las de las herramientas */
+    #mapa, #lluvia, #riesgo, .herramienta, #explicacion {
+      top: auto !important; left: 0 !important; right: 0 !important; bottom: 62px !important; width: auto !important;
+      max-width: none !important; max-height: 50vh; border-radius: 18px 18px 0 0 !important; padding: 4px 14px 12px;
+      box-shadow: 0 -6px 24px rgba(0,0,0,.18); z-index: 6; }
+    #mapa { max-height: 64vh; }
+    .mini { max-height: 56px !important; overflow: hidden !important; }
+    .completa { max-height: calc(100vh - 130px) !important; }
+    .asa { display: block; height: 22px; margin: 0 -14px 2px; cursor: pointer; position: relative; touch-action: manipulation; }
+    .asa::before { content: ""; position: absolute; left: 50%; top: 8px; width: 44px; height: 5px; margin-left: -22px;
+                   border-radius: 3px; background: currentColor; opacity: .35; }
+    .rejilla { grid-template-columns: repeat(3, 1fr); }
+    #osm { bottom: 66px; font-size: 10px; }
+    .etiqueta { font-size: 10px; padding: 2px 6px; }
+    #explicacion { display: none; }
   }
+
   @media print {
     html, body { overflow: visible; height: auto; background: #fff; }
     body > *:not(#informe) { display: none !important; }
@@ -126,18 +187,34 @@
 </head>
 <body>
 <div id="cargando" data-t="cargando"></div>
-<div id="mapa" class="panel"><button id="idioma"></button>
-<div class="tituloPixel"><small data-t="kicker"></small><div>Ripollet</div></div><span data-t="titulo"></span><br>
-<span data-t="ayudaMapa"></span>
-<div id="tiempoReal"></div>
-<div id="trafico"></div>
-<div class="botones"><button class="principal" id="conducir" data-t="conducir"></button>
-<button class="principal" id="abrirRiesgo" style="background:#b8326a" data-t="riesgo"></button>
-<button class="principal" id="abrirLluvia" style="background:#3b6fb6" data-t="lluvia"></button>
-<button class="principal" id="arte" style="background:#e0703a"></button></div>
-<div class="botones" id="herramientas"></div>
-<div class="botones" id="ir"></div>
-<details id="vista"></details></div>
+<header id="barra" class="panel">
+  <div class="marcaApp"><b>Ripollet</b><small data-t="kicker"></small></div>
+  <button id="chipTiempo" class="chip"></button>
+  <button id="idioma"></button>
+</header>
+<nav id="nav" class="panel">
+  <button data-sec="explorar"><span class="ico">🗺</span><span data-t="navExplorar"></span></button>
+  <button data-sec="herramientas"><span class="ico">🧰</span><span data-t="navHerramientas"></span></button>
+  <button data-sec="riesgo"><span class="ico">⚠️</span><span data-t="navRiesgo"></span></button>
+  <button data-sec="ajustes"><span class="ico">⚙️</span><span data-t="navAjustes"></span></button>
+</nav>
+<div id="mapa" class="panel"><div class="asa"></div>
+  <section data-sec="explorar">
+    <p class="nota" style="margin-top:4px"><span data-t="titulo"></span> <span id="ayuda" data-t="ayudaMapa"></span></p>
+    <div class="rejilla grandes"><button id="conducir" data-t="conducir"></button>
+      <button id="abrirLluvia" data-t="lluvia"></button><button id="abrirRiesgo" data-t="riesgo"></button></div>
+    <p class="subtitulo" data-t="navIr"></p>
+    <div class="botones" id="ir"></div>
+  </section>
+  <section data-sec="herramientas" hidden><div class="rejilla" id="herramientas"></div></section>
+  <section data-sec="ajustes" hidden>
+    <div id="tiempoReal"></div>
+    <div id="trafico"></div>
+    <div class="botones"><button id="arte"></button></div>
+    <details id="vista" open></details>
+  </section>
+</div>
+<div class="pista" id="pista"></div>
 
 <div id="hud" class="panel"><span data-t="hud1"></span><br><span data-t="hud2"></span>
 <div class="botones"><button id="camara" data-t="camara"></button><button id="reiniciar" data-t="salida"></button>
@@ -4707,6 +4784,14 @@ function crearTiempoReal(ctx, div) {
       if (clima.lluvia > 0) partes.push(t("trLluvia", numero(clima.lluvia, 1)));
     } else if (desfase === null) partes.push(t(error ? "trSinDatos" : "trCargando"));
     $("trTexto").innerHTML = activo ? partes.join(" · ") : "";
+    // Resumen corto en la barra de arriba: icono, hora y temperatura
+    const chip = document.getElementById("chipTiempo");
+    if (chip) {
+      const cod = clima && desfase === null ? grupoCielo(clima.codigo) : null;
+      const noche = posicionSol(horaActual().fecha, hora).elevacion < 0;
+      const icono = cod === null ? (noche ? "🌙" : "☀️") : noche && cod <= 1 ? "🌙" : ICONO[cod];
+      chip.textContent = `${icono} ${horaTexto(hora)}${clima && desfase === null ? ` · ${numero(clima.temperatura, 0)}°` : ""}`;
+    }
     $("trHora").style.display = $("trAhora").style.display = activo ? "" : "none";
     $("trHora").value = String(hora);
     $("trAhora").textContent = t("trAhora");
@@ -5282,6 +5367,7 @@ const TEXTOS = {
     cargando: "Cargando Ripollet…",
     titulo: "<b>Ripollet</b>: del centro a Pinetons, generado en Blender desde OpenStreetMap.",
     ayudaMapa: "Arrastra para moverte · clic derecho para girar · rueda para zoom",
+    ayudaTactil: "Un dedo para moverte · dos dedos para girar y hacer zoom",
     conducir: "🚗 Conducir", lluvia: "🌧 Lluvia", riesgo: "⚠️ Riesgo de inundación",
     estiloArte: "🎨 Estilo artístico", estiloReal: "🏙 Estilo realista",
     hud1: "<b>Conduciendo</b> · W/↑ acelerar · S/↓ frenar y marcha atrás · A D/← → girar",
@@ -5372,6 +5458,7 @@ const TEXTOS = {
     cargando: "Carregant Ripollet…",
     titulo: "<b>Ripollet</b>: del centre a Pinetons, generat amb Blender a partir d'OpenStreetMap.",
     ayudaMapa: "Arrossega per moure't · clic dret per girar · roda per fer zoom",
+    ayudaTactil: "Un dit per moure't · dos dits per girar i fer zoom",
     conducir: "🚗 Conduir", lluvia: "🌧 Pluja", riesgo: "⚠️ Risc d'inundació",
     estiloArte: "🎨 Estil artístic", estiloReal: "🏙 Estil realista",
     hud1: "<b>Conduint</b> · W/↑ accelerar · S/↓ frenar i marxa enrere · A D/← → girar",
@@ -5463,7 +5550,11 @@ const TEXTOS = {
 const LISTA_HERRAMIENTAS = globalThis.HERRAMIENTAS ?? [];
 for (const h of LISTA_HERRAMIENTAS) for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], h.textos[l]);
 for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_PIXEL[l], TEXTOS_TRAFICO[l],
-  { kicker: l === "es" ? "Maqueta · del centro a Pinetons" : "Maqueta · del centre als Pinetons" });
+  { kicker: l === "es" ? "Maqueta · del centro a Pinetons" : "Maqueta · del centre als Pinetons" },
+  l === "es" ? { navExplorar: "Explorar", navHerramientas: "Herramientas", navRiesgo: "Riesgo", navAjustes: "Ajustes",
+                 navIr: "Ir a…", navPista: "Toca 🧰 Herramientas para empezar", navAsa: "Plegar o desplegar" }
+             : { navExplorar: "Explorar", navHerramientas: "Eines", navRiesgo: "Risc", navAjustes: "Ajustos",
+                 navIr: "Anar a…", navPista: "Toca 🧰 Eines per començar", navAsa: "Plegar o desplegar" });
 let idioma = "es";
 try { idioma = localStorage.getItem("idioma") || (navigator.language.startsWith("ca") ? "ca" : "es"); } catch {}
 const t = (clave, ...args) => String(TEXTOS[idioma][clave] ?? clave).replace(/\{(\d)\}/g, (_, n) => args[n]);
@@ -5473,6 +5564,10 @@ const numero = (x, dec = 0) => x.toLocaleString(idioma === "ca" ? "ca-ES" : "es-
 function traducir() {
   document.documentElement.lang = idioma;
   for (const el of document.querySelectorAll("[data-t]")) el.innerHTML = t(el.dataset.t);
+  // En las cuadrículas, el emoji del principio va grande encima del texto
+  for (const el of document.querySelectorAll(".rejilla [data-t]"))
+    el.innerHTML = el.innerHTML.replace(/^(\p{Extended_Pictographic}[\uFE0F\u200D\p{Extended_Pictographic}]*)\s*/u, '<span class="ico">$1</span>');
+  for (const a of document.querySelectorAll(".asa")) a.title = t("navAsa");
   $("idioma").textContent = idioma === "es" ? "CA" : "ES";
   $("idioma").title = idioma === "es" ? "Català" : "Castellano";
   $("arte").textContent = t(estiloArte ? "estiloReal" : "estiloArte");
@@ -5838,6 +5933,58 @@ function mostrarPanel(id) {
   grupoMedidas.visible = grupoIncidencias.visible = id === "riesgo";
   if (id !== "riesgo") $("explicacion").style.display = "none";
   tiempoReal?.aplicar();          // la herramienta de sombra mueve el sol mientras está abierta
+  if (id && esMovil()) abrirSeccion(null);
+  marcarNav();
+}
+
+// ------------------------------------------------------------ navegación: secciones del menú
+// Móvil: barra abajo y hojas que suben; escritorio: pestañas arriba a la izquierda. Tocar la sección abierta la cierra.
+const esMovil = () => matchMedia("(max-width: 760px)").matches;
+let seccionAbierta = null;
+function abrirSeccion(sec) {
+  seccionAbierta = sec;
+  for (const s of document.querySelectorAll("#mapa section")) s.hidden = s.dataset.sec !== sec;
+  $("mapa").classList.toggle("abierta", !!sec);
+  $("mapa").classList.remove("mini", "completa");
+  marcarNav();
+}
+function marcarNav() {
+  const riesgo = $("riesgo").style.display === "block";
+  for (const b of document.querySelectorAll("#nav button"))
+    b.classList.toggle("activo", b.dataset.sec === "riesgo" ? riesgo : b.dataset.sec === seccionAbierta);
+}
+for (const b of document.querySelectorAll("#nav button"))
+  b.onclick = () => {
+    if (b.dataset.sec === "riesgo") {
+      if ($("riesgo").style.display === "block") mostrarPanel(null); else $("abrirRiesgo").click();
+      return;
+    }
+    // En el móvil, una sola hoja a la vez: abrir una sección cierra la herramienta abierta
+    if (esMovil() && seccionAbierta !== b.dataset.sec) mostrarPanel(null);
+    abrirSeccion(seccionAbierta === b.dataset.sec ? null : b.dataset.sec);
+  };
+$("chipTiempo").onclick = () => {
+  if (esMovil() && seccionAbierta !== "ajustes") mostrarPanel(null);
+  abrirSeccion(seccionAbierta === "ajustes" ? null : "ajustes");
+};
+/** Panel de herramienta: asa y ✕ para cerrar (se vuelven a poner cuando la herramienta rellena su panel). */
+function adornarHerramienta(panel) {
+  ponerAsa(panel);
+  if (panel.querySelector(":scope > .cerrar")) return;
+  const x = document.createElement("button");
+  Object.assign(x, { className: "cerrar", textContent: "✕", onclick: () => mostrarPanel(null) });
+  x.style.float = "right";
+  panel.querySelector(":scope > .asa").after(x);
+}
+/** Asa de las hojas (móvil): media pantalla → entera → plegada (solo el título). */
+function ponerAsa(panel) {
+  let asa = panel.querySelector(":scope > .asa");
+  if (!asa) { asa = document.createElement("div"); asa.className = "asa"; panel.prepend(asa); }
+  asa.onclick = () => {
+    const mini = panel.classList.contains("mini"), completa = panel.classList.contains("completa");
+    panel.classList.toggle("completa", !mini && !completa);
+    panel.classList.toggle("mini", completa);
+  };
 }
 
 function entrarAlCoche() {
@@ -5854,7 +6001,7 @@ function entrarAlCoche() {
   scene.fog.far = 1500;
   Object.assign(sol.shadow.camera, { left: -120, right: 120, top: 120, bottom: -120, near: 1, far: 600 });
   sol.shadow.camera.updateProjectionMatrix();
-  $("mapa").style.display = "none";
+  document.body.classList.add("conduciendo");
   mostrarPanel(null);
   $("hud").style.display = "block";
   $("velocidad").style.display = "block";
@@ -5877,7 +6024,7 @@ function salirDelCoche() {
   camera.position.copy(estado.pos).add(new THREE.Vector3(150, 180, 200));
   pixelado?.alSalirCoche();
   tiempoReal?.aplicar();
-  $("mapa").style.display = "block";
+  document.body.classList.remove("conduciendo");
   $("hud").style.display = "none";
   $("velocidad").style.display = "none";
   $("tactil").style.display = "none";
@@ -6914,6 +7061,8 @@ for (const h of LISTA_HERRAMIENTAS) {
       if (!this.creada) {
         this.creada = h.crear(CTX, div) || {};
         for (const el of div.querySelectorAll("[data-t]")) el.innerHTML = t(el.dataset.t);
+        adornarHerramienta(div);
+        for (const a of div.querySelectorAll(".asa")) a.title = t("navAsa");
       }
       return this.creada;
     },
@@ -6969,7 +7118,20 @@ addEventListener("resize", () => {
   etiquetas.setSize(innerWidth, innerHeight);
 });
 
+for (const panel of [$("mapa"), $("lluvia"), $("riesgo")]) ponerAsa(panel);
 traducir();
+if (matchMedia("(pointer: coarse)").matches) { $("ayuda").dataset.t = "ayudaTactil"; $("ayuda").textContent = t("ayudaTactil"); }
+// Escritorio: el menú abierto en «Explorar»; móvil: el mapa limpio y una pista la primera vez
+if (!esMovil()) abrirSeccion("explorar");
+else {
+  let vista = false;
+  try { vista = localStorage.getItem("pistaVista") === "si"; localStorage.setItem("pistaVista", "si"); } catch {}
+  if (!vista) {
+    $("pista").textContent = t("navPista");
+    $("pista").style.display = "block";
+    setTimeout(() => { $("pista").style.display = "none"; }, 5000);
+  }
+}
 // ?ir=x,z (metros de la maqueta) abre el visor mirando ese punto, para compartir un sitio concreto
 {
   const ir = new URLSearchParams(location.search).get("ir")?.split(",").map(Number);

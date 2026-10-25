@@ -183,6 +183,14 @@ export function crearTiempoReal(ctx, div) {
       if (clima.lluvia > 0) partes.push(t("trLluvia", numero(clima.lluvia, 1)));
     } else if (desfase === null) partes.push(t(error ? "trSinDatos" : "trCargando"));
     $("trTexto").innerHTML = activo ? partes.join(" · ") : "";
+    // Resumen corto en la barra de arriba: icono, hora y temperatura
+    const chip = document.getElementById("chipTiempo");
+    if (chip) {
+      const cod = clima && desfase === null ? grupoCielo(clima.codigo) : null;
+      const noche = posicionSol(horaActual().fecha, hora).elevacion < 0;
+      const icono = cod === null ? (noche ? "🌙" : "☀️") : noche && cod <= 1 ? "🌙" : ICONO[cod];
+      chip.textContent = `${icono} ${horaTexto(hora)}${clima && desfase === null ? ` · ${numero(clima.temperatura, 0)}°` : ""}`;
+    }
     $("trHora").style.display = $("trAhora").style.display = activo ? "" : "none";
     $("trHora").value = String(hora);
     $("trAhora").textContent = t("trAhora");
