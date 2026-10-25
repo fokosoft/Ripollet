@@ -131,6 +131,26 @@
                     min-height: 70px; padding: 8px 4px; font-size: 12px; line-height: 1.2; text-align: center;
                     white-space: normal; border-radius: 10px !important; }
   .rejilla button .ico { font-size: 24px; line-height: 1; }
+
+  /* Recorrido guiado */
+  #recorrido { position: fixed; left: 50%; right: auto; top: auto; transform: translateX(-50%); bottom: 24px; max-width: none; width: min(540px, calc(100vw - 24px));
+               z-index: 9; display: none; padding: 12px 16px; border-radius: 14px; box-shadow: 0 8px 28px rgba(0,0,0,.3); }
+  #recorrido .rcPaso { font-size: 11px; opacity: .7; letter-spacing: .05em; text-transform: uppercase; }
+  #recorrido h3 { margin: 2px 0 4px; font-size: 17px; }
+  #recorrido p { margin: 0 0 8px; font-size: 14px; line-height: 1.45; }
+  #recorrido .botones { justify-content: flex-end; }
+  #recorrido .barraRc { height: 3px; background: rgba(128,128,128,.3); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  #recorrido .barraRc i { display: block; height: 100%; width: 0; background: #e0703a; transition: width .4s; }
+  body.enRecorrido #nav, body.enRecorrido #mapa { display: none !important; }
+  .rejilla.dos { grid-template-columns: 1fr 1fr; }
+  #abrirRecorrido { background: #16181d !important; } #abrirMicasa { background: #2e9e54 !important; }
+  @media (max-width: 760px) {
+    #recorrido { top: 56px; bottom: auto; border-radius: 12px; padding: 10px 12px; }
+    #recorrido h3 { font-size: 15px; }
+    #recorrido p { font-size: 13px; }
+    body.enRecorrido .herramienta, body.enRecorrido #riesgo { bottom: 0 !important; }
+    body.enRecorrido #explicacion { display: none !important; }
+  }
   .rejilla.grandes button { color: #fff !important; font-weight: 600; border: 0 !important; }
   #conducir { background: #d64545 !important; } #abrirLluvia { background: #3b6fb6 !important; } #abrirRiesgo { background: #b8326a !important; }
   .asa { display: none; }
@@ -189,6 +209,7 @@
 <div id="cargando" data-t="cargando"></div>
 <header id="barra" class="panel">
   <div class="marcaApp"><b>Ripollet</b><small data-t="kicker"></small></div>
+  <button id="compartir" class="chip" data-t="compartirBoton"></button>
   <button id="chipTiempo" class="chip"></button>
   <button id="idioma"></button>
 </header>
@@ -201,6 +222,8 @@
 <div id="mapa" class="panel"><div class="asa"></div>
   <section data-sec="explorar">
     <p class="nota" style="margin-top:4px"><span data-t="titulo"></span> <span id="ayuda" data-t="ayudaMapa"></span></p>
+    <div class="rejilla grandes dos"><button id="abrirRecorrido" data-t="rcBoton"></button>
+      <button id="abrirMicasa" data-t="micasaBoton"></button></div>
     <div class="rejilla grandes"><button id="conducir" data-t="conducir"></button>
       <button id="abrirLluvia" data-t="lluvia"></button><button id="abrirRiesgo" data-t="riesgo"></button></div>
     <p class="subtitulo" data-t="navIr"></p>
@@ -215,6 +238,10 @@
   </section>
 </div>
 <div class="pista" id="pista"></div>
+<div id="recorrido" class="panel"><div class="rcPaso" id="rcPaso"></div><h3 id="rcTitulo"></h3><p id="rcTexto"></p>
+  <div class="botones"><button id="rcSalir" data-t="rcSalir"></button><button id="rcAuto"></button>
+  <button id="rcAtras">◀</button><button id="rcSigue" class="principal"></button></div>
+  <div class="barraRc"><i id="rcBarra"></i></div></div>
 
 <div id="hud" class="panel"><span data-t="hud1"></span><br><span data-t="hud2"></span>
 <div class="botones"><button id="camara" data-t="camara"></button><button id="reiniciar" data-t="salida"></button>
@@ -491,9 +518,37 @@ for (const h of LISTA_HERRAMIENTAS) for (const l of ["es", "ca"]) Object.assign(
 for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_PIXEL[l], TEXTOS_TRAFICO[l],
   { kicker: l === "es" ? "Maqueta · del centro a Pinetons" : "Maqueta · del centre als Pinetons" },
   l === "es" ? { navExplorar: "Explorar", navHerramientas: "Herramientas", navRiesgo: "Riesgo", navAjustes: "Ajustes",
-                 navIr: "Ir a…", navPista: "Toca 🧰 Herramientas para empezar", navAsa: "Plegar o desplegar" }
+                 navIr: "Ir a…", navPista: "Toca 🧰 Herramientas para empezar", navAsa: "Plegar o desplegar",
+                 compartirBoton: "🔗", enlaceCopiado: "Enlace copiado: pégalo donde quieras", copiaEnlace: "Copia este enlace:",
+                 rcBoton: "▶ Recorrido guiado", rcSalir: "Salir", rcSiguiente: "Siguiente ▶", rcFin: "Terminar",
+                 rcAutoOn: "⏸ Pausa", rcAutoOff: "⏵ Automático", rcPasoN: "Paso {0} de {1}",
+                 rcT: ["Ripollet en 3D", "El centro", "Riesgo de inundación", "Sombra y calor", "Energía solar",
+                       "Vulnerabilidad", "Transporte público", "Mi casa", "Ripollet de noche"],
+                 rcX: ["Del centro a Pinetons, construido solo con datos públicos: {0} edificios del Catastro, {1} árboles y arbustos medidos con LiDAR y {2} farolas reales.",
+                       "Puedes mover, girar y acercar el mapa, y hasta conducir por las calles reales. Las herramientas están en 🧰.",
+                       "Una lluvia torrencial de 60 mm/h: la simulación física marca dónde se acumula el agua y Neutro explica por qué. Este es el punto más crítico.",
+                       "Qué aceras quedan al sol una tarde de julio, con las sombras de los edificios y de los árboles. Aquí, la escuela con menos sombra alrededor.",
+                       "El potencial solar de cada cubierta, con las sombras de los vecinos. Aquí, el equipamiento que más energía podría producir.",
+                       "Las secciones censales según edad, hogares de una persona y renta (INE), cruzadas con el agua y el calor.",
+                       "Las 13 líneas de autobús con sus próximas salidas, y cuántos minutos se tarda a pie hasta una parada.",
+                       "Cualquiera puede buscar su dirección y ver la ficha de su edificio: agua, año, sol, ruido, barrio y servicios cerca.",
+                       "El sol, las nubes y la noche son los de ahora mismo. Así se ve Ripollet con sus farolas. Fin del recorrido: explora el resto en 🧰 Herramientas."] }
              : { navExplorar: "Explorar", navHerramientas: "Eines", navRiesgo: "Risc", navAjustes: "Ajustos",
-                 navIr: "Anar a…", navPista: "Toca 🧰 Eines per començar", navAsa: "Plegar o desplegar" });
+                 navIr: "Anar a…", navPista: "Toca 🧰 Eines per començar", navAsa: "Plegar o desplegar",
+                 compartirBoton: "🔗", enlaceCopiado: "Enllaç copiat: enganxa'l on vulguis", copiaEnlace: "Copia aquest enllaç:",
+                 rcBoton: "▶ Recorregut guiat", rcSalir: "Sortir", rcSiguiente: "Següent ▶", rcFin: "Acabar",
+                 rcAutoOn: "⏸ Pausa", rcAutoOff: "⏵ Automàtic", rcPasoN: "Pas {0} de {1}",
+                 rcT: ["Ripollet en 3D", "El centre", "Risc d'inundació", "Ombra i calor", "Energia solar",
+                       "Vulnerabilitat", "Transport públic", "La meva casa", "Ripollet de nit"],
+                 rcX: ["Del centre als Pinetons, construït només amb dades públiques: {0} edificis del Cadastre, {1} arbres i arbustos mesurats amb LiDAR i {2} fanals reals.",
+                       "Pots moure, girar i apropar el mapa, i fins i tot conduir pels carrers reals. Les eines són a 🧰.",
+                       "Una pluja torrencial de 60 mm/h: la simulació física marca on s'acumula l'aigua i Neutro explica per què. Aquest és el punt més crític.",
+                       "Quines voreres queden al sol una tarda de juliol, amb les ombres dels edificis i dels arbres. Aquí, l'escola amb menys ombra al voltant.",
+                       "El potencial solar de cada coberta, amb les ombres dels veïns. Aquí, l'equipament que més energia podria produir.",
+                       "Les seccions censals segons edat, llars d'una persona i renda (INE), creuades amb l'aigua i la calor.",
+                       "Les 13 línies d'autobús amb les properes sortides, i quants minuts es triga a peu fins a una parada.",
+                       "Qualsevol pot cercar la seva adreça i veure la fitxa del seu edifici: aigua, any, sol, soroll, barri i serveis a prop.",
+                       "El sol, els núvols i la nit són els d'ara mateix. Així es veu Ripollet amb els seus fanals. Fi del recorregut: explora la resta a 🧰 Eines."] });
 let idioma = "es";
 try { idioma = localStorage.getItem("idioma") || (navigator.language.startsWith("ca") ? "ca" : "es"); } catch {}
 const t = (clave, ...args) => String(TEXTOS[idioma][clave] ?? clave).replace(/\{(\d)\}/g, (_, n) => args[n]);
@@ -521,6 +576,7 @@ function traducir() {
   for (const p of Object.values(PANELES_HERRAMIENTA)) p.creada?.traducir?.();
   tiempoReal?.traducir();
   pixelado?.traducir();
+  if (typeof recorrido !== "undefined") recorrido.traducir();
   trafico?.traducir();
 }
 $("idioma").onclick = () => {
@@ -1369,6 +1425,9 @@ const REHAB = BLOBS && !BLOBS.rehab ? null : await cargarBinario("rehab", Uint16
 const LUGARES_OSM = BLOBS && !BLOBS.lugares ? null : await cargarBinario("lugares", Uint8Array, BLOBS)
   .then((b) => JSON.parse(new TextDecoder().decode(b))).catch(() => null);
 // Autobuses: paradas, líneas, trazados y horarios (GTFS de la AMB y de la Generalitat, obtener_transporte.py)
+// Portales del Catastro: [calle, número, x, z, edificio] (obtener_direcciones.py)
+const DIRECCIONES = BLOBS && !BLOBS.direcciones ? null : await cargarBinario("direcciones", Uint8Array, BLOBS)
+  .then((b) => JSON.parse(new TextDecoder().decode(b))).catch(() => null);
 // Zona de capacidad acústica de cada celda de 4 m (obtener_ambiente.py)
 const ACUSTICA_4M = BLOBS && !BLOBS.acustica ? null : await cargarBinario("acustica", Uint8Array, BLOBS).catch(() => null);
 const TRANSPORTE = BLOBS && !BLOBS.transporte ? null : await cargarBinario("transporte", Uint8Array, BLOBS)
@@ -1951,7 +2010,8 @@ $("verMedicion").onclick = () => {
 const CTX = {
   THREE, scene, camera, renderer, controls, CSS2DObject, D, DATOS, SIM, S1, altura, sol, sombrasMapa, geoCeldas,
   simulacion, FISICA, INTENSIDADES, volarA, $, t, tx, numero, idioma: () => idioma, estiloArte: () => estiloArte,
-  nombreCalle, choca, SOTANOS, secciones4m: SECCIONES_4M, rehab: REHAB, lugaresOsm: LUGARES_OSM, transporte: TRANSPORTE, acustica4m: ACUSTICA_4M,
+  nombreCalle, choca, SOTANOS, secciones4m: SECCIONES_4M, rehab: REHAB, lugaresOsm: LUGARES_OSM, transporte: TRANSPORTE, acustica4m: ACUSTICA_4M, direcciones: DIRECCIONES,
+  compartir: (extra) => compartir(extra),
   capa1m: { datos: datosCapa1m, actualizar: () => { texCapa1m.needsUpdate = true; },
             ver: (v) => { capa1mActiva.value = v ? 1 : 0; } },
   capaTechos: { datos: datosCapaTechos, nx: S1.nx / 2, ny: S1.ny / 2, actualizar: () => { texCapaTechos.needsUpdate = true; },
@@ -2058,6 +2118,109 @@ addEventListener("resize", () => {
 });
 
 for (const panel of [$("mapa"), $("lluvia"), $("riesgo")]) ponerAsa(panel);
+// ------------------------------------------------------------ compartir: enlace con la vista y la herramienta abiertas
+function aviso(texto, ms = 2800) {
+  $("pista").textContent = texto;
+  $("pista").style.display = "block";
+  clearTimeout(aviso.t);
+  aviso.t = setTimeout(() => { $("pista").style.display = "none"; }, ms);
+}
+function enlaceActual(extra = {}) {
+  const u = new URL(location.href);
+  for (const k of [...u.searchParams.keys()]) if (!["arte", "real"].includes(k)) u.searchParams.delete(k);
+  u.hash = "";
+  const abierta = Object.entries(PANELES_HERRAMIENTA).find(([, p]) => p.div.style.display === "block");
+  if (abierta) {
+    u.searchParams.set("h", abierta[0]);
+    for (const [k, v] of Object.entries({ ...(abierta[1].creada?.enlace?.() ?? {}), ...extra })) u.searchParams.set(k, v);
+  } else if ($("riesgo").style.display === "block") u.searchParams.set("h", "riesgo");
+  const tg = controls.target, c = camera.position;
+  u.searchParams.set("ir", `${Math.round(tg.x)},${Math.round(tg.z)}`);
+  u.searchParams.set("cam", `${Math.round(c.x - tg.x)},${Math.round(c.y - tg.y)},${Math.round(c.z - tg.z)}`);
+  return u.toString();
+}
+async function compartir(extra) {
+  const url = enlaceActual(extra);
+  if (navigator.share && esMovil()) { try { await navigator.share({ title: "Ripollet", url }); } catch {} return; }
+  try { await navigator.clipboard.writeText(url); aviso(t("enlaceCopiado")); }
+  catch { prompt(t("copiaEnlace"), url); }
+}
+$("compartir").onclick = () => compartir();
+$("compartir").title = "Compartir";
+
+// ------------------------------------------------------------ recorrido guiado: la app en 9 paradas
+const recorrido = (() => {
+  const centre = DATOS.lugares.find((l) => l.nombre === "Centre") ?? DATOS.lugares[0];
+  const ir = (x, z, d) => volarA(new THREE.Vector3(x, 0, z), d);
+  const clic = (sel, espera = 1200) => setTimeout(() => document.querySelector(sel)?.click(), espera);
+  const abrir = (id) => { mostrarPanel(id); if (esMovil()) PANELES_HERRAMIENTA[id]?.div.classList.add("mini"); };
+  const casaCentro = () => {
+    let mejor = null, dm = Infinity;
+    for (const p of DIRECCIONES ?? []) {
+      const d = (p[2] - centre.pos[0]) ** 2 + (p[3] - centre.pos[2]) ** 2;
+      if (p[4] && d < dm) { dm = d; mejor = p[4]; }
+    }
+    return mejor;
+  };
+  const PASOS = [
+    () => { mostrarPanel(null); ir(0, 0, 5); },
+    () => { mostrarPanel(null); ir(centre.pos[0], centre.pos[2], 0.8); },
+    () => { mostrarPanel(null); $("abrirRiesgo").click(); if (esMovil()) $("riesgo").classList.add("mini"); clic("#listaPuntos li", 1500); },
+    () => { abrir("sombra"); clic("#sbEscuelas li", 5000); },
+    () => { abrir("solar"); clic("#soEquip li", 1500); },
+    () => { abrir("vulner"); clic("#vuLista li", 1500); },
+    () => { abrir("transporte"); ir(centre.pos[0], centre.pos[2], 1.6); },
+    () => { mostrarPanel("micasa"); const e = casaCentro(); if (e) setTimeout(() => PANELES_HERRAMIENTA.micasa.h.restaurar(new URLSearchParams(`casa=${e}`)), 600); },
+    () => { mostrarPanel(null); const s = $("trHora"); s.value = "22"; s.oninput(); ir(centre.pos[0], centre.pos[2], 1.2); },
+  ];
+  let paso = -1, auto = null, horaCambiada = false;
+  function mostrar() {
+    const tit = tx("rcT"), txt = tx("rcX");
+    $("rcPaso").textContent = t("rcPasoN", paso + 1, PASOS.length);
+    $("rcTitulo").textContent = tit[paso];
+    // El primer paso lleva las cifras de la maqueta
+    $("rcTexto").textContent = txt[paso].replace("{0}", numero(DATOS.edificios)).replace("{1}", numero(DATOS.arboles))
+      .replace("{2}", numero(DATOS_FAROLAS ? DATOS_FAROLAS.length / 3 : 0));
+    $("rcSigue").textContent = t(paso === PASOS.length - 1 ? "rcFin" : "rcSiguiente");
+    $("rcAuto").textContent = t(auto ? "rcAutoOn" : "rcAutoOff");
+    $("rcAtras").disabled = paso === 0;
+    $("rcBarra").style.width = `${100 * (paso + 1) / PASOS.length}%`;
+  }
+  function ir_a(n) {
+    if (n >= PASOS.length) return salir();
+    paso = Math.max(0, n);
+    if (paso === PASOS.length - 1) horaCambiada = true;
+    PASOS[paso]();
+    mostrar();
+  }
+  function salir() {
+    clearInterval(auto); auto = null;
+    $("recorrido").style.display = "none";
+    document.body.classList.remove("enRecorrido");
+    mostrarPanel(null);
+    if (horaCambiada) { $("trAhora").click(); horaCambiada = false; }
+    paso = -1;
+  }
+  $("rcSigue").onclick = () => ir_a(paso + 1);
+  $("rcAtras").onclick = () => ir_a(paso - 1);
+  $("rcSalir").onclick = salir;
+  $("rcAuto").onclick = () => {
+    if (auto) { clearInterval(auto); auto = null; } else auto = setInterval(() => ir_a(paso + 1), 11000);
+    mostrar();
+  };
+  return {
+    empezar() {
+      abrirSeccion(null);
+      document.body.classList.add("enRecorrido");
+      $("recorrido").style.display = "block";
+      ir_a(0);
+    },
+    traducir() { if (paso >= 0) mostrar(); },
+  };
+})();
+$("abrirRecorrido").onclick = () => recorrido.empezar();
+$("abrirMicasa").onclick = () => { mostrarPanel("micasa"); setTimeout(() => $("mcBuscar")?.focus(), 300); };
+
 traducir();
 if (matchMedia("(pointer: coarse)").matches) { $("ayuda").dataset.t = "ayudaTactil"; $("ayuda").textContent = t("ayudaTactil"); }
 // Escritorio: el menú abierto en «Explorar»; móvil: el mapa limpio y una pista la primera vez
@@ -2073,8 +2236,18 @@ else {
 }
 // ?ir=x,z (metros de la maqueta) abre el visor mirando ese punto, para compartir un sitio concreto
 {
-  const ir = new URLSearchParams(location.search).get("ir")?.split(",").map(Number);
-  if (ir?.length === 2 && ir.every(Number.isFinite)) volarA(new THREE.Vector3(ir[0], 0, ir[1]), 0.35);
+  const P = new URLSearchParams(location.search);
+  const ir = P.get("ir")?.split(",").map(Number), cam = P.get("cam")?.split(",").map(Number);
+  if (ir?.length === 2 && ir.every(Number.isFinite)) {
+    if (cam?.length === 3 && cam.every(Number.isFinite)) {      // vista exacta del enlace
+      controls.target.set(ir[0], altura(ir[0], ir[1]), ir[1]);
+      camera.position.copy(controls.target).add(new THREE.Vector3(...cam));
+    } else volarA(new THREE.Vector3(ir[0], 0, ir[1]), 0.35);
+  }
+  const h = P.get("h");
+  if (h === "riesgo") $("abrirRiesgo").click();
+  else if (h && PANELES_HERRAMIENTA[h]) { mostrarPanel(h); PANELES_HERRAMIENTA[h].h.restaurar?.(P); }
+  if (P.has("recorrido")) setTimeout(() => recorrido.empezar(), 1500);
 }
 const reloj = new THREE.Clock();
 renderer.setAnimationLoop(() => {

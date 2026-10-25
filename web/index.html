@@ -131,6 +131,26 @@
                     min-height: 70px; padding: 8px 4px; font-size: 12px; line-height: 1.2; text-align: center;
                     white-space: normal; border-radius: 10px !important; }
   .rejilla button .ico { font-size: 24px; line-height: 1; }
+
+  /* Recorrido guiado */
+  #recorrido { position: fixed; left: 50%; right: auto; top: auto; transform: translateX(-50%); bottom: 24px; max-width: none; width: min(540px, calc(100vw - 24px));
+               z-index: 9; display: none; padding: 12px 16px; border-radius: 14px; box-shadow: 0 8px 28px rgba(0,0,0,.3); }
+  #recorrido .rcPaso { font-size: 11px; opacity: .7; letter-spacing: .05em; text-transform: uppercase; }
+  #recorrido h3 { margin: 2px 0 4px; font-size: 17px; }
+  #recorrido p { margin: 0 0 8px; font-size: 14px; line-height: 1.45; }
+  #recorrido .botones { justify-content: flex-end; }
+  #recorrido .barraRc { height: 3px; background: rgba(128,128,128,.3); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  #recorrido .barraRc i { display: block; height: 100%; width: 0; background: #e0703a; transition: width .4s; }
+  body.enRecorrido #nav, body.enRecorrido #mapa { display: none !important; }
+  .rejilla.dos { grid-template-columns: 1fr 1fr; }
+  #abrirRecorrido { background: #16181d !important; } #abrirMicasa { background: #2e9e54 !important; }
+  @media (max-width: 760px) {
+    #recorrido { top: 56px; bottom: auto; border-radius: 12px; padding: 10px 12px; }
+    #recorrido h3 { font-size: 15px; }
+    #recorrido p { font-size: 13px; }
+    body.enRecorrido .herramienta, body.enRecorrido #riesgo { bottom: 0 !important; }
+    body.enRecorrido #explicacion { display: none !important; }
+  }
   .rejilla.grandes button { color: #fff !important; font-weight: 600; border: 0 !important; }
   #conducir { background: #d64545 !important; } #abrirLluvia { background: #3b6fb6 !important; } #abrirRiesgo { background: #b8326a !important; }
   .asa { display: none; }
@@ -189,6 +209,7 @@
 <div id="cargando" data-t="cargando"></div>
 <header id="barra" class="panel">
   <div class="marcaApp"><b>Ripollet</b><small data-t="kicker"></small></div>
+  <button id="compartir" class="chip" data-t="compartirBoton"></button>
   <button id="chipTiempo" class="chip"></button>
   <button id="idioma"></button>
 </header>
@@ -201,6 +222,8 @@
 <div id="mapa" class="panel"><div class="asa"></div>
   <section data-sec="explorar">
     <p class="nota" style="margin-top:4px"><span data-t="titulo"></span> <span id="ayuda" data-t="ayudaMapa"></span></p>
+    <div class="rejilla grandes dos"><button id="abrirRecorrido" data-t="rcBoton"></button>
+      <button id="abrirMicasa" data-t="micasaBoton"></button></div>
     <div class="rejilla grandes"><button id="conducir" data-t="conducir"></button>
       <button id="abrirLluvia" data-t="lluvia"></button><button id="abrirRiesgo" data-t="riesgo"></button></div>
     <p class="subtitulo" data-t="navIr"></p>
@@ -215,6 +238,10 @@
   </section>
 </div>
 <div class="pista" id="pista"></div>
+<div id="recorrido" class="panel"><div class="rcPaso" id="rcPaso"></div><h3 id="rcTitulo"></h3><p id="rcTexto"></p>
+  <div class="botones"><button id="rcSalir" data-t="rcSalir"></button><button id="rcAuto"></button>
+  <button id="rcAtras">◀</button><button id="rcSigue" class="principal"></button></div>
+  <div class="barraRc"><i id="rcBarra"></i></div></div>
 
 <div id="hud" class="panel"><span data-t="hud1"></span><br><span data-t="hud2"></span>
 <div class="botones"><button id="camara" data-t="camara"></button><button id="reiniciar" data-t="salida"></button>
@@ -4599,6 +4626,241 @@ const herramientaAmbiente = {
 };
 (globalThis.HERRAMIENTAS ??= []).push(herramientaAmbiente);
 
+// ===== micasa.js =====
+// MI CASA: buscar una calle o una dirección (portales del Catastro) o tocar un edificio, y ver en una ficha todo lo
+// que la maqueta sabe de él: agua en lluvias fuertes, año y certificados, potencial solar, ruido (zona acústica),
+// vulnerabilidad de su barrio y a cuántos minutos a pie quedan la escuela, el CAP, el súper, la farmacia, el bus y un
+// refugio climático; y a cuántos en coche, una base de emergencias.
+
+const TEXTOS_MICASA = {
+  es: {
+    micasaBoton: "🏠 Mi casa", mcTitulo: "Mi casa", mcBuscar: "Calle y número, p. ej. «Balmes 12»",
+    mcClic: "Busca una dirección o toca tu edificio en el mapa.", mcSinResultados: "No encuentro esa dirección.",
+    mcCalle: "Calle", mcSinDireccion: "Edificio {0}", mcCompartir: "🔗 Compartir esta ficha",
+    mcAgua: "🌊 Agua en lluvias fuertes", mcAguaNada: "Sin agua acumulada junto a la fachada ni a 120 mm/h.",
+    mcAguaSi: "Hasta {0} cm junto a la fachada con {1} mm/h", mcSotano: " · tiene sótano o garaje (Catastro)",
+    mcEdificio: "🏢 Edificio", mcAnio: "construido en {0}", mcViv: "{0} viviendas", mcCert: "certificados energéticos: {0}",
+    mcSinCert: "sin certificados energéticos", mcSolar: "☀️ Cubierta", mcSolarTxt: "{0} kWh/m²·año de sol · podría producir ≈ {1} MWh/año ({2} kWp)",
+    mcRuido: "🔊 Zona acústica", mcRuidoTxt: "{0}: objetivo {1} dB de día y {2} dB de noche", mcSinZona: "sin zona acústica asignada",
+    mcBarrio: "👥 Barrio (sección censal {0})", mcBarrioTxt: "{0} vecinos · {1} % de 65 años o más · renta media {2} €/persona · índice de vulnerabilidad {3}/100",
+    mcCerca: "🚶 A pie desde aquí", mcCoche: "🚑 Emergencias en coche: {0} min ({1})",
+    mcMin: "{0}: {1} min ({2})", mcLejos: "{0}: más de 30 min",
+    mcCats: { educacion: "Escuela", salud: "Centro de salud", comida: "Comida", farmacia: "Farmacia", bus: "Parada de bus",
+            refugio: "Refugio climático" },
+    mcNota: "Datos de la maqueta: simulación física sin alcantarillado, Catastro, ICAEN, INE y OSM. Orientativo.",
+  },
+  ca: {
+    micasaBoton: "🏠 La meva casa", mcTitulo: "La meva casa", mcBuscar: "Carrer i número, p. ex. «Balmes 12»",
+    mcClic: "Cerca una adreça o toca el teu edifici al mapa.", mcSinResultados: "No trobo aquesta adreça.",
+    mcCalle: "Carrer", mcSinDireccion: "Edifici {0}", mcCompartir: "🔗 Compartir aquesta fitxa",
+    mcAgua: "🌊 Aigua en pluges fortes", mcAguaNada: "Sense aigua acumulada a tocar de la façana ni amb 120 mm/h.",
+    mcAguaSi: "Fins a {0} cm a tocar de la façana amb {1} mm/h", mcSotano: " · té soterrani o garatge (Cadastre)",
+    mcEdificio: "🏢 Edifici", mcAnio: "construït el {0}", mcViv: "{0} habitatges", mcCert: "certificats energètics: {0}",
+    mcSinCert: "sense certificats energètics", mcSolar: "☀️ Coberta", mcSolarTxt: "{0} kWh/m²·any de sol · podria produir ≈ {1} MWh/any ({2} kWp)",
+    mcRuido: "🔊 Zona acústica", mcRuidoTxt: "{0}: objectiu {1} dB de dia i {2} dB de nit", mcSinZona: "sense zona acústica assignada",
+    mcBarrio: "👥 Barri (secció censal {0})", mcBarrioTxt: "{0} veïns · {1} % de 65 anys o més · renda mitjana {2} €/persona · índex de vulnerabilitat {3}/100",
+    mcCerca: "🚶 A peu des d'aquí", mcCoche: "🚑 Emergències en cotxe: {0} min ({1})",
+    mcMin: "{0}: {1} min ({2})", mcLejos: "{0}: més de 30 min",
+    mcCats: { educacion: "Escola", salud: "Centre de salut", comida: "Menjar", farmacia: "Farmàcia", bus: "Parada de bus",
+            refugio: "Refugi climàtic" },
+    mcNota: "Dades de la maqueta: simulació física sense clavegueram, Cadastre, ICAEN, INE i OSM. Orientatiu.",
+  },
+};
+
+const USOS_ZONA = { A2: "sanitario o docente", A4: "residencial", B1: "residencial y actividades", B2: "residencial y tráfico",
+                    C1: "ocio", C2: "industrial" };
+const PIE_MC = 1.25;
+/** Para buscar: minúsculas, sin acentos ni prefijos («Carrer de», «Avinguda»…). */
+const normalizar = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[’'`.,]/g, " ")
+  .replace(/\b(carrer|calle|c|avinguda|avenida|av|avda|passeig|paseo|pg|placa|plaza|pl|rambla|ronda|cami|camino|passatge|pasaje|ptge|carretera|ctra|travessera|de|del|dels|la|les|el|els|d|l)\b/g, " ")
+  .replace(/\s+/g, " ").trim();
+
+const herramientaMicasa = {
+  id: "micasa",
+  textos: TEXTOS_MICASA,
+  crear(ctx, div) {
+    const { THREE, D, SIM, t, tx, numero, $ } = ctx;
+    const P = ctx.direcciones ?? [];             // [calle, número, x, z, edificio]
+    const calles = ctx.DATOS.calles;
+    const nEd = ctx.DATOS.edificios;
+
+    // Centro de cada calle (celdas de calzada con esa calle más cercana) y de cada edificio
+    const sc = calles.map(() => [0, 0, 0]), se = new Float64Array((nEd + 1) * 3);
+    for (let k = 0; k < SIM.nx * SIM.ny; k++) {
+      const i = k % SIM.nx, x = SIM.x0 + (i + 0.5) * SIM.celda, z = SIM.z0 + ((k - i) / SIM.nx + 0.5) * SIM.celda;
+      const id = D.calles[k], e = D.edificios[k];
+      if (id && D.codigos[k] === 6) { sc[id - 1][0] += x; sc[id - 1][1] += z; sc[id - 1][2]++; }
+      if (e) { se[e * 3] += x; se[e * 3 + 1] += z; se[e * 3 + 2]++; }
+    }
+    const centroEd = (e) => (se[e * 3 + 2] ? [se[e * 3] / se[e * 3 + 2], se[e * 3 + 1] / se[e * 3 + 2]] : null);
+    const normCalles = calles.map(normalizar);
+    const portalesDe = new Map();
+    for (const p of P) if (p[4]) portalesDe.set(p[4], [...(portalesDe.get(p[4]) ?? []), p]);
+
+    // ---------------------------------------------------------------- búsqueda
+    function buscar(q) {
+      const nq = normalizar(q), num = (nq.match(/\b(\d+[a-z]?)\b/) || [])[1];
+      const texto = nq.replace(/\b\d+[a-z]?\b/g, "").trim();
+      if (!texto) return [];
+      const r = [];
+      calles.forEach((c, id) => {
+        if (!normCalles[id].includes(texto)) return;
+        const portales = P.filter((p) => p[0] === id + 1);
+        if (num) {
+          const exacto = portales.filter((p) => p[1].toLowerCase() === num);
+          for (const p of exacto.length ? exacto : []) r.push({ txt: `${c} ${p[1]}`, x: p[2], z: p[3], e: p[4] });
+          if (!exacto.length && portales.length) {        // el número más cercano
+            const n = parseInt(num, 10), p = portales.reduce((a, b) => (Math.abs(parseInt(b[1], 10) - n) < Math.abs(parseInt(a[1], 10) - n) ? b : a));
+            r.push({ txt: `${c} ${p[1]}`, x: p[2], z: p[3], e: p[4] });
+          }
+        } else if (sc[id][2]) r.push({ txt: c, x: sc[id][0] / sc[id][2], z: sc[id][1] / sc[id][2], e: 0, calle: true });
+      });
+      const vistos = new Set();       // una fila por dirección (hay portales repetidos)
+      return r.filter((x) => !vistos.has(x.txt) && vistos.add(x.txt)).slice(0, 8);
+    }
+
+    // ---------------------------------------------------------------- cálculos de la ficha
+    const G = crearGrafo(D), nodoPie = nodosDe(G, (e) => G.pie[e]), nodoCoche = nodosDe(G, (e) => G.vel[e] > 0);
+    const REFUGIO = /bibliot|c[ií]vic|casal|centre de dia|centre obert/i;
+    const destinos = {
+      educacion: ctx.DATOS.equipamientos.filter((e) => e.tipo === "educacion"),
+      salud: ctx.DATOS.equipamientos.filter((e) => e.tipo === "salud"),
+      comida: ctx.DATOS.servicios.filter((s) => s.tipo === "alimentacion"),
+      farmacia: ctx.DATOS.servicios.filter((s) => s.tipo === "farmacia"),
+      bus: (ctx.transporte?.paradas ?? []).map((p) => ({ nombre: p.n, x: p.x, z: p.z })),
+      refugio: ctx.DATOS.equipamientos.filter((e) => e.tipo === "social" && REFUGIO.test(e.nombre)),
+    };
+    for (const lista of Object.values(destinos)) for (const d of lista) d.nodo = nodoCercano(G, d.x, d.z, nodoPie).nodo;
+    const bases = ctx.DATOS.equipamientos.filter((e) => e.tipo === "emergencia")
+      .map((e) => ({ ...e, nodo: nodoCercano(G, e.x, e.z, nodoCoche).nodo }));
+    function agua(e) {
+      const res = [];
+      for (const mmh of [60, 120]) {
+        const q = ctx.INTENSIDADES.indexOf(mmh), F = ctx.FISICA[q];
+        if (!F) continue;
+        let maxima = 0;
+        for (let k = 0; k < SIM.nx * SIM.ny; k++) {
+          if (D.edificios[k] !== e) continue;
+          const i = k % SIM.nx;
+          for (const v of [k - 1, k + 1, k - SIM.nx, k + SIM.nx]) {
+            // Solo vía pública, como el panel de riesgo (fuera patios privados, muros, río y edificios)
+            if (v < 0 || v >= F.length || (v % SIM.nx === 0 && i === SIM.nx - 1) || D.edificios[v] || !celdaAnalizable(D.codigos[v])) continue;
+            maxima = Math.max(maxima, F[v] * 2);
+          }
+        }
+        res.push([mmh, maxima]);
+      }
+      return res;
+    }
+
+    let elegido = 0;
+    function ficha(e) {
+      elegido = e;
+      pintarTecho();
+      if (!e) { $("mcFicha").innerHTML = ""; return; }
+      const c = centroEd(e);
+      const porta = portalesDe.get(e) ?? [];
+      const nombre = porta.length
+        ? [...new Set(porta.map((p) => calles[p[0] - 1]))].map((cn) => `${cn} ${porta.filter((p) => calles[p[0] - 1] === cn).map((p) => p[1]).join(", ")}`).join(" · ")
+        : t("mcSinDireccion", e);
+      const filas = [`<b style="font-size:16px">${nombre}</b>`];
+      // Agua
+      const ag = agua(e).filter(([, cm]) => cm >= 5);
+      const sot = ctx.SOTANOS?.[e - 1] ? t("mcSotano") : "";
+      filas.push(`<b>${t("mcAgua")}</b><br>` + (ag.length ? ag.map(([m, cm]) => t("mcAguaSi", numero(cm), m)).join("<br>") + sot
+                                                           : t("mcAguaNada") + sot));
+      // Edificio
+      if (ctx.rehab) {
+        const R = (q) => ctx.rehab[(e - 1) * 5 + q], letra = " ABCDEFG"[R(4) & 7];
+        const partes = [];
+        if (R(0)) partes.push(t("mcAnio", R(0)));
+        if (R(1)) partes.push(t("mcViv", R(1)));
+        partes.push(R(2) ? t("mcCert", `${R(2)} (mediana ${letra})`) : t("mcSinCert"));
+        filas.push(`<b>${t("mcEdificio")}</b><br>${partes.join(" · ")}`);
+      }
+      // Cubierta
+      const kwp = ctx.DATOS.solar?.kwp?.[e - 1], kwh = ctx.DATOS.solar?.kwh?.[e - 1];
+      if (kwp) filas.push(`<b>${t("mcSolar")}</b><br>${t("mcSolarTxt", numero(kwh / Math.max(kwp, 0.01) / 0.8 * 1, 0), numero(kwh / 1000, 1), numero(kwp, 1))}`);
+      // Zona acústica y barrio (de la celda del centro)
+      if (c) {
+        const k = Math.floor((c[1] - SIM.z0) / SIM.celda) * SIM.nx + Math.floor((c[0] - SIM.x0) / SIM.celda);
+        const za = ctx.acustica4m && ctx.DATOS.zonasAcusticas?.lista?.[ctx.acustica4m[k] - 1];
+        filas.push(`<b>${t("mcRuido")}</b><br>` + (za ? t("mcRuidoTxt", USOS_ZONA[za.usos] ?? za.usos, za.ld, za.ln) : t("mcSinZona")));
+        const s = ctx.secciones4m && ctx.DATOS.secciones?.lista?.[ctx.secciones4m[k] - 1];
+        if (s) filas.push(`<b>${t("mcBarrio", s.codigo)}</b><br>${t("mcBarrioTxt", numero(s.poblacion), numero(s.mayores, 1), numero(s.renta), s.indice)}`);
+        // A pie y en coche
+        const o = nodoCercano(G, c[0], c[1], nodoPie), { t: T } = tiempos(G, [o.nodo], (a) => (G.pie[a] ? G.largo[a] / PIE_MC : Infinity));
+        const cats = tx("mcCats"), lineas = [];
+        for (const [cat, lista] of Object.entries(destinos)) {
+          if (!lista.length) continue;
+          const mejor = lista.reduce((a, b) => (T[b.nodo] < T[a.nodo] ? b : a));
+          const min = (T[mejor.nodo] + o.distancia / PIE_MC) / 60;
+          lineas.push(min > 30 || !Number.isFinite(min) ? t("mcLejos", cats[cat]) : t("mcMin", cats[cat], Math.max(1, Math.round(min)), mejor.nombre || "—"));
+        }
+        filas.push(`<b>${t("mcCerca")}</b><br>${lineas.join("<br>")}`);
+        const oc = nodoCercano(G, c[0], c[1], nodoCoche);
+        const { t: TC } = tiempos(G, [oc.nodo], (a) => (G.vel[a] ? G.largo[a] / (G.vel[a] / 3.6) : Infinity));
+        const base = bases.reduce((a, b) => (TC[b.nodo] < TC[a.nodo] ? b : a), bases[0]);
+        if (base && Number.isFinite(TC[base.nodo])) filas.push(t("mcCoche", numero((TC[base.nodo] + 10 + oc.distancia / 4) / 60, 1), base.nombre));
+        ctx.volarA(new THREE.Vector3(c[0], 0, c[1]), 0.35);
+      }
+      filas.push(`<button id="mcCompartir">${t("mcCompartir")}</button>`, `<span class="nota">${t("mcNota")}</span>`);
+      $("mcFicha").innerHTML = filas.map((f) => `<p style="margin:8px 0">${f}</p>`).join("");
+      $("mcCompartir").onclick = () => ctx.compartir({ casa: e });
+    }
+    function pintarTecho() {
+      const T = ctx.capaTechos;
+      T.datos.fill(0);
+      if (elegido)
+        for (let j = 0; j < T.ny; j++)
+          for (let i = 0; i < T.nx; i++) {
+            const k = j * T.nx + i;
+            if (D.techos2m[k] && D.edificios[(j >> 1) * SIM.nx + (i >> 1)] === elegido) T.datos.set([255, 210, 63, 255], k * 4);
+          }
+      T.actualizar();
+    }
+
+    // ---------------------------------------------------------------- panel
+    div.innerHTML = `<b data-t="mcTitulo"></b>
+      <input id="mcBuscar" type="search" autocomplete="off" style="width:100%;margin-top:8px;font-size:16px;padding:6px 8px">
+      <ul id="mcResultados" style="list-style:none;padding:0;margin:4px 0"></ul>
+      <p id="mcAyuda" class="nota"></p><div id="mcFicha"></div>`;
+    function resultados() {
+      const q = $("mcBuscar").value.trim(), r = q.length >= 2 ? buscar(q) : [];
+      $("mcResultados").replaceChildren(...r.map((x) => {
+        const li = document.createElement("li");
+        li.dataset.x = 1;
+        Object.assign(li.style, { padding: "8px 6px", borderBottom: "1px solid rgba(128,128,128,.25)", cursor: "pointer" });
+        li.textContent = `${x.calle ? "🛣" : "🏠"} ${x.txt}`;
+        li.onclick = () => {
+          $("mcResultados").replaceChildren();
+          $("mcBuscar").value = x.txt;
+          if (x.e) ficha(x.e); else { ficha(0); ctx.volarA(new THREE.Vector3(x.x, 0, x.z), 0.6); }
+        };
+        return li;
+      }));
+      $("mcAyuda").textContent = q.length >= 2 && !r.length ? t("mcSinResultados") : elegido ? "" : t("mcClic");
+    }
+    $("mcBuscar").oninput = resultados;
+    $("mcBuscar").onkeydown = (ev) => { if (ev.key === "Enter") $("mcResultados").firstChild?.click(); };
+    function rotulos() { $("mcBuscar").placeholder = t("mcBuscar"); resultados(); if (elegido) ficha(elegido); }
+
+    return {
+      alMostrar() { ctx.capaTechos.ver(true); rotulos(); pintarTecho(); },
+      alOcultar() { ctx.capaTechos.ver(false); },
+      alClic(x, z, ev) {
+        const p = ctx.impacto(ev) ?? { x, z };
+        const e = ctx.edificioEn(p.x, p.z);
+        if (e) { $("mcBuscar").value = ""; $("mcResultados").replaceChildren(); ficha(e); $("mcAyuda").textContent = ""; }
+      },
+      enlace: () => (elegido ? { casa: elegido } : {}),
+      restaurar(params) { const e = +params.get("casa"); if (e > 0 && e <= nEd) ficha(e); },
+      traducir: rotulos,
+    };
+  },
+};
+(globalThis.HERRAMIENTAS ??= []).push(herramientaMicasa);
+
 // ===== tiempo_real.js =====
 // TIEMPO REAL en el mapa: el sol está donde está ahora en Ripollet (día, noche, amanecer y ocaso, con su luz y sus
 // sombras) y el tiempo es el de ahora (Open-Meteo, sin clave): nubes que apagan el sol, niebla, lluvia que se ve caer,
@@ -5552,9 +5814,37 @@ for (const h of LISTA_HERRAMIENTAS) for (const l of ["es", "ca"]) Object.assign(
 for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_PIXEL[l], TEXTOS_TRAFICO[l],
   { kicker: l === "es" ? "Maqueta · del centro a Pinetons" : "Maqueta · del centre als Pinetons" },
   l === "es" ? { navExplorar: "Explorar", navHerramientas: "Herramientas", navRiesgo: "Riesgo", navAjustes: "Ajustes",
-                 navIr: "Ir a…", navPista: "Toca 🧰 Herramientas para empezar", navAsa: "Plegar o desplegar" }
+                 navIr: "Ir a…", navPista: "Toca 🧰 Herramientas para empezar", navAsa: "Plegar o desplegar",
+                 compartirBoton: "🔗", enlaceCopiado: "Enlace copiado: pégalo donde quieras", copiaEnlace: "Copia este enlace:",
+                 rcBoton: "▶ Recorrido guiado", rcSalir: "Salir", rcSiguiente: "Siguiente ▶", rcFin: "Terminar",
+                 rcAutoOn: "⏸ Pausa", rcAutoOff: "⏵ Automático", rcPasoN: "Paso {0} de {1}",
+                 rcT: ["Ripollet en 3D", "El centro", "Riesgo de inundación", "Sombra y calor", "Energía solar",
+                       "Vulnerabilidad", "Transporte público", "Mi casa", "Ripollet de noche"],
+                 rcX: ["Del centro a Pinetons, construido solo con datos públicos: {0} edificios del Catastro, {1} árboles y arbustos medidos con LiDAR y {2} farolas reales.",
+                       "Puedes mover, girar y acercar el mapa, y hasta conducir por las calles reales. Las herramientas están en 🧰.",
+                       "Una lluvia torrencial de 60 mm/h: la simulación física marca dónde se acumula el agua y Neutro explica por qué. Este es el punto más crítico.",
+                       "Qué aceras quedan al sol una tarde de julio, con las sombras de los edificios y de los árboles. Aquí, la escuela con menos sombra alrededor.",
+                       "El potencial solar de cada cubierta, con las sombras de los vecinos. Aquí, el equipamiento que más energía podría producir.",
+                       "Las secciones censales según edad, hogares de una persona y renta (INE), cruzadas con el agua y el calor.",
+                       "Las 13 líneas de autobús con sus próximas salidas, y cuántos minutos se tarda a pie hasta una parada.",
+                       "Cualquiera puede buscar su dirección y ver la ficha de su edificio: agua, año, sol, ruido, barrio y servicios cerca.",
+                       "El sol, las nubes y la noche son los de ahora mismo. Así se ve Ripollet con sus farolas. Fin del recorrido: explora el resto en 🧰 Herramientas."] }
              : { navExplorar: "Explorar", navHerramientas: "Eines", navRiesgo: "Risc", navAjustes: "Ajustos",
-                 navIr: "Anar a…", navPista: "Toca 🧰 Eines per començar", navAsa: "Plegar o desplegar" });
+                 navIr: "Anar a…", navPista: "Toca 🧰 Eines per començar", navAsa: "Plegar o desplegar",
+                 compartirBoton: "🔗", enlaceCopiado: "Enllaç copiat: enganxa'l on vulguis", copiaEnlace: "Copia aquest enllaç:",
+                 rcBoton: "▶ Recorregut guiat", rcSalir: "Sortir", rcSiguiente: "Següent ▶", rcFin: "Acabar",
+                 rcAutoOn: "⏸ Pausa", rcAutoOff: "⏵ Automàtic", rcPasoN: "Pas {0} de {1}",
+                 rcT: ["Ripollet en 3D", "El centre", "Risc d'inundació", "Ombra i calor", "Energia solar",
+                       "Vulnerabilitat", "Transport públic", "La meva casa", "Ripollet de nit"],
+                 rcX: ["Del centre als Pinetons, construït només amb dades públiques: {0} edificis del Cadastre, {1} arbres i arbustos mesurats amb LiDAR i {2} fanals reals.",
+                       "Pots moure, girar i apropar el mapa, i fins i tot conduir pels carrers reals. Les eines són a 🧰.",
+                       "Una pluja torrencial de 60 mm/h: la simulació física marca on s'acumula l'aigua i Neutro explica per què. Aquest és el punt més crític.",
+                       "Quines voreres queden al sol una tarda de juliol, amb les ombres dels edificis i dels arbres. Aquí, l'escola amb menys ombra al voltant.",
+                       "El potencial solar de cada coberta, amb les ombres dels veïns. Aquí, l'equipament que més energia podria produir.",
+                       "Les seccions censals segons edat, llars d'una persona i renda (INE), creuades amb l'aigua i la calor.",
+                       "Les 13 línies d'autobús amb les properes sortides, i quants minuts es triga a peu fins a una parada.",
+                       "Qualsevol pot cercar la seva adreça i veure la fitxa del seu edifici: aigua, any, sol, soroll, barri i serveis a prop.",
+                       "El sol, els núvols i la nit són els d'ara mateix. Així es veu Ripollet amb els seus fanals. Fi del recorregut: explora la resta a 🧰 Eines."] });
 let idioma = "es";
 try { idioma = localStorage.getItem("idioma") || (navigator.language.startsWith("ca") ? "ca" : "es"); } catch {}
 const t = (clave, ...args) => String(TEXTOS[idioma][clave] ?? clave).replace(/\{(\d)\}/g, (_, n) => args[n]);
@@ -5582,6 +5872,7 @@ function traducir() {
   for (const p of Object.values(PANELES_HERRAMIENTA)) p.creada?.traducir?.();
   tiempoReal?.traducir();
   pixelado?.traducir();
+  if (typeof recorrido !== "undefined") recorrido.traducir();
   trafico?.traducir();
 }
 $("idioma").onclick = () => {
@@ -6430,6 +6721,9 @@ const REHAB = BLOBS && !BLOBS.rehab ? null : await cargarBinario("rehab", Uint16
 const LUGARES_OSM = BLOBS && !BLOBS.lugares ? null : await cargarBinario("lugares", Uint8Array, BLOBS)
   .then((b) => JSON.parse(new TextDecoder().decode(b))).catch(() => null);
 // Autobuses: paradas, líneas, trazados y horarios (GTFS de la AMB y de la Generalitat, obtener_transporte.py)
+// Portales del Catastro: [calle, número, x, z, edificio] (obtener_direcciones.py)
+const DIRECCIONES = BLOBS && !BLOBS.direcciones ? null : await cargarBinario("direcciones", Uint8Array, BLOBS)
+  .then((b) => JSON.parse(new TextDecoder().decode(b))).catch(() => null);
 // Zona de capacidad acústica de cada celda de 4 m (obtener_ambiente.py)
 const ACUSTICA_4M = BLOBS && !BLOBS.acustica ? null : await cargarBinario("acustica", Uint8Array, BLOBS).catch(() => null);
 const TRANSPORTE = BLOBS && !BLOBS.transporte ? null : await cargarBinario("transporte", Uint8Array, BLOBS)
@@ -7012,7 +7306,8 @@ $("verMedicion").onclick = () => {
 const CTX = {
   THREE, scene, camera, renderer, controls, CSS2DObject, D, DATOS, SIM, S1, altura, sol, sombrasMapa, geoCeldas,
   simulacion, FISICA, INTENSIDADES, volarA, $, t, tx, numero, idioma: () => idioma, estiloArte: () => estiloArte,
-  nombreCalle, choca, SOTANOS, secciones4m: SECCIONES_4M, rehab: REHAB, lugaresOsm: LUGARES_OSM, transporte: TRANSPORTE, acustica4m: ACUSTICA_4M,
+  nombreCalle, choca, SOTANOS, secciones4m: SECCIONES_4M, rehab: REHAB, lugaresOsm: LUGARES_OSM, transporte: TRANSPORTE, acustica4m: ACUSTICA_4M, direcciones: DIRECCIONES,
+  compartir: (extra) => compartir(extra),
   capa1m: { datos: datosCapa1m, actualizar: () => { texCapa1m.needsUpdate = true; },
             ver: (v) => { capa1mActiva.value = v ? 1 : 0; } },
   capaTechos: { datos: datosCapaTechos, nx: S1.nx / 2, ny: S1.ny / 2, actualizar: () => { texCapaTechos.needsUpdate = true; },
@@ -7119,6 +7414,109 @@ addEventListener("resize", () => {
 });
 
 for (const panel of [$("mapa"), $("lluvia"), $("riesgo")]) ponerAsa(panel);
+// ------------------------------------------------------------ compartir: enlace con la vista y la herramienta abiertas
+function aviso(texto, ms = 2800) {
+  $("pista").textContent = texto;
+  $("pista").style.display = "block";
+  clearTimeout(aviso.t);
+  aviso.t = setTimeout(() => { $("pista").style.display = "none"; }, ms);
+}
+function enlaceActual(extra = {}) {
+  const u = new URL(location.href);
+  for (const k of [...u.searchParams.keys()]) if (!["arte", "real"].includes(k)) u.searchParams.delete(k);
+  u.hash = "";
+  const abierta = Object.entries(PANELES_HERRAMIENTA).find(([, p]) => p.div.style.display === "block");
+  if (abierta) {
+    u.searchParams.set("h", abierta[0]);
+    for (const [k, v] of Object.entries({ ...(abierta[1].creada?.enlace?.() ?? {}), ...extra })) u.searchParams.set(k, v);
+  } else if ($("riesgo").style.display === "block") u.searchParams.set("h", "riesgo");
+  const tg = controls.target, c = camera.position;
+  u.searchParams.set("ir", `${Math.round(tg.x)},${Math.round(tg.z)}`);
+  u.searchParams.set("cam", `${Math.round(c.x - tg.x)},${Math.round(c.y - tg.y)},${Math.round(c.z - tg.z)}`);
+  return u.toString();
+}
+async function compartir(extra) {
+  const url = enlaceActual(extra);
+  if (navigator.share && esMovil()) { try { await navigator.share({ title: "Ripollet", url }); } catch {} return; }
+  try { await navigator.clipboard.writeText(url); aviso(t("enlaceCopiado")); }
+  catch { prompt(t("copiaEnlace"), url); }
+}
+$("compartir").onclick = () => compartir();
+$("compartir").title = "Compartir";
+
+// ------------------------------------------------------------ recorrido guiado: la app en 9 paradas
+const recorrido = (() => {
+  const centre = DATOS.lugares.find((l) => l.nombre === "Centre") ?? DATOS.lugares[0];
+  const ir = (x, z, d) => volarA(new THREE.Vector3(x, 0, z), d);
+  const clic = (sel, espera = 1200) => setTimeout(() => document.querySelector(sel)?.click(), espera);
+  const abrir = (id) => { mostrarPanel(id); if (esMovil()) PANELES_HERRAMIENTA[id]?.div.classList.add("mini"); };
+  const casaCentro = () => {
+    let mejor = null, dm = Infinity;
+    for (const p of DIRECCIONES ?? []) {
+      const d = (p[2] - centre.pos[0]) ** 2 + (p[3] - centre.pos[2]) ** 2;
+      if (p[4] && d < dm) { dm = d; mejor = p[4]; }
+    }
+    return mejor;
+  };
+  const PASOS = [
+    () => { mostrarPanel(null); ir(0, 0, 5); },
+    () => { mostrarPanel(null); ir(centre.pos[0], centre.pos[2], 0.8); },
+    () => { mostrarPanel(null); $("abrirRiesgo").click(); if (esMovil()) $("riesgo").classList.add("mini"); clic("#listaPuntos li", 1500); },
+    () => { abrir("sombra"); clic("#sbEscuelas li", 5000); },
+    () => { abrir("solar"); clic("#soEquip li", 1500); },
+    () => { abrir("vulner"); clic("#vuLista li", 1500); },
+    () => { abrir("transporte"); ir(centre.pos[0], centre.pos[2], 1.6); },
+    () => { mostrarPanel("micasa"); const e = casaCentro(); if (e) setTimeout(() => PANELES_HERRAMIENTA.micasa.h.restaurar(new URLSearchParams(`casa=${e}`)), 600); },
+    () => { mostrarPanel(null); const s = $("trHora"); s.value = "22"; s.oninput(); ir(centre.pos[0], centre.pos[2], 1.2); },
+  ];
+  let paso = -1, auto = null, horaCambiada = false;
+  function mostrar() {
+    const tit = tx("rcT"), txt = tx("rcX");
+    $("rcPaso").textContent = t("rcPasoN", paso + 1, PASOS.length);
+    $("rcTitulo").textContent = tit[paso];
+    // El primer paso lleva las cifras de la maqueta
+    $("rcTexto").textContent = txt[paso].replace("{0}", numero(DATOS.edificios)).replace("{1}", numero(DATOS.arboles))
+      .replace("{2}", numero(DATOS_FAROLAS ? DATOS_FAROLAS.length / 3 : 0));
+    $("rcSigue").textContent = t(paso === PASOS.length - 1 ? "rcFin" : "rcSiguiente");
+    $("rcAuto").textContent = t(auto ? "rcAutoOn" : "rcAutoOff");
+    $("rcAtras").disabled = paso === 0;
+    $("rcBarra").style.width = `${100 * (paso + 1) / PASOS.length}%`;
+  }
+  function ir_a(n) {
+    if (n >= PASOS.length) return salir();
+    paso = Math.max(0, n);
+    if (paso === PASOS.length - 1) horaCambiada = true;
+    PASOS[paso]();
+    mostrar();
+  }
+  function salir() {
+    clearInterval(auto); auto = null;
+    $("recorrido").style.display = "none";
+    document.body.classList.remove("enRecorrido");
+    mostrarPanel(null);
+    if (horaCambiada) { $("trAhora").click(); horaCambiada = false; }
+    paso = -1;
+  }
+  $("rcSigue").onclick = () => ir_a(paso + 1);
+  $("rcAtras").onclick = () => ir_a(paso - 1);
+  $("rcSalir").onclick = salir;
+  $("rcAuto").onclick = () => {
+    if (auto) { clearInterval(auto); auto = null; } else auto = setInterval(() => ir_a(paso + 1), 11000);
+    mostrar();
+  };
+  return {
+    empezar() {
+      abrirSeccion(null);
+      document.body.classList.add("enRecorrido");
+      $("recorrido").style.display = "block";
+      ir_a(0);
+    },
+    traducir() { if (paso >= 0) mostrar(); },
+  };
+})();
+$("abrirRecorrido").onclick = () => recorrido.empezar();
+$("abrirMicasa").onclick = () => { mostrarPanel("micasa"); setTimeout(() => $("mcBuscar")?.focus(), 300); };
+
 traducir();
 if (matchMedia("(pointer: coarse)").matches) { $("ayuda").dataset.t = "ayudaTactil"; $("ayuda").textContent = t("ayudaTactil"); }
 // Escritorio: el menú abierto en «Explorar»; móvil: el mapa limpio y una pista la primera vez
@@ -7134,8 +7532,18 @@ else {
 }
 // ?ir=x,z (metros de la maqueta) abre el visor mirando ese punto, para compartir un sitio concreto
 {
-  const ir = new URLSearchParams(location.search).get("ir")?.split(",").map(Number);
-  if (ir?.length === 2 && ir.every(Number.isFinite)) volarA(new THREE.Vector3(ir[0], 0, ir[1]), 0.35);
+  const P = new URLSearchParams(location.search);
+  const ir = P.get("ir")?.split(",").map(Number), cam = P.get("cam")?.split(",").map(Number);
+  if (ir?.length === 2 && ir.every(Number.isFinite)) {
+    if (cam?.length === 3 && cam.every(Number.isFinite)) {      // vista exacta del enlace
+      controls.target.set(ir[0], altura(ir[0], ir[1]), ir[1]);
+      camera.position.copy(controls.target).add(new THREE.Vector3(...cam));
+    } else volarA(new THREE.Vector3(ir[0], 0, ir[1]), 0.35);
+  }
+  const h = P.get("h");
+  if (h === "riesgo") $("abrirRiesgo").click();
+  else if (h && PANELES_HERRAMIENTA[h]) { mostrarPanel(h); PANELES_HERRAMIENTA[h].h.restaurar?.(P); }
+  if (P.has("recorrido")) setTimeout(() => recorrido.empezar(), 1500);
 }
 const reloj = new THREE.Clock();
 renderer.setAnimationLoop(() => {

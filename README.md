@@ -79,6 +79,14 @@ empieza con el viento de ahora. Sin internet, solo funciona el reloj y el sol.
 
 | 🔊 Ruido y aire | Ruido de tráfico ESTIMADO de día (Ld) y de noche (Ln) a 8 m (emisión según el tráfico estimado y la velocidad, fuente lineal, −10 dB tras un edificio); zonas de capacidad acústica oficiales y sus objetivos; edificios cuya fachada los supera (106 de día, 208 de noche) y calles con más; aire en directo: modelo CAMS (Open-Meteo) para Ripollet y último dato de las 4 estaciones XVPCA más cercanas, con la guía OMS 2021 | Mapa de capacitat acústica (Generalitat, WFS del Hipermapa) y objetivos del Decret 176/2009; XVPCA (dades obertes tasf-thgu); Open-Meteo Air Quality. El mapa estratégico de ruido oficial no cubre Ripollet y su estación de aire cerró en 1999 |
 
+| 🏠 Mi casa | Buscar una calle o una dirección (calle y número) o tocar un edificio, y ver su ficha: agua junto a la fachada a 60 y 120 mm/h (y si tiene sótano), año, viviendas y certificados, potencial solar, zona acústica, barrio (sección censal) y minutos a pie hasta escuela, centro de salud, comida, farmacia, parada de bus y refugio climático, y en coche desde la base de emergencias más cercana | Portales del Catastro (INSPIRE AD, 1 811 con calle): el Catastro da la calle como código y se le pone el nombre de la calle de OSM más cercana a la mayoría de sus portales |
+
+**Recorrido guiado** («▶ Recorrido guiado» en Explorar, o `?recorrido` en la dirección): 9 paradas con texto
+(vista general, centro, punto más crítico de inundación, escuela con menos sombra, cubierta con más potencial solar,
+vulnerabilidad, autobuses, una ficha de Mi casa y Ripollet de noche), manual o automático cada 11 s.
+**Compartir** (🔗 en la barra): copia un enlace con la vista exacta y la herramienta abierta (y su estado, p. ej. la
+casa elegida): `?h=micasa&casa=156&ir=33,904&cam=63,77,91`. En el móvil abre el menú de compartir del sistema.
+
 Todas son orientativas y lo dicen en su nota: sirven para priorizar y para conversar, no sustituyen un proyecto técnico.
 
 ## Cómo se genera (de cero)
@@ -101,6 +109,7 @@ python obtener_catastro.py
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_lugares.py
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_transporte.py   # GTFS AMB + Generalitat (≈ 35 MB)
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_ambiente.py     # zonas acústicas (Generalitat)
+..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_direcciones.py  # portales del Catastro
 #    Aparcamientos y plazas de OSM que no vienen en la descarga principal (datos_osm/superficies.json)
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_superficies.py
 # 1. Maqueta, datos del visor y ensamblado (≈ 1 min). Descarga y guarda en caché el relieve del ICGC.

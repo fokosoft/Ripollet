@@ -1376,6 +1376,32 @@ if os.path.exists(RUTA_ACUSTICA):
     ZONAS_ACUSTICAS = {"fuente": ZA["fuente"], "lista": [{k: v for k, v in z.items() if k != "anillos"} for z in ZA["zonas"]]}
     print(f"ZONAS ACÚSTICAS: {np.count_nonzero(id_acustica) * CELDA_SIM ** 2 / 1e4:.0f} ha con zona")
 
+# DIRECCIONES (obtener_direcciones.py): cada portal del Catastro con su número, su edificio y el nombre de su calle.
+# El Catastro da la calle como código: se le pone el nombre de la calle de OSM más cercana a la mayoría de sus portales.
+RUTA_DIR = os.path.join(DIR, "datos_catastro", "direcciones.json")
+if os.path.exists(RUTA_DIR):
+    with open(RUTA_DIR, encoding="utf-8") as f:
+        portales = json.load(f)
+    ref_a_ed = {r: k + 1 for k, r in enumerate(REF_EDIFICIO) if r}
+    votos, salida_dir = {}, []
+    for d in portales:
+        x, y = a_metros(d["lon"], d["lat"])
+        i, j = int((x + LIM[0]) / CELDA_SIM), int((-y + LIM[1]) / CELDA_SIM)
+        if not (0 <= i < SNX and 0 <= j < SNY):
+            continue
+        d["x"], d["z"], d["calle_osm"] = round(x, 1), round(-y, 1), int(id_calle[j, i])
+        clave = (d["muni"], d["via"])
+        if d["calle_osm"]:
+            votos.setdefault(clave, {}).setdefault(d["calle_osm"], 0)
+            votos[clave][d["calle_osm"]] += 1
+        salida_dir.append(d)
+    nombre_via = {k: max(v, key=v.get) for k, v in votos.items()}
+    lista = [[nombre_via[(d["muni"], d["via"])], d["n"], d["x"], d["z"], ref_a_ed.get(d["ref"], 0)]
+             for d in salida_dir if (d["muni"], d["via"]) in nombre_via]
+    with open(os.path.join(SALIDA_DATOS, "direcciones.bin"), "wb") as f:
+        f.write(json.dumps(lista, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+    print(f"DIRECCIONES: {len(lista)} portales con calle · {sum(1 for q in lista if q[4])} con su edificio")
+
 # TRANSPORTE PÚBLICO (obtener_transporte.py): paradas, líneas y horarios, como JSON comprimido (blob «transporte»)
 RUTA_TRANSPORTE = os.path.join(DIR, "datos_publicos", "transporte.json")
 if os.path.exists(RUTA_TRANSPORTE):
