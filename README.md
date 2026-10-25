@@ -146,6 +146,17 @@ node entrenar_neutro.mjs
 | `js/tiempo_real.js` | Sol y tiempo de ahora en el mapa (Open-Meteo), lluvia visible, deslizador de hora |
 | `js/sombra.js`, `js/accesibilidad.js`, `js/incendio.js`, `js/solar.js`, `js/rutas.js` (emergencias y 15 minutos), `js/proyectos.js`, `js/incidencias_ciudad.js` | Una herramienta cada uno: se apuntan en `globalThis.HERRAMIENTAS` y el visor les da paneles, capas (1 m sobre el suelo, 2 m sobre las cubiertas, 4 m propia) y clics |
 
+## Compartir y accesibilidad
+
+- **Vista previa al compartir:** etiquetas Open Graph y Twitter con la imagen `web/vista_previa.jpg` (1200×630,
+  79 KB). Las redes leen la página sin ejecutar JavaScript, así que la vista previa es la misma para cualquier enlace
+  (aunque lleve una herramienta o una casa).
+- **Accesibilidad:** auditada con axe-core (WCAG 2.0/2.1 A y AA) en los dos temas y en las secciones principales: sin
+  fallos. Nombres accesibles en los botones de solo símbolo y en el mapa, descripción del mapa para lectores de
+  pantalla, foco visible, el foco va al panel que se abre, Escape cierra paneles, flechas mueven el mapa con el foco en
+  él, asas de las hojas con teclado, botones de al menos 40 px en el móvil, vuelos sin animación si el sistema pide
+  menos movimiento y contraste corregido (botones principales más oscuros).
+
 ## Rendimiento (medido el 25 oct 2026)
 
 Chrome sin ventana en el PC de desarrollo (Ryzen 5 3550H, 1280×800; techo de esa medida: 60 fps), versión `web/`

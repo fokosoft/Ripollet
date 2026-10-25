@@ -3,7 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ripollet: risc d'inundació</title>
+<title>Ripollet · maqueta 3D</title>
+<meta name="description" content="Maqueta 3D de Ripollet amb dades obertes: risc d'inundació, ombra i calor, potencial solar, transport públic, la teva adreça i 12 eines més. · Maqueta 3D de Ripollet con datos abiertos.">
+<meta name="theme-color" content="#16181d">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ripollet · maqueta 3D">
+<meta property="og:title" content="Ripollet · maqueta 3D amb dades obertes">
+<meta property="og:description" content="Inundacions, ombra, solar, transport, la teva adreça i 12 eines més, en català i castellà.">
+<meta property="og:url" content="https://fokosoft.github.io/Ripollet/web/">
+<meta property="og:image" content="https://fokosoft.github.io/Ripollet/web/vista_previa.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Maqueta 3D de Ripollet en estil píxel, amb el títol RIPOLLET">
+<meta property="og:locale" content="ca_ES">
+<meta property="og:locale:alternate" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
@@ -17,7 +31,7 @@
   button { font: inherit; font-size: 13px; padding: 5px 10px; border: 0; border-radius: 6px; cursor: pointer;
            background: rgba(255,255,255,.18); color: #fff; }
   button:hover { background: #2f5fa8; }
-  button.principal { background: #d64545; font-weight: 600; }
+  button.principal { background: #b83232; font-weight: 600; }
   #idioma { float: right; font-weight: 700; padding: 2px 8px; }
   #hud, #lluvia, #riesgo { display: none; }
   #lluvia, #riesgo, .herramienta { left: auto; right: 12px; max-width: 360px; max-height: calc(100vh - 40px); overflow: auto; }
@@ -132,6 +146,18 @@
                     white-space: normal; border-radius: 10px !important; }
   .rejilla button .ico { font-size: 24px; line-height: 1; }
 
+
+  /* ===== Accesibilidad ===== */
+  :focus-visible { outline: 3px solid #ffbf47 !important; outline-offset: 2px; border-radius: 4px; }
+  .solo-lector { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .panel { background: rgba(10,14,24,.86); }
+  .nota { opacity: .92; }
+  body.claro .nota { color: #3d4252; opacity: 1; }
+  @media (max-width: 760px) {
+    .botones button, .herramienta button, #lluvia button, #riesgo button { min-height: 40px; }
+    select, input[type=date], input[type=text], input[type=search] { font-size: 16px; min-height: 36px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
   /* Recorrido guiado */
   #recorrido { position: fixed; left: 50%; right: auto; top: auto; transform: translateX(-50%); bottom: 24px; max-width: none; width: min(540px, calc(100vw - 24px));
                z-index: 9; display: none; padding: 12px 16px; border-radius: 14px; box-shadow: 0 8px 28px rgba(0,0,0,.3); }
@@ -143,7 +169,7 @@
   #recorrido .barraRc i { display: block; height: 100%; width: 0; background: #e0703a; transition: width .4s; }
   body.enRecorrido #nav, body.enRecorrido #mapa { display: none !important; }
   .rejilla.dos { grid-template-columns: 1fr 1fr; }
-  #abrirRecorrido { background: #16181d !important; } #abrirMicasa { background: #2e9e54 !important; }
+  #abrirRecorrido { background: #16181d !important; } #abrirMicasa { background: #1f7a3e !important; }
   @media (max-width: 760px) {
     #recorrido { top: 56px; bottom: auto; border-radius: 12px; padding: 10px 12px; }
     #recorrido h3 { font-size: 15px; }
@@ -152,7 +178,7 @@
     body.enRecorrido #explicacion { display: none !important; }
   }
   .rejilla.grandes button { color: #fff !important; font-weight: 600; border: 0 !important; }
-  #conducir { background: #d64545 !important; } #abrirLluvia { background: #3b6fb6 !important; } #abrirRiesgo { background: #b8326a !important; }
+  #conducir { background: #b83232 !important; } #abrirLluvia { background: #3b6fb6 !important; } #abrirRiesgo { background: #b8326a !important; }
   .asa { display: none; }
   .pista { position: fixed; left: 50%; transform: translateX(-50%); bottom: 76px; z-index: 8; padding: 10px 16px;
            border-radius: 999px; background: rgba(20,24,40,.9); color: #fff; font-size: 14px; display: none;
@@ -213,7 +239,7 @@
   <button id="chipTiempo" class="chip"></button>
   <button id="idioma"></button>
 </header>
-<nav id="nav" class="panel">
+<nav id="nav" class="panel" aria-label="Secciones">
   <button data-sec="explorar"><span class="ico">🗺</span><span data-t="navExplorar"></span></button>
   <button data-sec="herramientas"><span class="ico">🧰</span><span data-t="navHerramientas"></span></button>
   <button data-sec="riesgo"><span class="ico">⚠️</span><span data-t="navRiesgo"></span></button>
@@ -237,8 +263,9 @@
     <details id="vista" open></details>
   </section>
 </div>
-<div class="pista" id="pista"></div>
-<div id="recorrido" class="panel"><div class="rcPaso" id="rcPaso"></div><h3 id="rcTitulo"></h3><p id="rcTexto"></p>
+<div class="pista" id="pista" role="status" aria-live="polite"></div>
+<p id="descMapa" class="solo-lector"></p>
+<div id="recorrido" class="panel" role="dialog" aria-labelledby="rcTitulo" aria-live="polite"><div class="rcPaso" id="rcPaso"></div><h3 id="rcTitulo"></h3><p id="rcTexto"></p>
   <div class="botones"><button id="rcSalir" data-t="rcSalir"></button><button id="rcAuto"></button>
   <button id="rcAtras">◀</button><button id="rcSigue" class="principal"></button></div>
   <div class="barraRc"><i id="rcBarra"></i></div></div>
@@ -520,6 +547,9 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
   l === "es" ? { navExplorar: "Explorar", navHerramientas: "Herramientas", navRiesgo: "Riesgo", navAjustes: "Ajustes",
                  navIr: "Ir a…", navPista: "Toca 🧰 Herramientas para empezar", navAsa: "Plegar o desplegar",
                  compartirBoton: "🔗", enlaceCopiado: "Enlace copiado: pégalo donde quieras", copiaEnlace: "Copia este enlace:",
+                 a11yCerrar: "Cerrar", a11yCompartir: "Compartir un enlace a esta vista", a11yTiempo: "Hora y tiempo: {0}. Abrir ajustes",
+                 a11yAnterior: "Paso anterior", a11yMapaNombre: "Mapa 3D de Ripollet",
+                 a11yMapa: "Mapa 3D de Ripollet, del centro a Pinetons. Con el teclado: flechas para mover el mapa y Escape para cerrar paneles. La información de cada herramienta está también en texto en su panel; «Mi casa» permite buscar una dirección.",
                  rcBoton: "▶ Recorrido guiado", rcSalir: "Salir", rcSiguiente: "Siguiente ▶", rcFin: "Terminar",
                  rcAutoOn: "⏸ Pausa", rcAutoOff: "⏵ Automático", rcPasoN: "Paso {0} de {1}",
                  rcT: ["Ripollet en 3D", "El centro", "Riesgo de inundación", "Sombra y calor", "Energía solar",
@@ -536,6 +566,9 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
              : { navExplorar: "Explorar", navHerramientas: "Eines", navRiesgo: "Risc", navAjustes: "Ajustos",
                  navIr: "Anar a…", navPista: "Toca 🧰 Eines per començar", navAsa: "Plegar o desplegar",
                  compartirBoton: "🔗", enlaceCopiado: "Enllaç copiat: enganxa'l on vulguis", copiaEnlace: "Copia aquest enllaç:",
+                 a11yCerrar: "Tancar", a11yCompartir: "Compartir un enllaç a aquesta vista", a11yTiempo: "Hora i temps: {0}. Obrir ajustos",
+                 a11yAnterior: "Pas anterior", a11yMapaNombre: "Mapa 3D de Ripollet",
+                 a11yMapa: "Mapa 3D de Ripollet, del centre als Pinetons. Amb el teclat: fletxes per moure el mapa i Escape per tancar panells. La informació de cada eina també és en text al seu panell; «La meva casa» permet cercar una adreça.",
                  rcBoton: "▶ Recorregut guiat", rcSalir: "Sortir", rcSiguiente: "Següent ▶", rcFin: "Acabar",
                  rcAutoOn: "⏸ Pausa", rcAutoOff: "⏵ Automàtic", rcPasoN: "Pas {0} de {1}",
                  rcT: ["Ripollet en 3D", "El centre", "Risc d'inundació", "Ombra i calor", "Energia solar",
@@ -561,7 +594,8 @@ function traducir() {
   // En las cuadrículas, el emoji del principio va grande encima del texto
   for (const el of document.querySelectorAll(".rejilla [data-t]"))
     el.innerHTML = el.innerHTML.replace(/^(\p{Extended_Pictographic}[\uFE0F\u200D\p{Extended_Pictographic}]*)\s*/u, '<span class="ico">$1</span>');
-  for (const a of document.querySelectorAll(".asa")) a.title = t("navAsa");
+  for (const a of document.querySelectorAll(".asa")) { a.title = t("navAsa"); a.setAttribute("aria-label", t("navAsa")); }
+  etiquetasAccesibles();
   $("idioma").textContent = idioma === "es" ? "CA" : "ES";
   $("idioma").title = idioma === "es" ? "Català" : "Castellano";
   $("arte").textContent = t(estiloArte ? "estiloReal" : "estiloArte");
@@ -601,6 +635,10 @@ renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
+// El mapa es un lienzo: para lectores de pantalla, un nombre y una descripción (las herramientas tienen texto)
+Object.assign(renderer.domElement, { tabIndex: 0 });
+renderer.domElement.setAttribute("role", "img");
+renderer.domElement.setAttribute("aria-describedby", "descMapa");
 
 const etiquetas = new CSS2DRenderer();
 etiquetas.setSize(innerWidth, innerHeight);
@@ -618,6 +656,8 @@ controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI * 0.45;
 controls.minDistance = 30;
 controls.maxDistance = 3500;
+controls.keyPanSpeed = 30;
+controls.listenToKeyEvents(renderer.domElement);   // flechas con el foco en el mapa (no mientras se escribe)
 
 const cielo = new THREE.HemisphereLight(0xffffff, 0x8a7a60, 1.6);
 scene.add(cielo);
@@ -856,8 +896,8 @@ const vista = { escala: 1 };     // > 1 con el teleobjetivo de la maqueta: la c�
 function volarA(destino, distancia = 1) {
   const desplaz = new THREE.Vector3(180, 220, 260).multiplyScalar(distancia * vista.escala);
   destino.y = altura(destino.x, destino.z);
-  vuelo = { t: 0, desdeT: controls.target.clone(), desdeC: camera.position.clone(),
-            haciaT: destino, haciaC: destino.clone().add(desplaz) };
+  vuelo = { t: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0.999 : 0, desdeT: controls.target.clone(),
+            desdeC: camera.position.clone(), haciaT: destino, haciaC: destino.clone().add(desplaz) };
 }
 
 // ------------------------------------------------------------ choques con edificios
@@ -924,6 +964,14 @@ const teclas = new Set();
 let modo = "mapa", vistaConductor = false;
 
 addEventListener("keydown", (e) => {
+  if (modo === "mapa" && e.key === "Escape") {            // cierra lo último que se abrió
+    if (document.body.classList.contains("enRecorrido")) $("rcSalir").click();
+    else if ($("explicacion").style.display === "block") $("explicacion").style.display = "none";
+    else if (Object.values(PANELES_HERRAMIENTA).some((p) => p.div.style.display === "block") ||
+             $("riesgo").style.display === "block" || $("lluvia").style.display === "block") mostrarPanel(null);
+    else abrirSeccion(null);
+    return;
+  }
   if (modo !== "coche") return;
   if (e.code === "KeyC") vistaConductor = !vistaConductor;
   else if (e.code === "KeyV") alternarEstilo();
@@ -958,6 +1006,25 @@ function mostrarPanel(id) {
   tiempoReal?.aplicar();          // la herramienta de sombra mueve el sol mientras está abierta
   if (id && esMovil()) abrirSeccion(null);
   marcarNav();
+  const abierto = id && (PANELES_HERRAMIENTA[id]?.div ?? $(id));
+  if (abierto) {
+    abierto.setAttribute("role", "region");
+    abierto.setAttribute("aria-label", abierto.querySelector("b, h3")?.textContent ?? id);
+    abierto.tabIndex = -1;
+    setTimeout(() => abierto.focus({ preventScroll: true }), 50);
+  }
+}
+
+// ------------------------------------------------------------ accesibilidad: nombres de los botones con solo un símbolo
+function etiquetasAccesibles() {
+  const nombre = (el, txt) => { el.setAttribute("aria-label", txt); el.title = txt; };
+  for (const b of document.querySelectorAll(".cerrar, .cerrarExp, .cerrarMed")) nombre(b, t("a11yCerrar"));
+  nombre($("compartir"), t("a11yCompartir"));
+  nombre($("idioma"), idioma === "es" ? "Català" : "Castellano");
+  nombre($("chipTiempo"), t("a11yTiempo", $("chipTiempo").textContent));
+  nombre($("rcAtras"), t("a11yAnterior"));
+  $("descMapa").textContent = t("a11yMapa");
+  renderer.domElement.setAttribute("aria-label", t("a11yMapaNombre"));
 }
 
 // ------------------------------------------------------------ navegación: secciones del menú
@@ -973,8 +1040,11 @@ function abrirSeccion(sec) {
 }
 function marcarNav() {
   const riesgo = $("riesgo").style.display === "block";
-  for (const b of document.querySelectorAll("#nav button"))
-    b.classList.toggle("activo", b.dataset.sec === "riesgo" ? riesgo : b.dataset.sec === seccionAbierta);
+  for (const b of document.querySelectorAll("#nav button")) {
+    const activo = b.dataset.sec === "riesgo" ? riesgo : b.dataset.sec === seccionAbierta;
+    b.classList.toggle("activo", activo);
+    b.setAttribute("aria-pressed", activo);
+  }
 }
 for (const b of document.querySelectorAll("#nav button"))
   b.onclick = () => {
@@ -1030,6 +1100,13 @@ function ponerAsa(panel) {
     else if (dy > 40) poner(antes === "completa" ? "media" : "mini");
   };
   asa.onclick = null;
+  Object.assign(asa, { tabIndex: 0 });
+  asa.setAttribute("role", "button");
+  asa.onkeydown = (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    e.preventDefault();
+    poner({ media: "completa", completa: "mini", mini: "media" }[estadoDe()]);
+  };
 }
 
 function entrarAlCoche() {

@@ -193,6 +193,7 @@ export function crearTiempoReal(ctx, div) {
     }
     $("trHora").style.display = $("trAhora").style.display = activo ? "" : "none";
     $("trHora").value = String(hora);
+    $("trHora").setAttribute("aria-label", t("trHora", horaTexto(hora), "").replace(/<[^>]+>/g, ""));
     $("trAhora").textContent = t("trAhora");
     $("trAhora").disabled = desfase === null;
     $("trBoton").textContent = t(activo ? "trDesactivar" : "trActivar");
