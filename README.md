@@ -134,7 +134,7 @@ node entrenar_neutro.mjs
 | `visor_ripollet.html` | Plantilla del visor: mapa, coche, estilo artístico, lluvia, panel de riesgo, informe, idiomas |
 | `js/simulacion.js` | Agua en la GPU (tuberías virtuales, celdas de 4 m) |
 | `js/inundacion.js` | Percepción de Neutro, mapa de riesgo, puntos críticos, afectados, métricas |
-| `js/neutro_nucleo.js` | **Copia sin tocar** de `F:\Neutro\web\neutro\nucleo.js` (commit 400d383) |
+| `js/neutro_nucleo.js` | **Copia sin tocar** del núcleo de [Neutro](https://github.com/fokosoft/PUBLIC-NEUTRO) (Apache 2.0, commit 400d383) |
 | `js/datos.js` | Carga de los binarios comprimidos y altura del terreno |
 | `funciones_datos.py` | Datos de las herramientas: accesibilidad de las aceras, grafo de calles, potencial solar, servicios |
 | `js/comun.js` | Rejilla de 2 m compartida, montículo y caminos más cortos |
@@ -192,7 +192,9 @@ cada herramienta, no se descarga.
 
 ## Datos y licencias
 
-Código: licencia MIT (`LICENSE`). Los datos conservan las suyas:
+Código: licencia MIT (`LICENSE`), salvo **Neutro** (`js/neutro_nucleo.js`, también dentro de `ripollet.html` y
+`web/`): © 2026 FOKO SOFT (Emilio Martinez), **licencia Apache 2.0** (`LICENSE-NEUTRO` y `NOTICE`), copia sin
+modificar de [PUBLIC-NEUTRO](https://github.com/fokosoft/PUBLIC-NEUTRO). Los datos conservan sus licencias:
 © colaboradores de OpenStreetMap (ODbL) · tiempo: Open-Meteo (CC BY 4.0) · ICGC (MDT 5 m, cartografía 1:1000 del AMB) · Dirección General del
 Catastro · zonas inundables: ACA / SNCZI (MITECO), servicio IDEE · INE (Atlas de renta) · Idescat/ICGC (secciones
 censales, CC BY 4.0) · Generalitat de Catalunya, dades obertes (ICAEN, Servei Català de Trànsit, XVPCA, autobuses

@@ -41,6 +41,10 @@ def modulos():
         codigo = leer(os.path.join(DIR, "js", m))
         codigo = re.sub(r"^import [^\n]*from '\./[^\n]*\n", "", codigo, flags=re.M)
         codigo = re.sub(r"^export (?=(const|let|function|class|async) )", "", codigo, flags=re.M)
+        if m == "neutro_nucleo.js":   # Neutro es Apache 2.0: su aviso va con él también dentro de la app
+            codigo = ("/*! Neutro — cerebro de neuronas de concepto. Copyright 2026 FOKO SOFT (Emilio Martinez).\n"
+                      " *  Licencia Apache 2.0 (LICENSE-NEUTRO y NOTICE en https://github.com/fokosoft/Ripollet);\n"
+                      " *  origen: https://github.com/fokosoft/PUBLIC-NEUTRO. Copia sin modificar. */\n" + codigo)
         partes.append(f"// ===== {m} =====\n{codigo}")
     return "\n".join(partes)
 
