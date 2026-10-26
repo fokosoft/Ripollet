@@ -1,0 +1,4 @@
+{
+ "_ayuda": "Webs añadidas o corregidas a mano (enlazar_webs.py). Clave: la referencia de OpenStreetMap del local (\"node/123\", sale en datos_osm/lugares.json como \"o\") o su nombre exacto. Mandan sobre OpenStreetMap y Wikidata. Mejor aún: corregirlas en openstreetmap.org, así le sirve a todo el mundo.",
+ "webs": {}
+}

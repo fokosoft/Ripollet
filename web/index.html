@@ -4102,6 +4102,8 @@ const herramientaSeguridad = {
 // ===== lugares.js =====
 // TIENDAS Y LUGARES DE INTERÉS (OpenStreetMap): buscador, filtros por categoría, «abierto ahora» con el horario de
 // OSM (opening_hours) y la hora del tiempo real, iconos en el mapa y ficha con dirección, teléfono y web.
+// La web de cada local la pone enlazar_webs.py (de OSM, de un archivo manual o, en las cadenas, la de la marca en
+// Wikidata) y solo si se ha comprobado que funciona; la ficha invita al negocio a añadirla o corregirla en OSM.
 // Los datos de OSM los mantienen voluntarios: lo que falta o está mal se puede corregir en openstreetmap.org.
 
 const TEXTOS_LUGARES = {
@@ -4115,6 +4117,8 @@ const TEXTOS_LUGARES = {
     luCats: { comida: "🛒 Comida", bares: "🍽 Bares y restaurantes", tiendas: "🛍 Tiendas", salud: "💊 Salud",
             servicios: "🏦 Servicios", cultura: "🎭 Cultura", deporte: "⚽ Deporte y parques", patrimonio: "🏛 Patrimonio",
             ciudad: "♻️ Fuentes, reciclaje, aseos" },
+    luWeb: "🌐 Web", luWebMarca: "🌐 Web de la marca", luConWeb: "Solo los que tienen web ({0})",
+    luEsTuyo: "¿Es tu negocio? Añade o corrige su web y su horario en OpenStreetMap",
     luTipos: { fountain: "Fuente", drinking_water: "Fuente de agua potable", charging_station: "Punto de recarga",
              recycling: "Contenedor de reciclaje", toilets: "Aseos públicos", atm: "Cajero", bank: "Banco",
              fuel: "Gasolinera", post_office: "Correos", bicycle_rental: "Alquiler de bicis", car_sharing: "Coche compartido" },
@@ -4129,6 +4133,8 @@ const TEXTOS_LUGARES = {
     luCats: { comida: "🛒 Menjar", bares: "🍽 Bars i restaurants", tiendas: "🛍 Botigues", salud: "💊 Salut",
             servicios: "🏦 Serveis", cultura: "🎭 Cultura", deporte: "⚽ Esport i parcs", patrimonio: "🏛 Patrimoni",
             ciudad: "♻️ Fonts, reciclatge, lavabos" },
+    luWeb: "🌐 Web", luWebMarca: "🌐 Web de la marca", luConWeb: "Només els que tenen web ({0})",
+    luEsTuyo: "És el teu negoci? Afegeix o corregeix el seu web i l'horari a OpenStreetMap",
     luTipos: { fountain: "Font", drinking_water: "Font d'aigua potable", charging_station: "Punt de recàrrega",
              recycling: "Contenidor de reciclatge", toilets: "Lavabos públics", atm: "Caixer", bank: "Banc",
              fuel: "Benzinera", post_office: "Correus", bicycle_rental: "Lloguer de bicis", car_sharing: "Cotxe compartit" },
@@ -4195,6 +4201,7 @@ const herramientaLugares = {
       <input id="luBuscar" type="text" style="width:100%;margin-top:8px">
       <div class="botones" id="luCats"></div>
       <label><input type="checkbox" id="luAbierto"> <span id="luAbiertoT"></span></label>
+      <label><input type="checkbox" id="luConWeb"> <span id="luConWebT"></span></label>
       <p id="luFicha"></p><p class="nota" id="luCuenta"></p><ul id="luLista" style="padding-left:0;list-style:none"></ul>
       <p class="nota" data-t="luNota"></p>`;
     let categoria = null, elegido = -1;
@@ -4210,6 +4217,7 @@ const herramientaLugares = {
         if (categoria && l.c !== categoria) return false;
         if (q && !(`${l.n} ${l.t} ${l.d ?? ""}`.toLowerCase().includes(q))) return false;
         if (soloAbiertos && abiertoAhora(l.h, dia, hora) !== true) return false;
+        if ($("luConWeb").checked && !l.web) return false;
         return true;
       }).sort((a, b) => ((L[a].x - c.x) ** 2 + (L[a].z - c.z) ** 2) - ((L[b].x - c.x) ** 2 + (L[b].z - c.z) ** 2));
     }
@@ -4217,10 +4225,18 @@ const herramientaLugares = {
     function elegir(k) {
       elegido = k;
       const l = L[k], [dia, hora] = ahora(), ab = abiertoAhora(l.h, dia, hora);
-      const web = l.w ? `<br><a href="${esc(/^https?:/.test(l.w) ? l.w : "https://" + l.w)}" target="_blank" rel="noopener">${esc(l.w)}</a>` : "";
+      const enlace = (url, txt) => `<a href="${esc(url)}" target="_blank" rel="noopener nofollow">${txt}</a>`;
+      const dominio = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } };
+      const web = l.web ? `<br>${enlace(l.web, `${t(l.wf === "marca" ? "luWebMarca" : "luWeb")}: ${esc(dominio(l.web))}`)}` : "";
+      const redes = [l.ig && enlace(l.ig, "Instagram"), l.fb && enlace(l.fb, "Facebook")].filter(Boolean).join(" · ");
+      const tel = l.tel ? `<br>📞 <a href="tel:${esc(l.tel.replace(/[^+\d]/g, ""))}">${esc(l.tel)}</a>` : "";
+      // Comercios con nombre: enlace para que el propio negocio complete sus datos en OSM (llegan al regenerar)
+      const tuyo = l.o && l.n && ["tiendas", "comida", "bares", "salud", "servicios"].includes(l.c)
+        ? `<br><small>${enlace(`https://www.openstreetmap.org/edit?${l.o.replace("/", "=")}`, t("luEsTuyo"))}</small>` : "";
       $("luFicha").innerHTML = `<b>${esc(nombre(l))}</b> · ${esc(tx("luCats")[l.c] ?? l.c)} · <small>${esc(l.t)}</small>` +
-        (l.d ? `<br>📍 ${esc(l.d)}` : "") + (l.tel ? `<br>📞 ${esc(l.tel)}` : "") + web +
-        `<br>${l.h ? `${ab === true ? t("luAbiertoSi") : ab === false ? t("luAbiertoNo") : ""} <small>${esc(l.h)}</small>` : t("luSinHorario")}`;
+        (l.d ? `<br>📍 ${esc(l.d)}` : "") + tel + web + (redes ? `<br>${redes}` : "") +
+        `<br>${l.h ? `${ab === true ? t("luAbiertoSi") : ab === false ? t("luAbiertoNo") : ""} <small>${esc(l.h)}</small>` : t("luSinHorario")}` +
+        tuyo;
       ctx.volarA(new THREE.Vector3(l.x, 0, l.z), 0.3);
       for (const [q, o] of marcas.entries()) o.element.style.outline = q === k ? "3px solid #e0703a" : "";
     }
@@ -4253,6 +4269,7 @@ const herramientaLugares = {
     function rotulos() {
       $("luBuscar").placeholder = t("luBuscar");
       $("luAbiertoT").textContent = t("luAbierto", L.filter((l) => l.h).length);
+      $("luConWebT").textContent = t("luConWeb", L.filter((l) => l.web).length);
       const cats = tx("luCats");
       $("luCats").replaceChildren(...[[null, t("luTodas")], ...Object.entries(cats)].map(([k, txt]) => {
         const b = document.createElement("button");
@@ -4264,7 +4281,7 @@ const herramientaLugares = {
       if (elegido >= 0) elegir(elegido); else $("luFicha").textContent = t("luClic");
     }
     $("luBuscar").oninput = actualizar;
-    $("luAbierto").onchange = actualizar;
+    $("luAbierto").onchange = $("luConWeb").onchange = actualizar;
 
     return {
       alMostrar() { grupo.visible = true; rotulos(); actualizar(); },

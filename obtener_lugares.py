@@ -1,10 +1,13 @@
 # TIENDAS Y LUGARES DE INTERÉS de OpenStreetMap: comercios, bares y restaurantes, servicios, salud, cultura, deporte,
 # patrimonio y turismo, con nombre, horario (opening_hours), dirección, teléfono y web si los tienen.
-# Guarda datos_osm/lugares.json (compacto, solo lo que usa el visor). Uso:
-#   ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_lugares.py
+# Guarda datos_osm/lugares.json (compacto, solo lo que usa el visor), con lo que necesita enlazar_webs.py: la
+# referencia de OSM (para el enlace «edita tu negocio»), la marca en Wikidata y las redes. La respuesta de Overpass se
+# guarda en datos_osm/lugares_osm.json y se reutiliza (--nuevo vuelve a preguntar). Uso:
+#   ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_lugares.py [--nuevo]
 import json
 import math
 import os
+import sys
 import time
 import urllib.parse
 import urllib.request
@@ -54,11 +57,16 @@ def categoria(t):
     return None
 
 
+CACHE = os.path.join(DIR, "datos_osm", "lugares_osm.json")
 for intento, url in enumerate(SERVIDORES * 2):
+    if os.path.exists(CACHE) and "--nuevo" not in sys.argv:
+        datos = json.load(open(CACHE, encoding="utf-8"))
+        break
     try:
         pet = urllib.request.Request(url, data=urllib.parse.urlencode({"data": CONSULTA}).encode(),
                                      headers={"User-Agent": "maqueta-ripollet"})
         datos = json.loads(urllib.request.urlopen(pet, timeout=180).read())
+        json.dump(datos, open(CACHE, "w", encoding="utf-8"), ensure_ascii=False)
         break
     except OSError as e:
         print(f"{url}: {e}; reintento")
@@ -84,9 +92,10 @@ for e in datos["elements"]:
     tipo = t.get("shop") or t.get("amenity") or t.get("tourism") or t.get("historic") or t.get("leisure") \
         or t.get("healthcare") or t.get("office") or t.get("craft") or ""
     calle = " ".join(v for v in (t.get("addr:street"), t.get("addr:housenumber")) if v)
-    l = {"n": nombre or "", "c": c, "t": tipo, "x": round(x, 1), "z": round(-y, 1)}
+    l = {"n": nombre or "", "c": c, "t": tipo, "x": round(x, 1), "z": round(-y, 1), "o": f"{e['type']}/{e['id']}"}
     for k, v in (("h", t.get("opening_hours")), ("d", calle), ("tel", t.get("phone") or t.get("contact:phone")),
-                 ("w", t.get("website") or t.get("contact:website")), ("tipo", t.get("recycling_type"))):
+                 ("w", t.get("website") or t.get("contact:website") or t.get("url")), ("tipo", t.get("recycling_type")),
+                 ("bw", t.get("brand:wikidata")), ("ig", t.get("contact:instagram")), ("fb", t.get("contact:facebook"))):
         if v:
             l[k] = v
     lugares.append(l)

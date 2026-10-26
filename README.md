@@ -110,6 +110,24 @@ una se descarga solo al elegir su año (`ripollet.html` en local las toma de la 
   3 con su marca en la maqueta (poblados de la Edad del Bronce de los Pinetons y de la carretera de Santiga) y 3 justo
   fuera (necrópolis neolítica de la Bòbila Padró, villa romana de Can Tiana, Mas Duran).
 
+## Webs de las tiendas
+
+`enlazar_webs.py` busca la web de cada local de `datos_osm/lugares.json` y solo la enseña si funciona:
+
+1. **Fuentes**, por orden: `datos_publicos/webs_manual.json` (altas y correcciones a mano, por referencia de OSM o
+   nombre) → OpenStreetMap (`website`, `contact:website`, `url`) → Wikidata, la web oficial de la marca para las
+   cadenas (`brand:wikidata`, P856; prefiere la de España o en castellano o catalán).
+2. **Verificación** como una visita normal: respeta `robots.txt`, una sola visita a la portada cada 1,5 s y se repite
+   a los 30 días. Se descartan las caídas (dominio inexistente, 404/5xx) y las aparcadas (página del registrador).
+3. **Informe** en `datos_publicos/webs/informe.json` (no se publica): webs que fallan, para corregirlas en OSM, y locales
+   sin web.
+
+En la ficha de la tienda: la web («Web» o «Web de la marca»), Instagram y Facebook si los hay, el teléfono para llamar
+con un toque, el filtro «Solo los que tienen web» y, en los comercios, **«¿Es tu negocio?»**, que abre el editor de
+OpenStreetMap en ese local para que el propio negocio añada su web y su horario (aparecen al regenerar). Hoy: 52 de
+422 lugares con web verificada (13 de OSM y 36 de cadenas; 3 descartadas). Para refrescar:
+`obtener_lugares.py --nuevo` → `enlazar_webs.py` → `osm_ripollet.py` → `ensamblar.py`.
+
 ## Coche y sonido de ambiente
 
 **Coche (🚗 Conducir)**: nunca pasa del límite legal de la calle por la que va, que se ve en una señal junto al
