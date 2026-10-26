@@ -649,6 +649,9 @@ def es_puente(t):
 
 
 PUENTES = []   # para el visor: [{"p": [[x, z, altura del tablero], …], "ancho": m}] en ejes de three.js
+# Puentes que OSM marca como paso peatonal pero son una calle: el de la Carretera de l'Estació (la entrada desde el
+# Ripoll y la C-58), con el tablero de 9 m medido en el LiDAR del ICGC, y sus tres tramos de acceso.
+PUENTES_CALZADA = {31889349: 9.0, 720372823: 9.0, 720372833: 9.0, 803496609: 9.0}
 
 
 def puente(nombre, puntos, ancho):
@@ -790,6 +793,8 @@ for via in vias:
                 ancho = float(t.get("width", "").replace(",", ".").split()[0])
             except (ValueError, IndexError):
                 ancho = ANCHOS[tipo] + (0 if peatonal else 3)
+            if via["id"] in PUENTES_CALZADA:
+                peatonal, ancho = False, PUENTES_CALZADA[via["id"]]
             puente("peatonal" if peatonal else "calzada", puntos, ancho)
             if t.get("name"):
                 CALLES_CON_NOMBRE.append((puntos, t["name"]))
@@ -1357,8 +1362,24 @@ def arboles_en_su_sitio(lista):
     return salida
 
 
+def fuera_de_puentes(lista):
+    """El LiDAR ve el tablero de un puente alto como copa de árbol: fuera los árboles que caen sobre un tablero."""
+    tramos = [(a, b, p["ancho"] / 2 + 1) for p in PUENTES for a, b in zip(p["p"], p["p"][1:])]
+
+    def encima(x, z):
+        for (xa, za, _), (xb, zb, _), r in tramos:
+            dx, dz = xb - xa, zb - za
+            q = max(0.0, min(1.0, ((x - xa) * dx + (z - za) * dz) / ((dx * dx + dz * dz) or 1)))
+            if math.hypot(x - xa - q * dx, z - za - q * dz) < r:
+                return True
+        return False
+    salida = [a for a in lista if not encima(a[0] / 10, a[1] / 10)]
+    print(f"ÁRBOLES: {len(lista) - len(salida)} quitados de encima de los puentes")
+    return salida
+
+
 COPAS = []    # por árbol: desplazamiento de la copa respecto al tronco (x, z en dm)
-arboles = arboles_en_su_sitio(arboles)
+arboles = arboles_en_su_sitio(fuera_de_puentes(arboles))
 guardar("arboles", np.array(arboles, np.int16))
 guardar("copas", np.array(COPAS, np.int8))
 
