@@ -15,7 +15,7 @@ export const TEXTOS_LUGARES = {
     luCats: { comida: "🛒 Comida", bares: "🍽 Bares y restaurantes", tiendas: "🛍 Tiendas", salud: "💊 Salud",
             servicios: "🏦 Servicios", cultura: "🎭 Cultura", deporte: "⚽ Deporte y parques", patrimonio: "🏛 Patrimonio",
             ciudad: "♻️ Fuentes, reciclaje, aseos" },
-    luWeb: "🌐 Web", luWebMarca: "🌐 Web de la marca", luConWeb: "Solo los que tienen web ({0})",
+    luWeb: "🌐 Web", luWebMarca: "🌐 Web de la marca", luConWeb: "Solo los que tienen web ({0})", luOtra: "✕ Elegir otra",
     luEsTuyo: "¿Es tu negocio? Añade o corrige su web y su horario en OpenStreetMap",
     luTipos: { fountain: "Fuente", drinking_water: "Fuente de agua potable", charging_station: "Punto de recarga",
              recycling: "Contenedor de reciclaje", toilets: "Aseos públicos", atm: "Cajero", bank: "Banco",
@@ -31,7 +31,7 @@ export const TEXTOS_LUGARES = {
     luCats: { comida: "🛒 Menjar", bares: "🍽 Bars i restaurants", tiendas: "🛍 Botigues", salud: "💊 Salut",
             servicios: "🏦 Serveis", cultura: "🎭 Cultura", deporte: "⚽ Esport i parcs", patrimonio: "🏛 Patrimoni",
             ciudad: "♻️ Fonts, reciclatge, lavabos" },
-    luWeb: "🌐 Web", luWebMarca: "🌐 Web de la marca", luConWeb: "Només els que tenen web ({0})",
+    luWeb: "🌐 Web", luWebMarca: "🌐 Web de la marca", luConWeb: "Només els que tenen web ({0})", luOtra: "✕ Triar-ne una altra",
     luEsTuyo: "És el teu negoci? Afegeix o corregeix el seu web i l'horari a OpenStreetMap",
     luTipos: { fountain: "Font", drinking_water: "Font d'aigua potable", charging_station: "Punt de recàrrega",
              recycling: "Contenidor de reciclatge", toilets: "Lavabos públics", atm: "Caixer", bank: "Banc",
@@ -95,12 +95,14 @@ const herramientaLugares = {
       return o;
     });
 
+    // La ficha, arriba del todo: al elegir una tienda se ve sin bajar (en el móvil, la ventana es corta)
     div.innerHTML = `<b data-t="luTitulo"></b>
+      <p id="luFicha" style="margin-top:4px"></p>
       <input id="luBuscar" type="text" style="width:100%;margin-top:8px">
       <div class="botones" id="luCats"></div>
       <label><input type="checkbox" id="luAbierto"> <span id="luAbiertoT"></span></label>
       <label><input type="checkbox" id="luConWeb"> <span id="luConWebT"></span></label>
-      <p id="luFicha"></p><p class="nota" id="luCuenta"></p><ul id="luLista" style="padding-left:0;list-style:none"></ul>
+      <p class="nota" id="luCuenta"></p><ul id="luLista" style="padding-left:0;list-style:none"></ul>
       <p class="nota" data-t="luNota"></p>`;
     let categoria = null, elegido = -1;
     const ahora = () => { const { fecha, hora } = ctx.hora(); return [fecha.getUTCDay(), hora]; };
@@ -134,7 +136,10 @@ const herramientaLugares = {
       $("luFicha").innerHTML = `<b>${esc(nombre(l))}</b> · ${esc(tx("luCats")[l.c] ?? l.c)} · <small>${esc(l.t)}</small>` +
         (l.d ? `<br>📍 ${esc(l.d)}` : "") + tel + web + (redes ? `<br>${redes}` : "") +
         `<br>${l.h ? `${ab === true ? t("luAbiertoSi") : ab === false ? t("luAbiertoNo") : ""} <small>${esc(l.h)}</small>` : t("luSinHorario")}` +
-        tuyo;
+        tuyo + `<br><button id="luOtra" style="margin-top:8px">${t("luOtra")}</button>`;
+      $("luOtra").onclick = () => soltar(true);
+      div.scrollTop = 0;
+      div.classList.remove("mini");               // (si la hoja estaba plegada en el móvil, se abre)
       ctx.volarA(new THREE.Vector3(l.x, 0, l.z), 0.3);
       for (const [q, o] of marcas.entries()) o.element.style.outline = q === k ? "3px solid #e0703a" : "";
     }
@@ -164,6 +169,19 @@ const herramientaLugares = {
       }), ...(f.length > 40 ? [Object.assign(document.createElement("li"), { textContent: t("luMas", f.length - 40) })] : []));
     }
 
+    /** Deja de marcar la tienda elegida; con «todo», también la búsqueda y los filtros (al cerrar la ventana). */
+    function soltar(todo) {
+      elegido = -1;
+      for (const o of marcas) o.element.style.outline = "";
+      $("luFicha").textContent = t("luClic");
+      if (todo) {
+        $("luBuscar").value = "";
+        $("luAbierto").checked = $("luConWeb").checked = false;
+        categoria = null;
+        rotulos();
+      }
+      actualizar();
+    }
     function rotulos() {
       $("luBuscar").placeholder = t("luBuscar");
       $("luAbiertoT").textContent = t("luAbierto", L.filter((l) => l.h).length);
@@ -183,7 +201,7 @@ const herramientaLugares = {
 
     return {
       alMostrar() { grupo.visible = true; rotulos(); actualizar(); },
-      alOcultar() { grupo.visible = false; },
+      alOcultar() { grupo.visible = false; soltar(true); },
       cadaFrame(dt) {
         if (!grupo.visible || (espera -= dt) > 0) return;
         espera = 0.5;
