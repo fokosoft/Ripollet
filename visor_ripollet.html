@@ -906,6 +906,31 @@ function pintarTechos(material) {
 }
 const ES_TECHO = (nombre) => nombre === "tejado" || nombre === "azotea";
 
+// VENTANAS ENCENDIDAS DE NOCHE: el vidrio de la textura de fachada (azul oscuro) se enciende con luz cálida en una de
+// cada tres ventanas, al azar pero fijo (cada ventana es una repetición de la textura, y cambia de edificio a edificio).
+// Va con la oscuridad del tiempo real, como las farolas; de día no cambia nada.
+const nocheVentanas = { value: 0 };
+function pintarVentanas(material) {
+  material.onBeforeCompile = (s) => {
+    s.uniforms.uNocheV = nocheVentanas;
+    s.vertexShader = "varying vec3 vMundo;\n" + s.vertexShader.replace(...VERTICE_MUNDO);
+    s.fragmentShader = "varying vec3 vMundo;\nuniform float uNocheV;\nfloat luzVentana = 0.0;\n" + s.fragmentShader
+      .replace("#include <map_fragment>", `#include <map_fragment>
+        #ifdef USE_MAP
+        {
+          vec3 tx = diffuseColor.rgb;
+          float vidrio = step(dot(tx, vec3(0.3, 0.59, 0.11)), 0.14) * step(tx.r + 0.025, tx.b);
+          float h = fract(sin(dot(floor(vMapUv) + floor(vMundo.xz / 9.0) * 7.0, vec2(12.9898, 78.233))) * 43758.5453);
+          luzVentana = vidrio * step(h, 0.34) * uNocheV;
+        }
+        #endif`)
+      .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+        totalEmissiveRadiance += vec3(1.0, 0.72, 0.38) * luzVentana * 1.4;`);
+  };
+  material.customProgramCacheKey = () => "ventanas";
+  material.needsUpdate = true;
+}
+
 let sueloMalla = null;
 const mallasModelo = [];
 let estiloArte = new URLSearchParams(location.search).has("arte");   // ?arte abre ya en estilo artístico
@@ -919,6 +944,7 @@ new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
     if (o.material.map) o.material.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
     if (o.name === "suelo") sueloMalla = o;               // para colocar tormentas y preguntar a Neutro con clic
     if (ES_TECHO(o.material.name) && !o.material.userData.techo) { o.material.userData.techo = true; pintarTechos(o.material); }
+    if (o.material.name.startsWith("muro_") && !o.material.userData.ventanas) { o.material.userData.ventanas = true; pintarVentanas(o.material); }
     mallasModelo.push(o);
   });
   const peatonal = mallasModelo.find((o) => o.name === "peatonal");
@@ -946,6 +972,27 @@ new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
   };
   const matrices = Object.fromEntries(Object.keys(formas).map((k) => [k, []]));
   const m = new THREE.Matrix4();
+  // ESTACIÓN: las copas de hoja ancha cambian de color con la fecha. Cada árbol tiene su sorteo fijo: algo más de la
+  // mitad son de hoja caduca (plátanos, almeces, moreras…); en otoño se tiñen poco a poco de amarillo, naranja o rojizo,
+  // en invierno quedan pardos (sin hoja) y en primavera unos pocos florecen. Pinos, cipreses y arbustos, siempre verdes.
+  const coloresCopa = { bola_copa: [], bola_copa_clara: [] };
+  const diaDelAno = (() => { const h = new Date(), a = new Date(h.getFullYear(), 0, 1); return Math.floor((h - a) / 864e5); })();
+  const rampa = (d, a, b) => THREE.MathUtils.clamp((d - a) / (b - a), 0, 1);
+  const OTONO = [[0.78, 0.56, 0.08], [0.78, 0.32, 0.06], [0.56, 0.15, 0.05]].map((c) => new THREE.Color().setRGB(...c));
+  const PARDO = new THREE.Color().setRGB(0.32, 0.25, 0.17);
+  const FLOR = [[0.95, 0.62, 0.72], [0.93, 0.92, 0.86]].map((c) => new THREE.Color().setRGB(...c));
+  function colorCopa(base, k) {
+    const azar = (n) => { const v = Math.sin(k * 12.9898 + n * 78.233) * 43758.5453; return v - Math.floor(v); };
+    const c = new THREE.Color().setRGB(...base);
+    if (azar(1) > 0.58) return c;                                   // perenne
+    const d = diaDelAno;
+    const otono = d < 320 ? rampa(d, 268, 318) : 1 - rampa(d, 330, 352);     // de octubre a mediados de diciembre
+    const invierno = d >= 340 || d < 60 ? 0.75 : d < 80 ? 0.75 * (1 - rampa(d, 60, 80)) : 0;
+    if (azar(2) < invierno) return PARDO.clone();
+    if (azar(3) < otono) return c.lerp(OTONO[Math.floor(azar(4) * 3)], 0.88);
+    if (d >= 70 && d < 125 && azar(5) < 0.22) return FLOR[Math.floor(azar(6) * 2)].clone();
+    return c;
+  }
   for (let k = 0; k < n; k++) {
     const x = A[k * 5] / 10, z = A[k * 5 + 1] / 10, tipo = DATOS.tiposArbol[A[k * 5 + 2]];
     const r = A[k * 5 + 3] / 100, alto = A[k * 5 + 4] / 100, y = altura(x, z);
@@ -966,6 +1013,7 @@ new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
                                              new THREE.Vector3(grueso, largo, grueso)));
       const forma = tipo === "pino" || tipo.startsWith("cono") ? new THREE.Vector3(r, copa, r) : new THREE.Vector3(r, copa / 2, r);
       matrices[tipo].push(m.clone().compose(new THREE.Vector3(x + dx, y + fuste + copa / 2, z + dz), q, forma));
+      coloresCopa[tipo]?.push(colorCopa(formas[tipo][1].color.toArray(), k));
       continue;
     }
     if (tipo !== "arbusto") {
@@ -977,11 +1025,16 @@ new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
     else if (tipo === "pino") { base = y + 1.6 + alto / 2; escala = new THREE.Vector3(r, alto, r); }
     else if (tipo.startsWith("cono")) { base = y + 1.4 + alto / 2; escala = new THREE.Vector3(r, alto, r); }
     matrices[tipo].push(m.clone().compose(new THREE.Vector3(x, base, z), new THREE.Quaternion(), escala));
+    coloresCopa[tipo]?.push(colorCopa(formas[tipo][1].color.toArray(), k));
   }
   for (const [tipo, lista] of Object.entries(matrices)) {
     if (!lista.length) continue;
     const malla = new THREE.InstancedMesh(formas[tipo][0], formas[tipo][1], lista.length);
     lista.forEach((mm, i) => malla.setMatrixAt(i, mm));
+    if (coloresCopa[tipo]) {                // el color va por árbol (estación); el material, en blanco
+      coloresCopa[tipo].forEach((c, i) => malla.setColorAt(i, c));
+      formas[tipo][1].color.setRGB(1, 1, 1);
+    }
     malla.castShadow = true;
     malla.receiveShadow = true;
     scene.add(malla);
@@ -2464,6 +2517,7 @@ tiempoReal.alCambiarHora = trafico.recalcular;
 // Farolas reales del AMB (x, z en dm y tipo: 0 columna · 1 fachada), si se descargaron
 const DATOS_FAROLAS = BLOBS && !BLOBS.farolas ? null : await cargarBinario("farolas", Int16Array, BLOBS).catch(() => null);
 const farolas = crearFarolas({ ...CTX, altura: alturaSuelo, noche: tiempoReal.noche }, DATOS_FAROLAS);
+crearMobiliario(CTX);                       // contenedores, marquesinas y placas solares con sus datos reales
 
 // ------------------------------------------------------------ clic en el mapa: tormenta o pregunta a Neutro
 let pulsacion = null;
@@ -2749,6 +2803,7 @@ renderer.setAnimationLoop(() => {
   trafico.cadaFrame(dt);
   farolas.cadaFrame(dt);
   ambiente.cadaFrame(dt);
+  nocheVentanas.value = tiempoReal?.noche?.() ?? 0;
   // La bruma (y la niebla del tiempo real) es la de quien está en la calle: mirando la maqueta desde lejos, empieza
   // como pronto en el punto que se mira, con el mismo espesor. Así el centro siempre se ve y la niebla vela el fondo.
   const nieblaCerca = scene.fog.near, nieblaLejos = scene.fog.far;

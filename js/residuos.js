@@ -82,14 +82,9 @@ const herramientaResiduos = {
       }
       capa.actualizar();
     }
-    // Contenedores con instancias (pequeños, baratos); áreas y buzones con icono
-    const P = R.puntos, cont = P.filter((p) => p.tipo === "contenedor");
-    const mallas = new THREE.InstancedMesh(new THREE.BoxGeometry(1.4, 1.4, 1.1).translate(0, 0.7, 0),
-                                           new THREE.MeshStandardMaterial({ color: 0x8a5a2b, flatShading: true }), cont.length);
-    const m = new THREE.Matrix4();
-    cont.forEach((p, k) => mallas.setMatrixAt(k, m.makeTranslation(p.pos[0], ctx.altura(p.pos[0], p.pos[1]), p.pos[1])));
+    // Los contenedores están siempre en el mapa (mobiliario.js); aquí, los iconos de áreas y buzones
+    const P = R.puntos;
     const grupo = new THREE.Group();
-    grupo.add(mallas);
     for (const p of P.filter((p) => p.tipo !== "contenedor")) {
       const d = document.createElement("div");
       d.className = "marca";

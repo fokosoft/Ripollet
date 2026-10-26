@@ -1768,7 +1768,8 @@ if os.path.exists(RUTA_TRANSPORTE):
 
 # REHABILITACIÓN: por edificio, año y viviendas (Catastro) y certificados energéticos (ICAEN) por referencia
 # catastral (los 14 primeros caracteres = el edificio). Blob «rehab» (Uint16 × 5 por edificio): año, viviendas,
-# certificados, certificados E–G, letra mediana (1 = A … 7 = G, 0 = ninguno) + 8 × placas FV + 16 × uso.
+# certificados, certificados E–G, letra mediana (1 = A … 7 = G, 0 = ninguno) + 8 × placas FV + 16 × uso
+# + 128 × cubierta inclinada.
 USOS = ["", "residential", "industrial", "publicServices", "retail", "office", "agriculture"]
 DIRECCIONES = {}
 RUTA_CAT, RUTA_CERT = (os.path.join(DIR, "datos_publicos", n) for n in ("catastro_edificios.json", "certificados_ripollet.json"))
@@ -1790,7 +1791,8 @@ if os.path.exists(RUTA_CAT):
         uso = re.sub(r"^(\d+_)+", "", e.get("uso") or "")
         pv = any(c.get("solar_fotovoltaica") == "SI" for c in lista)
         rehab[k] = (e.get("anio") or 0, e.get("viviendas") or 0, len(letras), sum(l >= 5 for l in letras),
-                    (letras[len(letras) // 2] if letras else 0) + 8 * pv + 16 * (USOS.index(uso) if uso in USOS else 0))
+                    (letras[len(letras) // 2] if letras else 0) + 8 * pv + 16 * (USOS.index(uso) if uso in USOS else 0)
+                    + 128 * ES_CASA[k])                 # 128: cubierta inclinada (placas solares en el visor)
         if lista and lista[0].get("adre_a"):
             DIRECCIONES[k + 1] = f"{lista[0]['adre_a']} {lista[0].get('numero', '')}".strip()
     guardar("rehab", rehab)
