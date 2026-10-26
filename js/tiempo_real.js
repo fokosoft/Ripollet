@@ -29,6 +29,7 @@ export const TEXTOS_TIEMPO = {
 
 const URL_TIEMPO = "https://api.open-meteo.com/v1/forecast?latitude=41.5025&longitude=2.1553" +
   "&current=temperature_2m,precipitation,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m" +
+  "&hourly=precipitation&past_hours=3&forecast_hours=1" +            // la lluvia de las últimas horas (lluvia real)
   "&wind_speed_unit=ms&timezone=Europe%2FMadrid";
 const grupoCielo = (c) => (c <= 0 ? 0 : c <= 3 ? c : c < 50 ? 45 : c < 60 ? 51 : c < 70 ? 61 : c < 80 ? 71 : c < 95 ? 80 : 95);
 const ICONO = { 0: "☀️", 1: "🌤", 2: "⛅", 3: "☁️", 45: "🌫", 51: "🌦", 61: "🌧", 71: "❄️", 80: "🌦", 95: "⛈" };
@@ -166,9 +167,13 @@ export function crearTiempoReal(ctx, div) {
     try {
       const r = await fetch(URL_TIEMPO);
       if (!r.ok) throw new Error(r.status);
-      const c = (await r.json()).current;
+      const datos = await r.json(), c = datos.current;
+      // Lluvia horaria: el valor de cada hora es lo que cayó en la hora anterior (mm = mm/h). Las horas ya pasadas:
+      const ya = (datos.hourly?.time ?? []).map((h, i) => [h, datos.hourly.precipitation[i]]).filter(([h]) => h <= c.time);
       clima = { temperatura: c.temperature_2m, lluvia: c.precipitation, codigo: c.weather_code, nubes: c.cloud_cover,
-                viento: c.wind_speed_10m, dirViento: c.wind_direction_10m };
+                viento: c.wind_speed_10m, dirViento: c.wind_direction_10m,
+                lluviaHora: ya.length ? ya[ya.length - 1][1] ?? 0 : 0,
+                lluvia3h: ya.slice(-3).reduce((a, [, v]) => a + (v ?? 0), 0) };
       consultado = horaTexto(ahoraEnRipollet().hora);
       error = false;
     } catch { error = true; }
@@ -221,7 +226,8 @@ export function crearTiempoReal(ctx, div) {
     alCambiarHora: null,
     noche: () => oscuridad,        // 0 de día · 1 de noche (farolas)
     /** Viento de ahora para otras herramientas (incendio): { v en m/s, dir de donde viene en grados } o null. */
-    clima: () => (activo && clima ? { viento: clima.viento, dirViento: clima.dirViento, lluvia: clima.lluvia } : null),
+    clima: () => (activo && clima ? { viento: clima.viento, dirViento: clima.dirViento, lluvia: clima.lluvia,
+                                      lluviaHora: clima.lluviaHora, lluvia3h: clima.lluvia3h } : null),
     cadaFrame(dt) {
       if (lluvia.visible) {
         const c = ctx.enMapa() ? ctx.controls.target : ctx.camera.position;
