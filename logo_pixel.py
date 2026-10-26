@@ -1,4 +1,5 @@
-# LOGO: el escudo de Ripollet en píxel (logoripollet.png, 1254×1254, 1 MB, con una rejilla irregular de 11–19 px)
+# LOGO de la app: un escudo propio en píxel inspirado en el de Ripollet (logoapp.png, 1254×1254, 1 MB, rejilla
+# irregular de 11–19 px; torre, árboles y el río). Uso: ... --python logo_pixel.py -- logoapp.png
 # → un sprite de verdad, ligero y nítido, para la barra del visor y el favicon (js/logo.js, en base64).
 # Cada celda de la rejilla nueva toma el color DOMINANTE de su trozo del dibujo (no la media, que emborronaría los
 # bordes) y el blanco de fuera se vuelve transparente rellenando desde el borde (el blanco de dentro del escudo,
@@ -82,7 +83,7 @@ cuadro = np.zeros((n, n, 4), np.float32)
 cuadro[(n - eh) // 2:(n - eh) // 2 + eh, (n - ew) // 2:(n - ew) // 2 + ew] = escudo
 favicon = guardar_png(cuadro, os.path.join(tmp, "favicon.png"))
 with open(os.path.join(DIR, "js", "logo.js"), "w", encoding="utf-8") as f:
-    f.write("// LOGO: el escudo de Ripollet en píxel (generado por logo_pixel.py, no editar a mano)\n"
+    f.write("// LOGO de la app (escudo propio en píxel; generado por logo_pixel.py, no editar a mano)\n"
             f"export const LOGO_PNG = \"data:image/png;base64,{base64.b64encode(logo).decode()}\";\n"
             f"export const LOGO_TAM = [{w}, {h}];\n"
             "// Favicon (cuadrado)\n"

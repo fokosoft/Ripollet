@@ -63,7 +63,7 @@ sombras duras y botones que se hunden al pulsar; los títulos de los paneles son
 (Silkscreen) y la maqueta se apoya en una mesa con rejilla de puntos. Con la vista 3D, el mismo diseño en versión
 nocturna (acento sol). Todo con variables CSS (`--p-fondo`, `--acento`…) en un solo sitio.
 
-**Logo**: el escudo de Ripollet en píxel. `logo_pixel.py` (con Blender) pasa el dibujo original (1 MB, rejilla
+**Logo**: un escudo propio en píxel inspirado en el de Ripollet (torre, árboles y el río; `logoapp.png`). `logo_pixel.py` (con Blender) pasa el dibujo original (1 MB, rejilla
 irregular) a un sprite de 64×81 de colores planos con el fondo transparente (2,9 KB) y un favicon de 64×64 solo con
 el escudo (2,5 KB), en `js/logo.js`.
 
