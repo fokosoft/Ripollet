@@ -117,10 +117,13 @@ export function crearPixelado(ctx, div) {
     // ENCAJE AL PÍXEL: la cámara se mueve a saltos de un píxel grande (lo que mide un píxel a la distancia del punto
     // que se mira) y la imagen final se desplaza el resto. Al arrastrar el mapa, cada cosa sigue en sus mismos
     // píxeles en vez de «bailar» (bordes, ventanas y líneas que cambian de forma en cada fotograma).
+    // Solo en el mapa: conduciendo, la cámara gira sin parar y va pegada al coche, y el punto del mapa se queda lejos
+    // (a cientos de metros): los saltos serían de metros y la cámara iría a trompicones.
     const tamPix = 2 * camera.position.distanceTo(controls.target) * Math.tan(camera.fov * Math.PI / 360) / h;
     derecha.setFromMatrixColumn(camera.matrixWorld, 0); arriba.setFromMatrixColumn(camera.matrixWorld, 1);
+    const encajar = ctx.enMapa();
     const pd = camera.position.dot(derecha) / tamPix, pa = camera.position.dot(arriba) / tamPix;
-    const fd = pd - Math.round(pd), fa = pa - Math.round(pa);
+    const fd = encajar ? pd - Math.round(pd) : 0, fa = encajar ? pa - Math.round(pa) : 0;
     guardada.copy(camera.position);
     camera.position.addScaledVector(derecha, -fd * tamPix).addScaledVector(arriba, -fa * tamPix);
     camera.updateMatrixWorld();
