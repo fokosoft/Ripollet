@@ -1,8 +1,8 @@
 # Ripollet: maqueta 3D, riesgo de inundación y herramientas urbanas
 
 Visor web (three.js) de Ripollet, del centro a Pinetons, generado con Blender a partir de OpenStreetMap, el Catastro y
-el relieve del ICGC, con una simulación de lluvia en la GPU, Neutro explicando los puntos críticos y catorce
-herramientas de análisis urbano con datos públicos. En castellano y catalán.
+el relieve del ICGC, con una simulación de lluvia en la GPU, Neutro explicando los puntos críticos y veintiuna
+herramientas con datos públicos. En castellano y catalán.
 
 **Abrir en línea:** https://fokosoft.github.io/Ripollet/ (GitHub Pages, desde la carpeta `web/`).
 
@@ -10,10 +10,22 @@ herramientas de análisis urbano con datos públicos. En castellano y catalán.
 
 | Archivo | Para qué |
 |---|---|
-| `ripollet.html` | Todo en un archivo (2,9 MB): doble clic y funciona (necesita internet para three.js) |
-| `web/` | Para publicar en un servidor (2,3 MB): `index.html`, `ripollet.glb` y `datos/*.z`; `index.html` de la raíz lleva aquí |
+| `ripollet.html` | Todo en un archivo (3,1 MB): doble clic y funciona (necesita internet para three.js) |
+| `web/` | Para publicar en un servidor (2,6 MB): `index.html`, `ripollet.glb` y `datos/*.z`; `index.html` de la raíz lleva aquí |
 | `ripollet.html?arte` | Abre directamente en estilo artístico |
 | `INFORME_NEUTRO.md` | Cómo se midió Neutro, frente a qué rival, y la comparación con la cartografía oficial |
+
+## Dos modos: vecino y técnico
+
+- **Modo vecino** (por defecto): pensado para quien solo quiere saber cosas de su casa y su barrio. Buscador de
+  dirección en Explorar, la pestaña **Mi casa** en lugar de Riesgo (el agua en lluvias fuertes sale en la ficha de
+  la casa) y siete herramientas: Mi casa, Recogida de residuos, Agenda, Tiendas y lugares, Transporte público,
+  Sombra y calor e Incidencias. Las notas de método quedan plegadas tras «ℹ️ ¿Cómo se calcula?» y el recorrido
+  guiado tiene 8 pasos (incluye recogida y agenda).
+- **Modo técnico**: todo (panel de riesgo y lluvia, vulnerabilidad, planeamiento, rehabilitación, seguridad vial,
+  ruido, incendio, solar, proyectos…). Se activa en ⚙️ Ajustes (se recuerda en el navegador) o con
+  `?modo=tecnico`; los enlaces compartidos desde el modo técnico lo llevan, y un enlace `?h=` a una herramienta
+  técnica cambia de modo solo.
 
 ## Qué hace el panel de riesgo
 

@@ -25,7 +25,7 @@
   html, body { margin: 0; height: 100%; overflow: hidden; background: #bfe0f5; font-family: system-ui, sans-serif;
                touch-action: none; user-select: none; }
   .panel { position: fixed; top: 12px; left: 12px; right: 12px; max-width: 460px; padding: 10px 14px;
-           background: rgba(0,0,0,.6); color: #fff; border-radius: 8px; font-size: 14px; line-height: 1.4; }
+           background: rgba(0,0,0,.6); color: #fff; border-radius: 8px; font-size: 14px; line-height: 1.4; z-index: 2; }
   .panel b { color: #ffd166; }
   .panel a { color: #9fd3ff; } body.claro .panel a { color: #1f5fa8; }
   .botones { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
@@ -159,6 +159,17 @@
     select, input[type=date], input[type=text], input[type=search] { font-size: 16px; min-height: 36px; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+
+  /* ===== Modos: vecino (por defecto, lo que afecta a cada uno) y técnico (todo) ===== */
+  body.vecino .soloTecnico { display: none !important; }
+  body:not(.vecino) .soloVecino { display: none !important; }
+  body.vecino .herramienta .nota { display: none; }
+  body.vecino .herramienta.verNotas .nota { display: block; }
+  .comoSeCalcula { margin-top: 10px; font-size: 12px !important; background: none !important; text-decoration: underline;
+                   padding: 4px 0 !important; }
+  .buscador { display: flex; gap: 6px; margin: 6px 0 4px; }
+  .buscador input { flex: 1; font-size: 16px; padding: 10px 12px; border-radius: 10px; border: 2px solid #1f7a3e; min-width: 0; }
+  .interruptor { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-weight: 600; }
   /* Recorrido guiado */
   #recorrido { position: fixed; left: 50%; right: auto; top: auto; transform: translateX(-50%); bottom: 24px; max-width: none; width: min(540px, calc(100vw - 24px));
                z-index: 9; display: none; padding: 12px 16px; border-radius: 14px; box-shadow: 0 8px 28px rgba(0,0,0,.3); }
@@ -243,21 +254,26 @@
 <nav id="nav" class="panel" aria-label="Secciones">
   <button data-sec="explorar"><span class="ico">🗺</span><span data-t="navExplorar"></span></button>
   <button data-sec="herramientas"><span class="ico">🧰</span><span data-t="navHerramientas"></span></button>
-  <button data-sec="riesgo"><span class="ico">⚠️</span><span data-t="navRiesgo"></span></button>
+  <button data-sec="riesgo" class="soloTecnico"><span class="ico">⚠️</span><span data-t="navRiesgo"></span></button>
+  <button data-sec="micasa" class="soloVecino"><span class="ico">🏠</span><span data-t="navCasa"></span></button>
   <button data-sec="ajustes"><span class="ico">⚙️</span><span data-t="navAjustes"></span></button>
 </nav>
 <div id="mapa" class="panel"><div class="asa"></div>
   <section data-sec="explorar">
+    <div class="soloVecino"><label for="buscarCasa" class="subtitulo" data-t="navBuscar"></label>
+      <div class="buscador"><input id="buscarCasa" type="search" autocomplete="off"><button id="irCasa" class="principal">🔍</button></div></div>
     <p class="nota" style="margin-top:4px"><span data-t="titulo"></span> <span id="ayuda" data-t="ayudaMapa"></span></p>
     <div class="rejilla grandes dos"><button id="abrirRecorrido" data-t="rcBoton"></button>
       <button id="abrirMicasa" data-t="micasaBoton"></button></div>
     <div class="rejilla grandes"><button id="conducir" data-t="conducir"></button>
-      <button id="abrirLluvia" data-t="lluvia"></button><button id="abrirRiesgo" data-t="riesgo"></button></div>
+      <button id="abrirLluvia" class="soloTecnico" data-t="lluvia"></button><button id="abrirRiesgo" class="soloTecnico" data-t="riesgo"></button></div>
     <p class="subtitulo" data-t="navIr"></p>
     <div class="botones" id="ir"></div>
   </section>
   <section data-sec="herramientas" hidden><div class="rejilla" id="herramientas"></div></section>
   <section data-sec="ajustes" hidden>
+    <label class="interruptor"><input type="checkbox" id="chkTecnico"> <span data-t="navTecnico"></span></label>
+    <p class="nota" data-t="navTecnicoAyuda"></p>
     <div id="tiempoReal"></div>
     <div id="trafico"></div>
     <div class="botones"><button id="arte"></button></div>
@@ -547,7 +563,10 @@ for (const h of LISTA_HERRAMIENTAS) for (const l of ["es", "ca"]) Object.assign(
 for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_PIXEL[l], TEXTOS_TRAFICO[l],
   { kicker: l === "es" ? "Maqueta · del centro a Pinetons" : "Maqueta · del centre als Pinetons" },
   l === "es" ? { navExplorar: "Explorar", navHerramientas: "Herramientas", navRiesgo: "Riesgo", navAjustes: "Ajustes",
-                 navIr: "Ir a…", navPista: "Toca 🧰 Herramientas para empezar", navAsa: "Plegar o desplegar",
+                 navIr: "Ir a…", navPista: "Busca tu dirección o toca 🧰 Herramientas", navAsa: "Plegar o desplegar",
+                 navCasa: "Mi casa", navBuscar: "Busca tu dirección", navBuscarEj: "Calle y número, p. ej. «Balmes 12»",
+                 navTecnico: "🛠 Modo técnico", navTecnicoAyuda: "Muestra todas las herramientas de análisis (riesgo con Neutro, simulación de lluvia, vulnerabilidad, rehabilitación, planeamiento…) y cómo se calcula cada una.",
+                 comoSeCalcula: "ℹ️ ¿Cómo se calcula?", ocultarCalculo: "Ocultar cómo se calcula",
                  compartirBoton: "🔗", enlaceCopiado: "Enlace copiado: pégalo donde quieras", copiaEnlace: "Copia este enlace:",
                  a11yCerrar: "Cerrar", a11yCompartir: "Compartir un enlace a esta vista", a11yTiempo: "Hora y tiempo: {0}. Abrir ajustes",
                  a11yAnterior: "Paso anterior", a11yMapaNombre: "Mapa 3D de Ripollet",
@@ -555,7 +574,7 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
                  rcBoton: "▶ Recorrido guiado", rcSalir: "Salir", rcSiguiente: "Siguiente ▶", rcFin: "Terminar",
                  rcAutoOn: "⏸ Pausa", rcAutoOff: "⏵ Automático", rcPasoN: "Paso {0} de {1}",
                  rcT: ["Ripollet en 3D", "El centro", "Riesgo de inundación", "Sombra y calor", "Energía solar",
-                       "Vulnerabilidad", "Transporte público", "Mi casa", "Ripollet de noche"],
+                       "Vulnerabilidad", "Transporte público", "Mi casa", "Ripollet de noche", "Recogida de residuos", "Agenda"],
                  rcX: ["Del centro a Pinetons, construido solo con datos públicos: {0} edificios del Catastro, {1} árboles y arbustos medidos con LiDAR y {2} farolas reales.",
                        "Puedes mover, girar y acercar el mapa, y hasta conducir por las calles reales. Las herramientas están en 🧰.",
                        "Una lluvia torrencial de 60 mm/h: la simulación física marca dónde se acumula el agua y Neutro explica por qué. Este es el punto más crítico.",
@@ -564,9 +583,14 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
                        "Las secciones censales según edad, hogares de una persona y renta (INE), cruzadas con el agua y el calor.",
                        "Las 13 líneas de autobús con sus próximas salidas, y cuántos minutos se tarda a pie hasta una parada.",
                        "Cualquiera puede buscar su dirección y ver la ficha de su edificio: agua, año, sol, ruido, barrio y servicios cerca.",
-                       "El sol, las nubes y la noche son los de ahora mismo. Así se ve Ripollet con sus farolas. Fin del recorrido: explora el resto en 🧰 Herramientas."] }
+                       "El sol, las nubes y la noche son los de ahora mismo. Así se ve Ripollet con sus farolas. Fin del recorrido: explora el resto en 🧰 Herramientas.",
+                       "Qué toca sacar hoy en tu calle, y dónde están el contenedor, el área de emergencia y el buzón de textil sanitario más cercanos.",
+                       "Los actos de la agenda de ripollet.cat, en el mapa y actualizados cada día."] }
              : { navExplorar: "Explorar", navHerramientas: "Eines", navRiesgo: "Risc", navAjustes: "Ajustos",
-                 navIr: "Anar a…", navPista: "Toca 🧰 Eines per començar", navAsa: "Plegar o desplegar",
+                 navIr: "Anar a…", navPista: "Cerca la teva adreça o toca 🧰 Eines", navAsa: "Plegar o desplegar",
+                 navCasa: "La meva casa", navBuscar: "Cerca la teva adreça", navBuscarEj: "Carrer i número, p. ex. «Balmes 12»",
+                 navTecnico: "🛠 Mode tècnic", navTecnicoAyuda: "Mostra totes les eines d'anàlisi (risc amb Neutro, simulació de pluja, vulnerabilitat, rehabilitació, planejament…) i com es calcula cadascuna.",
+                 comoSeCalcula: "ℹ️ Com es calcula?", ocultarCalculo: "Amagar com es calcula",
                  compartirBoton: "🔗", enlaceCopiado: "Enllaç copiat: enganxa'l on vulguis", copiaEnlace: "Copia aquest enllaç:",
                  a11yCerrar: "Tancar", a11yCompartir: "Compartir un enllaç a aquesta vista", a11yTiempo: "Hora i temps: {0}. Obrir ajustos",
                  a11yAnterior: "Pas anterior", a11yMapaNombre: "Mapa 3D de Ripollet",
@@ -574,7 +598,7 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
                  rcBoton: "▶ Recorregut guiat", rcSalir: "Sortir", rcSiguiente: "Següent ▶", rcFin: "Acabar",
                  rcAutoOn: "⏸ Pausa", rcAutoOff: "⏵ Automàtic", rcPasoN: "Pas {0} de {1}",
                  rcT: ["Ripollet en 3D", "El centre", "Risc d'inundació", "Ombra i calor", "Energia solar",
-                       "Vulnerabilitat", "Transport públic", "La meva casa", "Ripollet de nit"],
+                       "Vulnerabilitat", "Transport públic", "La meva casa", "Ripollet de nit", "Recollida de residus", "Agenda"],
                  rcX: ["Del centre als Pinetons, construït només amb dades públiques: {0} edificis del Cadastre, {1} arbres i arbustos mesurats amb LiDAR i {2} fanals reals.",
                        "Pots moure, girar i apropar el mapa, i fins i tot conduir pels carrers reals. Les eines són a 🧰.",
                        "Una pluja torrencial de 60 mm/h: la simulació física marca on s'acumula l'aigua i Neutro explica per què. Aquest és el punt més crític.",
@@ -583,7 +607,9 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
                        "Les seccions censals segons edat, llars d'una persona i renda (INE), creuades amb l'aigua i la calor.",
                        "Les 13 línies d'autobús amb les properes sortides, i quants minuts es triga a peu fins a una parada.",
                        "Qualsevol pot cercar la seva adreça i veure la fitxa del seu edifici: aigua, any, sol, soroll, barri i serveis a prop.",
-                       "El sol, els núvols i la nit són els d'ara mateix. Així es veu Ripollet amb els seus fanals. Fi del recorregut: explora la resta a 🧰 Eines."] });
+                       "El sol, els núvols i la nit són els d'ara mateix. Així es veu Ripollet amb els seus fanals. Fi del recorregut: explora la resta a 🧰 Eines.",
+                       "Què toca treure avui al teu carrer, i on són el contenidor, l'àrea d'emergència i la bústia de tèxtil sanitari més propers.",
+                       "Els actes de l'agenda de ripollet.cat, al mapa i actualitzats cada dia."] });
 let idioma = "es";
 try { idioma = localStorage.getItem("idioma") || (navigator.language.startsWith("ca") ? "ca" : "es"); } catch {}
 const t = (clave, ...args) => String(TEXTOS[idioma][clave] ?? clave).replace(/\{(\d)\}/g, (_, n) => args[n]);
@@ -598,6 +624,9 @@ function traducir() {
     el.innerHTML = el.innerHTML.replace(/^(\p{Extended_Pictographic}[\uFE0F\u200D\p{Extended_Pictographic}]*)\s*/u, '<span class="ico">$1</span>');
   for (const a of document.querySelectorAll(".asa")) { a.title = t("navAsa"); a.setAttribute("aria-label", t("navAsa")); }
   etiquetasAccesibles();
+  $("buscarCasa").placeholder = t("navBuscarEj");
+  for (const c of document.querySelectorAll(".comoSeCalcula"))
+    c.textContent = t(c.closest(".herramienta")?.classList.contains("verNotas") ? "ocultarCalculo" : "comoSeCalcula");
   $("idioma").textContent = idioma === "es" ? "CA" : "ES";
   $("idioma").title = idioma === "es" ? "Català" : "Castellano";
   $("arte").textContent = t(estiloArte ? "estiloReal" : "estiloArte");
@@ -644,7 +673,7 @@ renderer.domElement.setAttribute("aria-describedby", "descMapa");
 
 const etiquetas = new CSS2DRenderer();
 etiquetas.setSize(innerWidth, innerHeight);
-Object.assign(etiquetas.domElement.style, { position: "fixed", top: "0", pointerEvents: "none" });
+Object.assign(etiquetas.domElement.style, { position: "fixed", top: "0", pointerEvents: "none", zIndex: "1" });
 document.body.appendChild(etiquetas.domElement);
 
 const scene = new THREE.Scene();
@@ -991,6 +1020,12 @@ for (const b of document.querySelectorAll("#tactil button")) {
 const pulsada = (...codigos) => codigos.some((c) => teclas.has(c));
 
 const PANELES_HERRAMIENTA = {};   // id → { div, h }
+// Modo técnico: ?modo=tecnico en el enlace, o lo elegido la última vez (por defecto, modo vecino)
+let modoTecnico = (() => {
+  const m = new URLSearchParams(location.search).get("modo");
+  if (m) return m === "tecnico";
+  try { return localStorage.getItem("modo") === "tecnico"; } catch { return false; }
+})();
 let tiempoReal = null, pixelado = null, trafico = null;
 function mostrarPanel(id) {
   for (const p of ["lluvia", "riesgo"]) $(p).style.display = p === id ? "block" : "none";
@@ -1043,7 +1078,8 @@ function abrirSeccion(sec) {
 function marcarNav() {
   const riesgo = $("riesgo").style.display === "block";
   for (const b of document.querySelectorAll("#nav button")) {
-    const activo = b.dataset.sec === "riesgo" ? riesgo : b.dataset.sec === seccionAbierta;
+    const activo = b.dataset.sec === "riesgo" ? riesgo
+      : b.dataset.sec === "micasa" ? PANELES_HERRAMIENTA.micasa?.div.style.display === "block" : b.dataset.sec === seccionAbierta;
     b.classList.toggle("activo", activo);
     b.setAttribute("aria-pressed", activo);
   }
@@ -1052,6 +1088,10 @@ for (const b of document.querySelectorAll("#nav button"))
   b.onclick = () => {
     if (b.dataset.sec === "riesgo") {
       if ($("riesgo").style.display === "block") mostrarPanel(null); else $("abrirRiesgo").click();
+      return;
+    }
+    if (b.dataset.sec === "micasa") {
+      if (PANELES_HERRAMIENTA.micasa?.div.style.display === "block") mostrarPanel(null); else $("abrirMicasa").click();
       return;
     }
     // En el móvil, una sola hoja a la vez: abrir una sección cierra la herramienta abierta
@@ -1070,6 +1110,13 @@ function adornarHerramienta(panel) {
   Object.assign(x, { className: "cerrar", textContent: "✕", onclick: () => mostrarPanel(null) });
   x.style.float = "right";
   panel.querySelector(":scope > .asa").after(x);
+  if (panel.querySelector(".nota")) {        // en modo vecino las notas de método van plegadas
+    const c = document.createElement("button");
+    c.className = "comoSeCalcula soloVecino";
+    c.onclick = () => { panel.classList.toggle("verNotas"); c.textContent = t(panel.classList.contains("verNotas") ? "ocultarCalculo" : "comoSeCalcula"); };
+    c.textContent = t("comoSeCalcula");
+    panel.append(c);
+  }
 }
 /** Asa de las hojas (móvil): media pantalla → entera → plegada (solo el título). */
 function ponerAsa(panel) {
@@ -2194,6 +2241,7 @@ for (const h of LISTA_HERRAMIENTAS) {
   document.body.appendChild(div);
   const boton = document.createElement("button");
   boton.dataset.t = h.id + "Boton";
+  boton.dataset.herr = h.id;
   boton.onclick = () => mostrarPanel(div.style.display === "block" ? null : h.id);
   $("herramientas").appendChild(boton);
   // Se prepara la primera vez que se abre (cada una precalcula sus rejillas): la carga inicial no espera a ninguna
@@ -2280,6 +2328,7 @@ function enlaceActual(extra = {}) {
   const tg = controls.target, c = camera.position;
   u.searchParams.set("ir", `${Math.round(tg.x)},${Math.round(tg.z)}`);
   u.searchParams.set("cam", `${Math.round(c.x - tg.x)},${Math.round(c.y - tg.y)},${Math.round(c.z - tg.z)}`);
+  if (modoTecnico) u.searchParams.set("modo", "tecnico");
   return u.toString();
 }
 async function compartir(extra) {
@@ -2315,25 +2364,31 @@ const recorrido = (() => {
     () => { abrir("transporte"); ir(centre.pos[0], centre.pos[2], 1.6); },
     () => { mostrarPanel("micasa"); const e = casaCentro(); if (e) setTimeout(() => PANELES_HERRAMIENTA.micasa.h.restaurar(new URLSearchParams(`casa=${e}`)), 600); },
     () => { mostrarPanel(null); const s = $("trHora"); s.value = "22"; s.oninput(); ir(centre.pos[0], centre.pos[2], 1.2); },
+    () => { abrir("residuos"); setTimeout(() => PANELES_HERRAMIENTA.residuos.h.alClic?.(centre.pos[0] + 60, centre.pos[2] - 120), 600); ir(centre.pos[0], centre.pos[2], 1.5); },
+    () => { abrir("agenda"); setTimeout(() => document.querySelector("[data-filtro=todo]")?.click(), 800); ir(centre.pos[0], centre.pos[2], 2); },
   ];
+  // Qué paradas ve cada modo (índices de PASOS y de los textos)
+  const ORDEN = { vecino: [0, 1, 7, 9, 10, 6, 3, 8], tecnico: [0, 1, 2, 3, 4, 5, 6, 7, 8] };
+  const orden = () => ORDEN[modoTecnico ? "tecnico" : "vecino"];
   let paso = -1, auto = null, horaCambiada = false;
   function mostrar() {
     const tit = tx("rcT"), txt = tx("rcX");
-    $("rcPaso").textContent = t("rcPasoN", paso + 1, PASOS.length);
-    $("rcTitulo").textContent = tit[paso];
+    const n = orden()[paso];
+    $("rcPaso").textContent = t("rcPasoN", paso + 1, orden().length);
+    $("rcTitulo").textContent = tit[n];
     // El primer paso lleva las cifras de la maqueta
-    $("rcTexto").textContent = txt[paso].replace("{0}", numero(DATOS.edificios)).replace("{1}", numero(DATOS.arboles))
+    $("rcTexto").textContent = txt[n].replace("{0}", numero(DATOS.edificios)).replace("{1}", numero(DATOS.arboles))
       .replace("{2}", numero(DATOS_FAROLAS ? DATOS_FAROLAS.length / 3 : 0));
-    $("rcSigue").textContent = t(paso === PASOS.length - 1 ? "rcFin" : "rcSiguiente");
+    $("rcSigue").textContent = t(paso === orden().length - 1 ? "rcFin" : "rcSiguiente");
     $("rcAuto").textContent = t(auto ? "rcAutoOn" : "rcAutoOff");
     $("rcAtras").disabled = paso === 0;
-    $("rcBarra").style.width = `${100 * (paso + 1) / PASOS.length}%`;
+    $("rcBarra").style.width = `${100 * (paso + 1) / orden().length}%`;
   }
   function ir_a(n) {
-    if (n >= PASOS.length) return salir();
+    if (n >= orden().length) return salir();
     paso = Math.max(0, n);
-    if (paso === PASOS.length - 1) horaCambiada = true;
-    PASOS[paso]();
+    if (orden()[paso] === 8) horaCambiada = true;
+    PASOS[orden()[paso]]();
     mostrar();
   }
   function salir() {
@@ -2362,6 +2417,43 @@ const recorrido = (() => {
   };
 })();
 $("abrirRecorrido").onclick = () => recorrido.empezar();
+
+// ------------------------------------------------------------ modos: vecino (por defecto) y técnico
+// Vecino: lo que afecta a cada uno, con Mi casa en el centro. Técnico: todas las herramientas de análisis.
+const HERR_VECINO = ["micasa", "residuos", "agenda", "lugares", "transporte", "sombra", "incid"];
+function aplicarModo() {
+  document.body.classList.toggle("vecino", !modoTecnico);
+  for (const b of $("herramientas").children) {
+    const v = HERR_VECINO.indexOf(b.dataset.herr);
+    b.classList.toggle("soloTecnico", v < 0);
+    b.style.order = modoTecnico ? "" : String(v);
+  }
+  $("chkTecnico").checked = modoTecnico;
+  if (!modoTecnico) {        // al volver a vecino se cierra lo que es solo técnico
+    const abierta = Object.entries(PANELES_HERRAMIENTA).find(([, p]) => p.div.style.display === "block");
+    if ((abierta && !HERR_VECINO.includes(abierta[0])) || $("riesgo").style.display === "block" ||
+        $("lluvia").style.display === "block") mostrarPanel(null);
+  }
+  $("tfNota")?.classList.add("soloTecnico");
+  marcarNav();
+}
+$("chkTecnico").onchange = () => {
+  modoTecnico = $("chkTecnico").checked;
+  try { localStorage.setItem("modo", modoTecnico ? "tecnico" : "vecino"); } catch {}
+  aplicarModo();
+};
+function buscarCasa() {
+  const q = $("buscarCasa").value.trim();
+  mostrarPanel("micasa");
+  setTimeout(() => {
+    $("mcBuscar").value = q;
+    $("mcBuscar").oninput?.();
+    $("mcBuscar").focus();
+  }, 200);
+}
+$("irCasa").onclick = buscarCasa;
+$("buscarCasa").onkeydown = (e) => { if (e.key === "Enter") buscarCasa(); };
+aplicarModo();
 $("abrirMicasa").onclick = () => { mostrarPanel("micasa"); setTimeout(() => $("mcBuscar")?.focus(), 300); };
 
 traducir();
@@ -2388,6 +2480,10 @@ else {
     } else volarA(new THREE.Vector3(ir[0], 0, ir[1]), 0.35);
   }
   const h = P.get("h");
+  if ((h === "riesgo" || (h && PANELES_HERRAMIENTA[h] && !HERR_VECINO.includes(h))) && !modoTecnico) {
+    modoTecnico = true;
+    aplicarModo();
+  }
   if (h === "riesgo") $("abrirRiesgo").click();
   else if (h && PANELES_HERRAMIENTA[h]) { mostrarPanel(h); PANELES_HERRAMIENTA[h].h.restaurar?.(P); }
   if (P.has("recorrido")) setTimeout(() => recorrido.empezar(), 1500);
