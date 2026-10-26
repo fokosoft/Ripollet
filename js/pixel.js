@@ -44,13 +44,13 @@ export function crearPixelado(ctx, div) {
     uniforms: {
       tColor: { value: rt.texture }, tDepth: { value: rt.depthTexture }, uTam: { value: new THREE.Vector2(1, 1) },
       uNear: { value: 1 }, uFar: { value: 1e4 }, uPaleta: { value: 1 }, uTramado: { value: 0 }, uContornos: { value: 1 },
-      uFondo: { value: new THREE.Color() }, uDesp: { value: new THREE.Vector2() }, uPal: { value: PALETA.map((h) => new THREE.Color("#" + h).convertLinearToSRGB()) },
+      uFondo: { value: new THREE.Color() }, uDesp: { value: new THREE.Vector2() }, uRejilla: { value: 1 }, uPal: { value: PALETA.map((h) => new THREE.Color("#" + h).convertLinearToSRGB()) },
     },
     vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
     fragmentShader: `
       uniform sampler2D tColor, tDepth;
       uniform vec2 uTam, uDesp;
-      uniform float uNear, uFar, uPaleta, uTramado, uContornos;
+      uniform float uNear, uFar, uPaleta, uTramado, uContornos, uRejilla;
       uniform vec3 uFondo;
       uniform vec3 uPal[32];
       varying vec2 vUv;
@@ -65,6 +65,11 @@ export function crearPixelado(ctx, div) {
         vec2 uv = vUv + uDesp;                        // el resto del encaje al píxel (ver render)
         float d0 = texture2D(tDepth, uv).r;
         vec3 c = d0 >= 0.99999 ? uFondo : aSRGB(texture2D(tColor, uv).rgb);
+        // Fondo: la mesa del diorama, con una rejilla de puntos fija a la pantalla (vUv: no tiembla al encajar)
+        if (d0 >= 0.99999 && uRejilla > 0.5) {
+          vec2 q = mod(floor(vUv * uTam), 6.0);
+          if (q.x < 0.5 && q.y < 0.5) c = mix(c, vec3(0.09, 0.1, 0.13), 0.13);
+        }
         // Contorno: este píxel está delante de un vecino bastante más lejano (borde de un objeto o de la maqueta)
         float borde = 0.0;
         if (uContornos > 0.5 && d0 < 0.99999) {
@@ -102,6 +107,7 @@ export function crearPixelado(ctx, div) {
     if (rt.width !== w || rt.height !== h) { rt.setSize(w, h); mat.uniforms.uTam.value.set(w, h); }
     const U = mat.uniforms;
     U.uNear.value = camera.near; U.uFar.value = camera.far;
+    U.uRejilla.value = +ctx.enMapa();       // la mesa solo en el mapa (conduciendo, el fondo es el cielo)
     U.uPaleta.value = +op.paleta; U.uTramado.value = +op.tramado; U.uContornos.value = +op.contornos;
     // Fondo claro como en un diorama; de noche, el del cielo aclarado
     U.uFondo.value.copy(scene.background).lerp(fondoClaro, 0.7).convertLinearToSRGB();

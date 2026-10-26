@@ -2,6 +2,7 @@
 // sombras) y el tiempo es el de ahora (Open-Meteo, sin clave): nubes que apagan el sol, niebla, lluvia que se ve caer,
 // temperatura y viento. Un deslizador mueve la hora para ver el día entero; «Ahora» vuelve al presente.
 import { posicionSol } from './sombra.js';
+import { iconoPx } from './iconos.js';
 
 export const TEXTOS_TIEMPO = {
   es: {
@@ -31,6 +32,8 @@ const URL_TIEMPO = "https://api.open-meteo.com/v1/forecast?latitude=41.5025&long
   "&wind_speed_unit=ms&timezone=Europe%2FMadrid";
 const grupoCielo = (c) => (c <= 0 ? 0 : c <= 3 ? c : c < 50 ? 45 : c < 60 ? 51 : c < 70 ? 61 : c < 80 ? 71 : c < 95 ? 80 : 95);
 const ICONO = { 0: "☀️", 1: "🌤", 2: "⛅", 3: "☁️", 45: "🌫", 51: "🌦", 61: "🌧", 71: "❄️", 80: "🌦", 95: "⛈" };
+// En la barra, iconos de píxel (js/iconos.js) con el mismo reparto
+const ICONO_PX = { 0: "sol", 1: "solnube", 2: "solnube", 3: "nube", 45: "nube", 51: "lluvia", 61: "lluvia", 71: "nube", 80: "lluvia", 95: "lluvia" };
 
 /** Fecha y hora de reloj en Ripollet (Europe/Madrid), sea cual sea la zona del ordenador. */
 function ahoraEnRipollet() {
@@ -188,8 +191,8 @@ export function crearTiempoReal(ctx, div) {
     if (chip) {
       const cod = clima && desfase === null ? grupoCielo(clima.codigo) : null;
       const noche = posicionSol(horaActual().fecha, hora).elevacion < 0;
-      const icono = cod === null ? (noche ? "🌙" : "☀️") : noche && cod <= 1 ? "🌙" : ICONO[cod];
-      chip.textContent = `${icono} ${horaTexto(hora)}${clima && desfase === null ? ` · ${numero(clima.temperatura, 0)}°` : ""}`;
+      const icono = cod === null ? (noche ? "luna" : "sol") : noche && cod <= 1 ? "luna" : ICONO_PX[cod];
+      chip.innerHTML = `${iconoPx(icono)} ${horaTexto(hora)}${clima && desfase === null ? ` · ${numero(clima.temperatura, 0)}°` : ""}`;
     }
     $("trHora").style.display = $("trAhora").style.display = activo ? "" : "none";
     $("trHora").value = String(hora);

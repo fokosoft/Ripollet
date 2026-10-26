@@ -50,6 +50,20 @@ Fonts). En «🎛 Vista»: Píxel / 3D, Maqueta, Girar, tamaño del píxel (2–
 en el navegador. Combina con el estilo realista o el artístico y con el coche. Además aligera la GPU (con píxel 4
 dibuja 16 veces menos). `?real` abre la vista 3D clásica.
 
+## Diseño: «maqueta de papel y tinta»
+
+La interfaz se dibuja con la misma paleta de 32 colores que la maqueta píxel, para que mapa y botones sean una sola
+pieza: tinta (`#16181d`) para bordes y texto, papel (`#fbfbf8`) para los paneles, **teja** (`#b8322f`, los tejados de
+Ripollet) como acento, y verde, agua y sol del mapa para lo demás. Piezas de diorama: bordes de 2 px, esquinas rectas,
+sombras duras y botones que se hunden al pulsar; los títulos de los paneles son barras de ventana con letra de píxel
+(Silkscreen) y la maqueta se apoya en una mesa con rejilla de puntos. Con la vista 3D, el mismo diseño en versión
+nocturna (acento sol). Todo con variables CSS (`--p-fondo`, `--acento`…) en un solo sitio.
+
+**Iconos de píxel propios** (32, de 16×16) en vez de emojis, que cambian de aspecto en cada sistema:
+`iconos_pixel.py` los guarda dibujados en texto y genera `js/iconos.js` (un sprite SVG de 17 KB, unos 4 KB comprimido;
+también el favicon). El contorno toma el color del texto, así el mismo icono sirve en botones claros y oscuros.
+Accesibilidad comprobada con axe-core (0 fallos en los tres modos).
+
 ## Coche y sonido de ambiente
 
 **Coche (🚗 Conducir)**: nunca pasa del límite legal de la calle por la que va, que se ve en una señal junto al

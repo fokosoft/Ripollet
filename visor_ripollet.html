@@ -22,18 +22,76 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  /* ===== DISEÑO: «maqueta de papel y tinta» =====
+     La interfaz usa la paleta de 32 colores de la maqueta píxel (js/pixel.js): tinta para bordes y texto, papel para
+     los paneles, teja (los tejados de Ripollet) como acento y los colores del mapa (verde, agua, sol) para lo demás.
+     Piezas de diorama: bordes de 2 px, esquinas rectas y sombras duras; iconos de píxel propios (js/iconos.js).
+     Dos temas con las mismas piezas: claro con la vista píxel (body.claro) y nocturno con la 3D. */
+  :root { --tinta: #16181d; --papel: #fbfbf8; --mesa: #eef0f4; --teja: #b8322f; --verde: #2c6b30; --agua: #2a6db0;
+          --marino: #1f3f74; --sol: #f2c14e; --pixel: "Silkscreen", ui-monospace, monospace; }
+  body { --p-fondo: rgba(22,24,29,.94); --p-texto: #f4f4f2; --p-borde: #000; --p-sombra: 3px 3px 0 rgba(0,0,0,.5);
+         --b-fondo: #2e323c; --b-hover: #3c404a; --b-texto: #f4f4f2; --b-borde: #000; --b-sombra: 2px 2px 0 rgba(0,0,0,.6);
+         --t-fondo: #0b0c0f; --t-texto: #f7e08a; --acento: #f2c14e; --enlace: #9fd3f0; --suave: rgba(255,255,255,.07);
+         --nota: #c9ccd3; --linea: rgba(255,255,255,.18);
+         --flecha: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' shape-rendering='crispEdges'%3E%3Cpath fill='%23f4f4f2' d='M0 0h10v2H8v2H6v2H4V4H2V2H0z'/%3E%3C/svg%3E"); }
+  body.claro { --p-fondo: var(--papel); --p-texto: var(--tinta); --p-borde: var(--tinta); --p-sombra: 3px 3px 0 var(--tinta);
+               --b-fondo: #fff; --b-hover: #f2efe6; --b-texto: var(--tinta); --b-borde: var(--tinta);
+               --b-sombra: 2px 2px 0 var(--tinta); --t-fondo: var(--tinta); --t-texto: var(--papel); --acento: var(--teja);
+               --enlace: var(--agua); --suave: #f3f1ea; --nota: #4a4f5c; --linea: #d9dad6;
+               --flecha: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' shape-rendering='crispEdges'%3E%3Cpath fill='%2316181d' d='M0 0h10v2H8v2H6v2H4V4H2V2H0z'/%3E%3C/svg%3E"); }
+
   html, body { margin: 0; height: 100%; overflow: hidden; background: #bfe0f5; font-family: system-ui, sans-serif;
                touch-action: none; user-select: none; }
-  .panel { position: fixed; top: 12px; left: 12px; right: 12px; max-width: 460px; padding: 10px 14px;
-           background: rgba(0,0,0,.6); color: #fff; border-radius: 8px; font-size: 14px; line-height: 1.4; z-index: 2; }
-  .panel b { color: #ffd166; }
-  .panel a { color: #9fd3ff; } body.claro .panel a { color: #1f5fa8; }
-  .botones { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  button { font: inherit; font-size: 13px; padding: 5px 10px; border: 0; border-radius: 6px; cursor: pointer;
-           background: rgba(255,255,255,.18); color: #fff; }
-  button:hover { background: #2f5fa8; }
-  button.principal { background: #b83232; font-weight: 600; }
-  #idioma { float: right; font-weight: 700; padding: 2px 8px; }
+  body.claro { background: var(--mesa); }
+  .px { width: 16px; height: 16px; vertical-align: -3px; flex: none; image-rendering: pixelated; }
+
+  /* Paneles */
+  .panel { position: fixed; top: 12px; left: 12px; right: 12px; max-width: 460px; padding: 10px 14px; z-index: 2;
+           background: var(--p-fondo); color: var(--p-texto); border: 2px solid var(--p-borde); border-radius: 0;
+           box-shadow: var(--p-sombra); font-size: 14px; line-height: 1.45; }
+  .panel b, .c1 { color: var(--acento); }
+  .panel a { color: var(--enlace); }
+  .valor { color: var(--enlace); }
+  .c2 { color: #ff7b7b; } body.claro .c2 { color: #c62828; }
+  .lilaOficial { color: #c9a3ff; } body.claro .lilaOficial { color: #6a3fb0; }   /* la leyenda de las zonas de la ACA */
+  .nota { font-size: 12px; margin-top: 8px; color: var(--nota); }
+  .resumen, details { margin-top: 10px; padding: 8px 10px; background: var(--suave); border: 1px solid var(--linea); }
+  summary { cursor: pointer; font: 400 11px var(--pixel); text-transform: uppercase; letter-spacing: .05em; color: var(--p-texto); }
+  .subtitulo { margin: 14px 0 0; font: 400 10px var(--pixel); text-transform: uppercase; letter-spacing: .08em; color: var(--nota); }
+  /* Título de cada panel: barra de ventana de tinta con letra de píxel; ✕ dentro, a la derecha */
+  .herramienta > b:first-of-type, #lluvia > b:first-of-type, #riesgo > b:first-of-type {
+    display: block; margin: -10px -14px 10px; padding: 10px 46px 9px 14px; background: var(--t-fondo); color: var(--t-texto);
+    font: 400 12px/1.3 var(--pixel); text-transform: uppercase; letter-spacing: .05em; }
+  .herramienta > b:first-of-type + br, #lluvia > .cerrar + br, #riesgo > .cerrar + br { display: none; }
+  .panel > .cerrar { position: absolute; top: 4px; right: 6px; float: none !important; width: 30px; height: 30px; padding: 0;
+                     display: grid; place-items: center; background: none !important; border: 0 !important;
+                     box-shadow: none !important; color: var(--t-texto) !important; }
+  .panel > .cerrar:hover { background: rgba(255,255,255,.15) !important; }
+
+  /* Botones: piezas con borde y sombra dura que se hunden al pulsar */
+  .botones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  button { font: inherit; font-size: 13px; padding: 5px 10px; cursor: pointer; border-radius: 0;
+           background: var(--b-fondo); color: var(--b-texto); border: 2px solid var(--b-borde); box-shadow: var(--b-sombra);
+           transition: transform .05s, box-shadow .05s; }
+  button:hover { background: var(--b-hover); }
+  button:active { transform: translate(2px, 2px); box-shadow: none; }
+  button:disabled { opacity: .45; cursor: default; transform: none; box-shadow: none; }
+  button.principal { background: var(--teja); color: #fff; border-color: var(--b-borde); font-weight: 600; }
+  button.principal:hover { background: #9c2a27; }
+  button.activo { background: var(--t-fondo); color: var(--t-texto); }
+  body.claro button.activo { background: var(--tinta); color: var(--papel); }
+  /* Controles de formulario a juego */
+  select, input[type=text], input[type=search], input[type=date], input[type=number] {
+    font: inherit; font-size: 13px; padding: 5px 8px; border: 2px solid var(--b-borde); border-radius: 0;
+    background: var(--b-fondo); color: var(--b-texto); max-width: 100%; }
+  select { appearance: none; padding-right: 26px; margin-left: 4px; cursor: pointer;
+           background: var(--b-fondo) var(--flecha) no-repeat right 8px center; }
+  input[type=checkbox], input[type=radio], input[type=range] { accent-color: var(--acento); }
+  input[type=checkbox] { width: 16px; height: 16px; vertical-align: -3px; }
+  input[type=range] { width: 100%; }
+  label { cursor: pointer; }
+
+  #idioma { font-weight: 700; padding: 2px 8px; }
   #hud, #lluvia, #riesgo { display: none; }
   #lluvia, #riesgo, .herramienta { left: auto; right: 12px; max-width: 360px; max-height: calc(100vh - 40px); overflow: auto; }
   .herramienta { display: none; }
@@ -41,21 +99,20 @@
   .herramienta ol, .herramienta ul { margin: 6px 0 0; padding-left: 20px; }
   .herramienta li[data-x] { cursor: pointer; }
   .leyenda { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; margin-top: 6px; }
-  .leyenda i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; vertical-align: -2px; }
+  .leyenda i { display: inline-block; width: 12px; height: 12px; margin-right: 4px; vertical-align: -2px; outline: 1px solid var(--linea); }
   #lluvia label, #riesgo label { display: block; margin-top: 8px; }
-  input[type=range] { width: 100%; }
-  select { font: inherit; font-size: 13px; margin-left: 4px; max-width: 100%; }
-  .valor { color: #9fd3ff; }
-  .nota { font-size: 12px; opacity: .8; margin-top: 8px; }
   #tormentas, #listaPuntos, #listaEquip { margin: 6px 0 0; padding-left: 20px; }
-  #tormentas button { padding: 0 6px; margin-left: 6px; }
+  #tormentas button, #listaMedidas button, #listaIncidencias button { padding: 0 6px; margin-left: 6px; box-shadow: none; border-width: 1px; }
   #listaPuntos li { cursor: pointer; }
-  #listaPuntos li:hover { color: #ffd166; }
-  .resumen { margin-top: 8px; padding: 6px 8px; background: rgba(255,255,255,.08); border-radius: 6px; }
-  .c1 { color: #ffd166; } .c2 { color: #ff7b7b; }
-  #velocidad { position: fixed; right: 16px; bottom: 34px; padding: 8px 16px; border-radius: 10px;
-               background: rgba(0,0,0,.6); color: #fff; font-size: 28px; font-weight: 700; display: none; }
-  #velocidad small { font-size: 14px; font-weight: 400; opacity: .8; }
+  #listaPuntos li:hover { color: var(--acento); }
+  #listaMedidas, #listaIncidencias { margin: 6px 0 0; padding-left: 20px; }
+  #listaIncidencias li { cursor: pointer; }
+
+  /* Coche */
+  #velocidad { position: fixed; right: 16px; bottom: 34px; padding: 8px 14px; display: none; align-items: center;
+               background: var(--tinta); color: #fff; border: 2px solid #000; box-shadow: 3px 3px 0 rgba(0,0,0,.4);
+               font: 700 28px var(--pixel); }
+  #velocidad small { font: 400 11px var(--pixel); opacity: .8; margin-left: 4px; }
   /* señal de límite de velocidad de la calle por la que se va */
   #senal { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px;
            margin-left: 12px; vertical-align: middle; border: 5px solid #d62828; border-radius: 50%;
@@ -63,169 +120,153 @@
   #tactil { position: fixed; left: 0; right: 0; bottom: 16px; display: none; justify-content: space-between;
             padding: 0 16px; pointer-events: none; }
   #tactil div { display: flex; gap: 10px; pointer-events: auto; }
-  #tactil button { width: 64px; height: 64px; font-size: 26px; border-radius: 50%; background: rgba(0,0,0,.45); }
-  .etiqueta { padding: 3px 8px; border-radius: 10px; background: rgba(20,30,50,.75); color: #fff;
-              font-size: 13px; white-space: nowrap; pointer-events: none; }
+  #tactil button { width: 64px; height: 64px; font-size: 26px; border-radius: 50%; background: rgba(0,0,0,.45); color: #fff;
+                   border-color: rgba(255,255,255,.6); box-shadow: none; }
+
+  /* Sobre el mapa: rótulos, marcas e iconos */
+  .etiqueta { padding: 4px 8px 3px; background: rgba(22,24,29,.88); color: #fbfbf8; border: 2px solid #000;
+              font: 400 10px var(--pixel); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; pointer-events: none; }
+  body.claro .etiqueta { background: #fff; color: var(--tinta); border-color: var(--tinta); box-shadow: 2px 2px 0 var(--tinta); }
   .marca { width: 24px; height: 24px; border-radius: 50%; background: #d7263d; color: #fff; font: 700 13px system-ui;
-           display: grid; place-items: center; border: 2px solid #fff; cursor: pointer; pointer-events: auto; }
-  details { margin-top: 10px; padding: 6px 8px; background: rgba(255,255,255,.06); border-radius: 6px; }
-  summary { cursor: pointer; color: #ffd166; font-weight: 600; }
-  button.activo { background: #2f9e5a; }
-  input[type=text], input[type=date] { font: inherit; font-size: 13px; padding: 2px 4px; }
-  #listaMedidas, #listaIncidencias { margin: 6px 0 0; padding-left: 20px; }
-  #listaMedidas button, #listaIncidencias button { padding: 0 6px; margin-left: 6px; }
-  #listaIncidencias li { cursor: pointer; }
+           display: grid; place-items: center; border: 2px solid #fff; box-shadow: 0 0 0 2px var(--tinta);
+           cursor: pointer; pointer-events: auto; }
   .pin { width: 14px; height: 14px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid #fff;
          pointer-events: auto; cursor: pointer; }
   .icono { font-size: 18px; pointer-events: none; text-shadow: 0 0 3px #000; }
+
   #explicacion { position: fixed; left: 12px; bottom: 34px; max-width: 420px; display: none; top: auto; right: auto; }
   #explicacion ul { margin: 6px 0; padding-left: 18px; }
-  #cargando { position: fixed; inset: 0; display: grid; place-items: center; background: #bfe0f5; color: #234;
-              font-size: 18px; z-index: 10; }
   #medicion { position: fixed; inset: 0; margin: auto; width: min(640px, calc(100vw - 32px)); height: fit-content;
               max-height: calc(100vh - 40px); overflow: auto; display: none; top: 0; left: 0; right: 0; bottom: 0; }
   #medicion table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
-  #medicion td, #medicion th { border-bottom: 1px solid rgba(255,255,255,.2); padding: 4px 6px; text-align: right; }
+  #medicion td, #medicion th { border-bottom: 1px solid var(--linea); padding: 4px 6px; text-align: right; }
   #medicion td:first-child, #medicion th:first-child { text-align: left; }
+  .cerrarExp, .cerrarMed { padding: 2px 4px; display: inline-grid; place-items: center; }
+
+  /* Pantalla de carga: el nombre en píxel y bloques de teja que avanzan */
+  #cargando { position: fixed; inset: 0; display: grid; place-content: center; justify-items: center; gap: 16px; z-index: 10;
+              background: var(--mesa); color: var(--tinta); font: 400 11px var(--pixel); text-transform: uppercase; letter-spacing: .1em; }
+  #cargando::before { content: "Ripollet"; font: 700 44px/1 var(--pixel); text-transform: uppercase; letter-spacing: .02em; order: -1; }
+  #cargando::after { content: ""; width: 168px; height: 16px; border: 2px solid var(--tinta); box-shadow: 3px 3px 0 var(--tinta);
+                     background: repeating-linear-gradient(90deg, var(--teja) 0 10px, transparent 10px 14px) 0 0 / 28px 100%;
+                     animation: cargaBloques .7s steps(2) infinite; }
+  @keyframes cargaBloques { to { background-position: 28px 0; } }
+
   #grano { position: fixed; inset: 0; pointer-events: none; opacity: 0; mix-blend-mode: multiply; transition: opacity .4s;
            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
   body.arte #grano { opacity: .3; }
-  #osm { position: fixed; right: 8px; bottom: 6px; font-size: 12px; color: #234; background: rgba(255,255,255,.7);
-         padding: 2px 6px; border-radius: 4px; }
+  #osm { position: fixed; right: 8px; bottom: 6px; font-size: 11px; color: var(--tinta); background: rgba(251,251,248,.9);
+         padding: 2px 6px; border: 1px solid rgba(22,24,29,.25); }
   #osm a { color: inherit; }
   #informe { display: none; }
-  /* MAQUETA PÍXEL: interfaz clara con letra de píxel (como un diorama de pixel art) */
-  body.claro, body.claro #cargando { background: #eef0f4; }
-  body.claro .panel { background: rgba(251,251,253,.95); color: #1d2230; border: 1px solid #d6d9e0; border-radius: 3px;
-                      box-shadow: 0 3px 0 rgba(20,24,40,.08); }
-  body.claro .panel b, body.claro .c1, body.claro #listaPuntos li:hover { color: #b4441f; }
-  body.claro summary { color: #1d2230; font: 400 11px "Silkscreen", monospace; text-transform: uppercase; letter-spacing: .05em; }
-  body.claro .panel > b:first-child { font: 400 13px "Silkscreen", monospace; text-transform: uppercase; color: #1d2230; }
-  body.claro button { background: #fff; color: #1d2230; border: 1px solid #cdd1da; border-radius: 2px; }
-  body.claro button:hover { background: #e9ecf2; }
-  body.claro button.principal { background: #16181d; color: #fff; border-color: #16181d; }
-  body.claro button.activo { background: #2f9e5a; color: #fff; }
-  body.claro details, body.claro .resumen { background: #f3f4f7; border: 1px solid #e3e5eb; border-radius: 2px; }
-  body.claro .valor { color: #1f5fa8; } body.claro .c2 { color: #c62828; }
-  body.claro .etiqueta { background: #fff; color: #1d2230; border: 2px solid #1d2230; border-radius: 0;
-                         font: 400 10px "Silkscreen", monospace; text-transform: uppercase; }
-  body.claro #velocidad { background: #16181d; font-family: "Silkscreen", monospace; }
-  body.claro #osm { background: rgba(255,255,255,.9); }
-  body.claro #medicion td, body.claro #medicion th { border-bottom-color: #dde0e6; }
-  .tituloPixel { display: none; }
-  body.claro .tituloPixel { display: block; }
-  body.claro .tituloPixel small { font: 400 9px "Silkscreen", monospace; letter-spacing: .12em; color: #6b7184; }
-  body.claro .tituloPixel div { font: 700 30px/1 "Silkscreen", monospace; color: #16181d; margin: 2px 0 4px; letter-spacing: .02em; }
-  body.claro #idioma { position: relative; }
-  body.claro #mapa { max-width: 400px; font-size: 13px; }
-  body.claro #mapa .botones button { padding: 4px 8px; }
-  #vista { margin-top: 8px; }
+  #vista { margin-top: 10px; }
   #vista label { display: inline-block; margin-right: 10px; font-size: 13px; }
 
-  /* ===== INTERFAZ: barra superior, navegación por secciones y hojas (pensada primero para el móvil) ===== */
+  /* ===== Barra, menú y hoja: una sola columna en escritorio (pensada primero para el móvil) ===== */
   #barra, #nav { display: flex; align-items: center; }
-  #barra { top: 12px; left: 12px; right: auto; width: 420px; max-width: none; gap: 8px; padding: 8px 12px;
-           border-radius: 10px 10px 0 0; z-index: 4; }
-  .marcaApp { flex: 1; display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
-  .marcaApp b { font-size: 18px; letter-spacing: .02em; color: inherit; }
-  .marcaApp small { font-size: 10px; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  body.claro .marcaApp b { font: 700 20px/1 "Silkscreen", monospace; color: #16181d; }
-  body.claro .marcaApp small { font: 400 8px "Silkscreen", monospace; letter-spacing: .1em; }
-  .chip { border-radius: 999px !important; padding: 4px 10px !important; font-size: 13px; white-space: nowrap; }
-  #idioma { float: none; }
-  #nav { top: 60px; left: 12px; right: auto; width: 420px; max-width: none; gap: 4px; padding: 4px 8px 8px;
-         border-radius: 0; z-index: 4; }
-  #nav button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 4px;
-                font-size: 13px; }
-  #nav button.activo { background: #2f5fa8; color: #fff; }
-  body.claro #nav button.activo { background: #16181d; color: #fff; border-color: #16181d; }
-  #nav .ico { font-size: 16px; }
-  #mapa { top: 104px; left: 12px; right: auto; width: 420px; max-width: none; max-height: calc(100vh - 130px);
-          overflow: auto; border-radius: 0 0 10px 10px; display: none; }
+  #barra { top: 12px; left: 12px; right: auto; width: 420px; max-width: none; gap: 8px; padding: 8px 10px 8px 12px; z-index: 4;
+           box-sizing: border-box; height: 52px; }
+  .marcaApp { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .marcaApp .px { width: 28px; height: 28px; }
+  .marcaApp span { display: flex; flex-direction: column; min-width: 0; line-height: 1.1; }
+  .marcaApp b { font: 700 19px/1 var(--pixel); color: var(--p-texto); letter-spacing: .02em; text-transform: uppercase; }
+  .marcaApp small { font: 400 9px var(--pixel); letter-spacing: .06em; text-transform: uppercase; color: var(--nota);
+                    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+  .chip { height: 32px; padding: 0 9px !important; font-size: 13px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+  #nav { top: 62px; left: 12px; right: auto; width: 420px; max-width: none; gap: 6px; padding: 8px; z-index: 4;
+         box-sizing: border-box; border-top: 0; }
+  #nav button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 4px; font-size: 13px; }
+  #nav .ico .px { width: 18px; height: 18px; }
+  #mapa { top: 114px; left: 12px; right: auto; width: 420px; max-width: none; max-height: calc(100vh - 140px);
+          overflow: auto; display: none; box-sizing: border-box; border-top: 0; }
   #mapa.abierta { display: block; }
   #mapa section[hidden] { display: none; }
-  .subtitulo { margin: 12px 0 0; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; opacity: .75; }
-  .rejilla { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
-  .rejilla button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-                    min-height: 70px; padding: 8px 4px; font-size: 12px; line-height: 1.2; text-align: center;
-                    white-space: normal; border-radius: 10px !important; }
-  .rejilla button .ico { font-size: 24px; line-height: 1; }
-
+  .rejilla { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; }
+  .rejilla button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+                    min-height: 76px; padding: 8px 4px; font-size: 12px; font-weight: 600; line-height: 1.2; text-align: center;
+                    white-space: normal; }
+  .rejilla button .ico { line-height: 1; font-size: 24px; }
+  .rejilla button .px { width: 32px; height: 32px; }
+  .rejilla button.abierto { background: var(--t-fondo); color: var(--t-texto); }
 
   /* ===== Accesibilidad ===== */
-  :focus-visible { outline: 3px solid #ffbf47 !important; outline-offset: 2px; border-radius: 4px; }
+  :focus-visible { outline: 3px solid #ffbf47 !important; outline-offset: 2px; }
   .solo-lector { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .panel { background: rgba(10,14,24,.86); }
-  .nota { opacity: .92; }
-  body.claro .nota { color: #3d4252; opacity: 1; }
   @media (max-width: 760px) {
     .botones button, .herramienta button, #lluvia button, #riesgo button { min-height: 40px; }
-    select, input[type=date], input[type=text], input[type=search] { font-size: 16px; min-height: 36px; }
+    select, input[type=date], input[type=text], input[type=search] { font-size: 16px; min-height: 38px; }
   }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
 
   /* ===== Modos: vecino (por defecto, lo que afecta a cada uno) y técnico (todo) ===== */
   body.vecino .soloTecnico { display: none !important; }
   body:not(.vecino) .soloVecino { display: none !important; }
   body.vecino .herramienta .nota { display: none; }
   body.vecino .herramienta.verNotas .nota { display: block; }
-  .comoSeCalcula { margin-top: 10px; font-size: 12px !important; background: none !important; text-decoration: underline;
-                   padding: 4px 0 !important; }
-  .buscador { display: flex; gap: 6px; margin: 6px 0 4px; }
-  .buscador input { flex: 1; font-size: 16px; padding: 10px 12px; border-radius: 10px; border: 2px solid #1f7a3e; min-width: 0; }
-  .interruptor { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-weight: 600; }
+  .comoSeCalcula { margin-top: 10px; font-size: 12px !important; background: none !important; border: 0 !important;
+                   box-shadow: none !important; text-decoration: underline; padding: 4px 0 !important; color: var(--enlace) !important; }
+  .buscador { display: flex; gap: 8px; margin: 8px 0 4px; }
+  .buscador input { flex: 1; font-size: 16px; padding: 9px 12px; min-width: 0; box-shadow: inset 2px 2px 0 rgba(22,24,29,.12); }
+  .buscador button { padding: 0 12px; }
+  .buscador button .px { width: 20px; height: 20px; }
+  .interruptor { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-weight: 600; }
+
   /* Recorrido guiado */
-  #recorrido { position: fixed; left: 50%; right: auto; top: auto; transform: translateX(-50%); bottom: 24px; max-width: none; width: min(540px, calc(100vw - 24px));
-               z-index: 9; display: none; padding: 12px 16px; border-radius: 14px; box-shadow: 0 8px 28px rgba(0,0,0,.3); }
-  #recorrido .rcPaso { font-size: 11px; opacity: .7; letter-spacing: .05em; text-transform: uppercase; }
-  #recorrido h3 { margin: 2px 0 4px; font-size: 17px; }
+  #recorrido { position: fixed; left: 50%; right: auto; top: auto; transform: translateX(-50%); bottom: 24px; max-width: none;
+               width: min(540px, calc(100vw - 24px)); z-index: 9; display: none; padding: 12px 16px; }
+  #recorrido .rcPaso { font: 400 10px var(--pixel); color: var(--nota); letter-spacing: .08em; text-transform: uppercase; }
+  #recorrido h3 { margin: 4px 0 4px; font-size: 17px; }
   #recorrido p { margin: 0 0 8px; font-size: 14px; line-height: 1.45; }
   #recorrido .botones { justify-content: flex-end; }
-  #recorrido .barraRc { height: 3px; background: rgba(128,128,128,.3); border-radius: 2px; margin-top: 8px; overflow: hidden; }
-  #recorrido .barraRc i { display: block; height: 100%; width: 0; background: #e0703a; transition: width .4s; }
+  #recorrido .barraRc { height: 6px; background: var(--suave); border: 1px solid var(--linea); margin-top: 10px; overflow: hidden; }
+  #recorrido .barraRc i { display: block; height: 100%; width: 0; background: var(--teja); transition: width .4s; }
   body.enRecorrido #nav, body.enRecorrido #mapa { display: none !important; }
   .rejilla.dos { grid-template-columns: 1fr 1fr; }
-  #abrirRecorrido { background: #16181d !important; } #abrirMicasa { background: #1f7a3e !important; }
+  /* Botones grandes de Explorar: bloques de color de la paleta, icono con contorno blanco */
+  .rejilla.grandes button { color: #fff !important; font-size: 13px; }
+  .rejilla.grandes button:hover { filter: brightness(1.12); }
+  #abrirRecorrido { background: var(--tinta) !important; } #abrirMicasa { background: var(--verde) !important; }
+  #conducir { background: var(--teja) !important; } #abrirLluvia { background: var(--agua) !important; }
+  #abrirRiesgo { background: var(--marino) !important; }
+  /* En modo vecino «Conducir» va solo en su fila: a todo lo ancho */
+  body.vecino .rejilla.grandes:not(.dos) { grid-template-columns: 1fr; }
+  .asa { display: none; }
+  .pista { position: fixed; left: 50%; transform: translateX(-50%); bottom: 76px; z-index: 8; padding: 10px 16px;
+           background: var(--tinta); color: #fff; font-size: 14px; display: none; border: 2px solid #000;
+           box-shadow: 3px 3px 0 rgba(0,0,0,.35); white-space: nowrap; }
+  body.conduciendo #barra, body.conduciendo #nav, body.conduciendo #mapa { display: none !important; }
   @media (max-width: 760px) {
-    #recorrido { top: 56px; bottom: auto; border-radius: 12px; padding: 10px 12px; }
+    #barra { top: 0; left: 0; right: 0; width: auto; height: auto; padding: 6px 10px; border-width: 0 0 2px;
+             padding-top: max(6px, env(safe-area-inset-top)); box-shadow: 0 3px 0 rgba(22,24,29,.12); }
+    .marcaApp .px { width: 24px; height: 24px; }
+    #nav { top: auto; bottom: 0; left: 0; right: 0; width: auto; padding: 4px 4px max(4px, env(safe-area-inset-bottom));
+           gap: 2px; z-index: 7; border-width: 2px 0 0; border-top-style: solid; box-shadow: none; }
+    #nav button { flex-direction: column; gap: 3px; font-size: 11px; padding: 6px 2px; background: none;
+                  border: 0; box-shadow: none; }
+    #nav .ico .px { width: 24px; height: 24px; }
+    #nav button.activo { background: var(--t-fondo); color: var(--t-texto); }
+    /* Hojas desde abajo: la del menú y las de las herramientas */
+    #mapa, #lluvia, #riesgo, .herramienta, #explicacion {
+      top: auto !important; left: 0 !important; right: 0 !important; bottom: 62px !important; width: auto !important;
+      max-width: none !important; max-height: 50vh; padding: 4px 14px 12px; border-width: 2px 0 0 !important;
+      border-style: solid !important; box-shadow: 0 -3px 0 rgba(22,24,29,.12); z-index: 6; }
+    #mapa { max-height: 64vh; }
+    .herramienta > b:first-of-type, #lluvia > b:first-of-type, #riesgo > b:first-of-type { margin-top: 0; }
+    .panel > .cerrar { top: 26px; }
+    .mini { max-height: 64px !important; overflow: hidden !important; }
+    .completa { max-height: calc(100vh - 130px) !important; }
+    .asa { display: block; height: 22px; margin: 0 -14px 2px; cursor: pointer; position: relative; touch-action: manipulation; }
+    .asa::before { content: ""; position: absolute; left: 50%; top: 8px; width: 40px; height: 6px; margin-left: -20px;
+                   background: currentColor; opacity: .3; }
+    .rejilla { grid-template-columns: repeat(3, 1fr); }
+    #osm { bottom: 66px; font-size: 10px; }
+    .etiqueta { font-size: 9px; padding: 3px 6px 2px; }
+    #explicacion { display: none; }
+    #recorrido { top: 56px; bottom: auto; padding: 10px 12px; }
     #recorrido h3 { font-size: 15px; }
     #recorrido p { font-size: 13px; }
     body.enRecorrido .herramienta, body.enRecorrido #riesgo { bottom: 0 !important; }
     body.enRecorrido #explicacion { display: none !important; }
-  }
-  .rejilla.grandes button { color: #fff !important; font-weight: 600; border: 0 !important; }
-  #conducir { background: #b83232 !important; } #abrirLluvia { background: #3b6fb6 !important; } #abrirRiesgo { background: #b8326a !important; }
-  .asa { display: none; }
-  .pista { position: fixed; left: 50%; transform: translateX(-50%); bottom: 76px; z-index: 8; padding: 10px 16px;
-           border-radius: 999px; background: rgba(20,24,40,.9); color: #fff; font-size: 14px; display: none;
-           box-shadow: 0 4px 16px rgba(0,0,0,.25); white-space: nowrap; }
-  body.conduciendo #barra, body.conduciendo #nav, body.conduciendo #mapa { display: none !important; }
-  @media (max-width: 760px) {
-    #barra { top: 0; left: 0; right: 0; width: auto; border-radius: 0; padding: 6px 12px;
-             padding-top: max(6px, env(safe-area-inset-top)); }
-    #nav { top: auto; bottom: 0; left: 0; right: 0; width: auto; padding: 4px 4px max(4px, env(safe-area-inset-bottom));
-           border-radius: 0; gap: 0; z-index: 7; }
-    #nav button { flex-direction: column; gap: 2px; font-size: 11px; padding: 6px 2px; background: none !important;
-                  border: 0 !important; border-radius: 8px !important; }
-    #nav .ico { font-size: 22px; }
-    #nav button.activo { color: #ffd166 !important; }
-    body.claro #nav button.activo { color: #b4441f !important; }
-    #nav button.activo .ico { transform: scale(1.12); }
-    /* Hojas desde abajo: la del menú y las de las herramientas */
-    #mapa, #lluvia, #riesgo, .herramienta, #explicacion {
-      top: auto !important; left: 0 !important; right: 0 !important; bottom: 62px !important; width: auto !important;
-      max-width: none !important; max-height: 50vh; border-radius: 18px 18px 0 0 !important; padding: 4px 14px 12px;
-      box-shadow: 0 -6px 24px rgba(0,0,0,.18); z-index: 6; }
-    #mapa { max-height: 64vh; }
-    .mini { max-height: 56px !important; overflow: hidden !important; }
-    .completa { max-height: calc(100vh - 130px) !important; }
-    .asa { display: block; height: 22px; margin: 0 -14px 2px; cursor: pointer; position: relative; touch-action: manipulation; }
-    .asa::before { content: ""; position: absolute; left: 50%; top: 8px; width: 44px; height: 5px; margin-left: -22px;
-                   border-radius: 3px; background: currentColor; opacity: .35; }
-    .rejilla { grid-template-columns: repeat(3, 1fr); }
-    #osm { bottom: 66px; font-size: 10px; }
-    .etiqueta { font-size: 10px; padding: 2px 6px; }
-    #explicacion { display: none; }
   }
 
   @media print {
@@ -250,7 +291,7 @@
 <body>
 <div id="cargando" data-t="cargando"></div>
 <header id="barra" class="panel">
-  <div class="marcaApp"><b>Ripollet</b><small data-t="kicker"></small></div>
+  <div class="marcaApp"><span id="logo" aria-hidden="true"></span><span><b>Ripollet</b><small data-t="kicker"></small></span></div>
   <button id="compartir" class="chip" data-t="compartirBoton"></button>
   <button id="chipTiempo" class="chip"></button>
   <button id="idioma"></button>
@@ -381,7 +422,7 @@ const $ = (id) => document.getElementById(id);
 // ------------------------------------------------------------ idiomas (castellano / catalán)
 const TEXTOS = {
   es: {
-    cargando: "Cargando Ripollet…",
+    cargando: "Montando la maqueta…",
     titulo: "<b>Ripollet</b>: del centro a Pinetons, generado en Blender desde OpenStreetMap.",
     ayudaMapa: "Arrastra para moverte · clic derecho para girar · rueda para zoom",
     ayudaTactil: "Un dedo para moverte · dos dedos para girar y hacer zoom",
@@ -428,7 +469,7 @@ const TEXTOS = {
     porIncidencia: "📍 Corregido por incidencias reales ({0}): aquí Neutro hace una excepción por lugar, sin cambiar lo que sabe del resto de la ciudad.",
     secIncidencias: "Incidencias reales registradas", simCerca: "Simulación física cerca",
     importError: "El archivo no tiene incidencias válidas.",
-    verOficial: "Zonas inundables oficiales del río (ACA): <span style='color:#c9a3ff'>T10 · T100 · T500</span>",
+    verOficial: "Zonas inundables oficiales del río (ACA): <span class='lilaOficial'>T10 · T100 · T500</span>",
     oficialCelda: "Zona inundable oficial del río: periodo de retorno de {0} años (ACA)",
     secOficial: "Comparación con la cartografía oficial",
     textoOficial: "La ACA publica las zonas inundables por desbordamiento del río (fluviales), no por la lluvia sobre la ciudad. En esta zona ocupan {0} ha (T500), a lo largo del Ripoll y sin edificios dentro. De la superficie que esta simulación marca como inundada por la lluvia, el {1} % cae dentro de ellas: son riesgos distintos y complementarios. Para validar los puntos de lluvia hacen falta observaciones (episodios reales, avisos de los servicios municipales).",
@@ -472,7 +513,7 @@ const TEXTOS = {
     intervalo: "Diferencia Neutro − logística en F1 «inundado» (zonas no vistas): {0} (intervalo del 95 %: {1} a {2})",
   },
   ca: {
-    cargando: "Carregant Ripollet…",
+    cargando: "Muntant la maqueta…",
     titulo: "<b>Ripollet</b>: del centre a Pinetons, generat amb Blender a partir d'OpenStreetMap.",
     ayudaMapa: "Arrossega per moure't · clic dret per girar · roda per fer zoom",
     ayudaTactil: "Un dit per moure't · dos dits per girar i fer zoom",
@@ -519,7 +560,7 @@ const TEXTOS = {
     porIncidencia: "📍 Corregit per incidències reals ({0}): aquí Neutro fa una excepció per lloc, sense canviar el que sap de la resta de la ciutat.",
     secIncidencias: "Incidències reals registrades", simCerca: "Simulació física a prop",
     importError: "El fitxer no té incidències vàlides.",
-    verOficial: "Zones inundables oficials del riu (ACA): <span style='color:#c9a3ff'>T10 · T100 · T500</span>",
+    verOficial: "Zones inundables oficials del riu (ACA): <span class='lilaOficial'>T10 · T100 · T500</span>",
     oficialCelda: "Zona inundable oficial del riu: període de retorn de {0} anys (ACA)",
     secOficial: "Comparació amb la cartografia oficial",
     textoOficial: "L'ACA publica les zones inundables per desbordament del riu (fluvials), no per la pluja sobre la ciutat. En aquesta zona ocupen {0} ha (T500), al llarg del Ripoll i sense edificis a dins. De la superfície que aquesta simulació marca com a inundada per la pluja, el {1} % cau dins seu: són riscos diferents i complementaris. Per validar els punts de pluja calen observacions (episodis reals, avisos dels serveis municipals).",
@@ -622,6 +663,29 @@ const t = (clave, ...args) => String(TEXTOS[idioma][clave] ?? clave).replace(/\{
 const tx = (clave) => TEXTOS[idioma][clave];
 const numero = (x, dec = 0) => x.toLocaleString(idioma === "ca" ? "ca-ES" : "es-ES", { maximumFractionDigits: dec, minimumFractionDigits: dec });
 
+// ICONOS DE PÍXEL (js/iconos.js) en vez de emojis: menú, cuadrículas, cerrar, buscar, compartir y logotipo
+const ICONO_DE = {
+  explorar: "mapa", herramientas: "caja", riesgo: "aviso", micasa: "casa", ajustes: "ajustes",
+  abrirRecorrido: "play", abrirMicasa: "casa", conducir: "coche", abrirLluvia: "lluvia", abrirRiesgo: "gota",
+  sombra: "arbol", acces: "silla", incendio: "fuego", solar: "sol", emerg: "cruz", minutos: "reloj", proy: "grua",
+  incid: "nota", vulner: "personas", rehab: "ladrillos", seguridad: "semaforo", lugares: "tienda", transporte: "bus",
+  ambiente: "altavoz", residuos: "contenedor", plan: "plano", agenda: "calendario",
+};
+function ponerIconos() {
+  for (const b of document.querySelectorAll("#nav [data-sec]")) b.querySelector(".ico").innerHTML = iconoPx(ICONO_DE[b.dataset.sec]);
+  for (const b of document.querySelectorAll(".rejilla button")) {
+    const n = ICONO_DE[b.dataset.herr ?? b.id];
+    if (!n) continue;
+    let ico = b.querySelector(".ico");
+    if (!ico) { ico = document.createElement("span"); ico.className = "ico"; b.prepend(ico); }
+    ico.innerHTML = iconoPx(n);
+  }
+  for (const b of document.querySelectorAll(".cerrar, .cerrarExp, .cerrarMed")) b.innerHTML = iconoPx("cerrar");
+  $("irCasa").innerHTML = iconoPx("lupa");
+  $("compartir").innerHTML = iconoPx("compartir");
+  $("logo").innerHTML = iconoPx("casa");
+}
+
 function traducir() {
   document.documentElement.lang = idioma;
   for (const el of document.querySelectorAll("[data-t]")) el.innerHTML = t(el.dataset.t);
@@ -633,6 +697,7 @@ function traducir() {
   $("buscarCasa").placeholder = t("navBuscarEj");
   for (const c of document.querySelectorAll(".comoSeCalcula"))
     c.textContent = t(c.closest(".herramienta")?.classList.contains("verNotas") ? "ocultarCalculo" : "comoSeCalcula");
+  ponerIconos();
   $("idioma").textContent = idioma === "es" ? "CA" : "ES";
   $("idioma").title = idioma === "es" ? "Català" : "Castellano";
   $("arte").textContent = t(estiloArte ? "estiloReal" : "estiloArte");
@@ -1079,6 +1144,7 @@ function etiquetasAccesibles() {
   const nombre = (el, txt) => { el.setAttribute("aria-label", txt); el.title = txt; };
   for (const b of document.querySelectorAll(".cerrar, .cerrarExp, .cerrarMed")) nombre(b, t("a11yCerrar"));
   nombre($("compartir"), t("a11yCompartir"));
+  nombre($("irCasa"), t("navBuscar"));
   nombre($("idioma"), idioma === "es" ? "Català" : "Castellano");
   nombre($("chipTiempo"), t("a11yTiempo", $("chipTiempo").textContent));
   nombre($("rcAtras"), t("a11yAnterior"));
@@ -1105,6 +1171,9 @@ function marcarNav() {
     b.classList.toggle("activo", activo);
     b.setAttribute("aria-pressed", activo);
   }
+  // La herramienta abierta, marcada en la cuadrícula
+  for (const b of document.querySelectorAll("#herramientas [data-herr]"))
+    b.classList.toggle("abierto", PANELES_HERRAMIENTA[b.dataset.herr]?.div.style.display === "block");
 }
 for (const b of document.querySelectorAll("#nav button"))
   b.onclick = () => {
@@ -1129,7 +1198,8 @@ function adornarHerramienta(panel) {
   ponerAsa(panel);
   if (panel.querySelector(":scope > .cerrar")) return;
   const x = document.createElement("button");
-  Object.assign(x, { className: "cerrar", textContent: "✕", onclick: () => mostrarPanel(null) });
+  Object.assign(x, { className: "cerrar", innerHTML: iconoPx("cerrar"), onclick: () => mostrarPanel(null) });
+  x.setAttribute("aria-label", t("a11yCerrar"));
   x.style.float = "right";
   panel.querySelector(":scope > .asa").after(x);
   if (panel.querySelector(".nota")) {        // en modo vecino las notas de método van plegadas
@@ -1843,7 +1913,7 @@ function explicar(celda, numeroPunto = null) {
   ultimaExplicacion = [celda, numeroPunto];
   const caja = $("explicacion");
   const cod = D.codigos[celda];
-  let html = `<button class="cerrarExp" style="float:right">✕</button><b>${numeroPunto ? `${numeroPunto} · ` : ""}${t("porQue")}</b><br>`;
+  let html = `<button class="cerrarExp" style="float:right">${iconoPx("cerrar")}</button><b>${numeroPunto ? `${numeroPunto} · ` : ""}${t("porQue")}</b><br>`;
   html += `${t("calle")}: ${nombreCalle(D.calles[celda])}<br>`;
   if (OFICIAL && OFICIAL[celda]) html += `<span style="color:#c9a3ff">${t("oficialCelda", PERIODOS[OFICIAL[celda]])}</span><br>`;
   if (!celdaAnalizable(cod)) html += t("noAnaliza");
@@ -2242,7 +2312,7 @@ $("verMedicion").onclick = () => {
     .map(([clave, campo]) => `<tr><td>${t(clave)}</td><td><b>${pc(prueba.neutro[campo])}</b></td><td>${pc(prueba.logistica[campo])}</td><td>${pc(prueba.seco[campo])}</td></tr>`).join("");
   const tabla = (titulo, prueba) => `<h4 style="margin:10px 0 0">${titulo}</h4><table><tr><th>${t("metrica")}</th><th>Neutro</th><th>${t("logistica")}</th><th>${t("siempreSeco")}</th></tr>${filas(prueba)}</table>`;
   const ic = MEDICION.espacial.diferenciaF1;
-  caja.innerHTML = `<button class="cerrarMed" style="float:right">✕</button><b>${t("tituloMedicion")}</b><p>${t("textoMedicion")}</p>
+  caja.innerHTML = `<button class="cerrarMed" style="float:right">${iconoPx("cerrar")}</button><b>${t("tituloMedicion")}</b><p>${t("textoMedicion")}</p>
     <p><i>${t("prediccionPrevia")}:</i> ${MEDICION.prediccion[idioma] || MEDICION.prediccion.es}</p>
     ${tabla(t("pruebaEspacial"), MEDICION.espacial)}
     <div class="nota">${t("intervalo", numero(ic.media * 100, 1), numero(ic.ic[0] * 100, 1), numero(ic.ic[1] * 100, 1))}</div>
@@ -2529,7 +2599,8 @@ const ambiente = (() => {
     },
     cadaFrame(dt) {
       if (!audio) { if (activo) { crear(); tocar(); } return; }
-      const objetivo = activo && !document.hidden ? 0.45 * (1 - (tiempoReal?.noche?.() ?? 0)) : 0;
+      // 0,16: de fondo (≈ 9 dB menos que antes); los trinos no tapan nada
+      const objetivo = activo && !document.hidden ? 0.16 * (1 - (tiempoReal?.noche?.() ?? 0)) : 0;
       anterior += (objetivo - anterior) * Math.min(1, dt * 1.2);
       audio.volume = Math.min(1, Math.max(0, anterior));
       if (objetivo === 0 && anterior < 0.005 && !audio.paused) audio.pause();
