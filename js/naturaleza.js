@@ -108,7 +108,7 @@ const herramientaNaturaleza = {
       && (!soloEpoca || !mes || Math.min(Math.abs(mes - mesHoy), 12 - Math.abs(mes - mesHoy)) <= 1);
 
     // Puntos: una bolita por observación, del color de su grupo
-    const malla = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1.6, 0), new THREE.MeshBasicMaterial({ color: 0xffffff }), O.length);
+    const malla = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(3, 0), new THREE.MeshBasicMaterial({ color: 0xffffff }), O.length);
     malla.frustumCulled = false;
     malla.visible = false;
     ctx.scene.add(malla);
@@ -118,7 +118,7 @@ const herramientaNaturaleza = {
       for (const o of O) {
         if (!vale(o)) continue;
         const [s, x, z] = o;
-        malla.setMatrixAt(n, m4.makeTranslation(x + ((s * 7) % 5) - 2, ctx.altura(x, z) + 2.5, z + ((s * 3) % 5) - 2));
+        malla.setMatrixAt(n, m4.makeTranslation(x + ((s * 7) % 5) - 2, ctx.altura(x, z) + 4, z + ((s * 3) % 5) - 2));
         malla.setColorAt(n++, color.setHex(COLOR[GRUPO(E[s].g)]));
       }
       malla.count = n;
@@ -131,7 +131,7 @@ const herramientaNaturaleza = {
       <label><input type="checkbox" id="naEpoca"> <span id="naEpocaT"></span></label>
       <p id="naCercaT" style="margin-top:10px"></p>
       <p class="subtitulo" id="naTopT"></p><ol id="naTop" style="margin:4px 0 0;padding-left:22px"></ol>
-      <div class="botones" id="naVerTodasCaja" hidden><button id="naVerTodas"></button></div>
+      <div class="botones" id="naVerTodasCaja" style="display:none"><button id="naVerTodas"></button></div>
       <p class="nota" data-t="naNota"></p>`;
     const fila = ([s, n]) => `<li data-x="1" data-s="${s}">${esc(nombre(E[s]))} <small><i>${esc(E[s].c)}</i> · ${t("naVeces", n)}</small></li>`;
     function contar(lista) {
@@ -149,7 +149,7 @@ const herramientaNaturaleza = {
       $("naEpoca").checked = soloEpoca;
       $("naTopT").textContent = t("naTop");
       $("naTop").innerHTML = contar(O).slice(0, 12).map(fila).join("");
-      $("naVerTodasCaja").hidden = especie < 0;
+      $("naVerTodasCaja").style.display = especie < 0 ? "none" : "";
       $("naVerTodas").textContent = t("naVerTodas");
       cerca();
       for (const li of div.querySelectorAll("li[data-s]")) {

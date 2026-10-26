@@ -121,5 +121,27 @@ def construir():
           f"GLB {tam(os.path.join(DATOS, 'ripollet.glb')):.0f} KB) · Neutro: {'sí' if memoria != 'null' else 'aún no'}")
 
 
+def comprobar_sintaxis():
+    """El visor entero como módulo, con `node --check` (si hay Node): un error de sintaxis (una comilla o un salto de
+    línea dentro de una cadena) deja la web en blanco, así que se avisa al ensamblar en vez de al publicar."""
+    import re
+    import subprocess
+    import tempfile
+    codigo = max(re.findall(r'<script type="module">(.*?)</script>', leer(os.path.join(DIR, "ripollet.html")), re.S), key=len)
+    with tempfile.NamedTemporaryFile("w", suffix=".mjs", delete=False, encoding="utf-8") as f:
+        f.write(codigo)
+    try:
+        r = subprocess.run(["node", "--check", f.name], capture_output=True, text=True, encoding="utf-8")
+    except FileNotFoundError:
+        print("SINTAXIS: sin Node, no se comprueba")
+        return
+    finally:
+        os.remove(f.name)
+    if r.returncode:
+        raise SystemExit("SINTAXIS: ERROR en el visor ensamblado, no publicar:\n" + r.stderr[-1500:])
+    print("SINTAXIS: correcta")
+
+
 if __name__ == "__main__":
     construir()
+    comprobar_sintaxis()

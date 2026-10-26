@@ -2886,7 +2886,7 @@ renderer.setAnimationLoop(() => {
   etiquetas.render(scene, camera);
 });
 // ?depurar: acceso a la escena desde la consola (pruebas automáticas de parpadeo y rendimiento)
-if (new URLSearchParams(location.search).has("depurar")) globalThis.VISOR = { THREE, scene, camera, controls, renderer, pixelado, ambiente, tiempoReal };
+if (new URLSearchParams(location.search).has("depurar")) globalThis.VISOR = { THREE, scene, camera, controls, renderer, pixelado, ambiente, tiempoReal, pajaros };
 </script>
 </body>
 </html>
