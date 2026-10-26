@@ -117,8 +117,8 @@ python obtener_catastro.py
 #    Coberturas del suelo (ICGC) para el suelo que OSM no describe
 python obtener_cobertes.py
 #    Recogida de residuos, planeamiento y agenda
-..lender-5.2.3-windows-x64.2pythoninpython.exe -I obtener_residuos.py
-..lender-5.2.3-windows-x64.2pythoninpython.exe -I obtener_planeamiento.py
+..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_residuos.py
+..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_planeamiento.py
 python obtener_agenda.py
 #    Aparcamientos y plazas de OSM que no vienen en la descarga principal (datos_osm/superficies.json)
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_superficies.py
