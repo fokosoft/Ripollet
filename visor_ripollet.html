@@ -2690,8 +2690,16 @@ renderer.setAnimationLoop(() => {
   trafico.cadaFrame(dt);
   farolas.cadaFrame(dt);
   ambiente.cadaFrame(dt);
+  // La bruma (y la niebla del tiempo real) es la de quien está en la calle: mirando la maqueta desde lejos, empieza
+  // como pronto en el punto que se mira, con el mismo espesor. Así el centro siempre se ve y la niebla vela el fondo.
+  const nieblaCerca = scene.fog.near, nieblaLejos = scene.fog.far;
+  if (modo === "mapa") {
+    scene.fog.near = Math.max(nieblaCerca, 0.95 * camera.position.distanceTo(controls.target));
+    scene.fog.far = scene.fog.near + (nieblaLejos - nieblaCerca);
+  }
   if (pixelado.activo) pixelado.render();
   else renderer.render(scene, camera);
+  scene.fog.near = nieblaCerca; scene.fog.far = nieblaLejos;
   etiquetas.render(scene, camera);
 });
 // ?depurar: acceso a la escena desde la consola (pruebas automáticas de parpadeo y rendimiento)
