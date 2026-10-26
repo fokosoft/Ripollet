@@ -4,6 +4,7 @@ import bpy
 import bmesh
 import gzip
 import json
+import collections
 import math
 import os
 import random
@@ -616,11 +617,13 @@ RANGO_CALLE = {"motorway": 4, "trunk": 4, "primary": 3, "secondary": 2, "seconda
                "tertiary_link": 1}
 
 
-def cinta(nombre, puntos, ancho, separacion, anchos=None, union=None):
+def cinta(nombre, puntos, ancho, separacion, anchos=None, union=None, sin_lineas=None):
     """Cinta pegada al terreno: tramos cortos para seguir la pendiente y un octógono en cada nodo para rellenar las
     uniones. `anchos`: el ancho de cada tramo (medido de bordillo a bordillo), o el mismo `ancho` para todos.
     `union`: altura de los octógonos; por debajo de todas las cintas de su tipo para que las líneas pintadas
-    queden siempre encima en vez de pelearse con el asfalto liso de la unión (parpadeo)."""
+    queden siempre encima en vez de pelearse con el asfalto liso de la unión (parpadeo).
+    `sin_lineas`: True (toda la vía en asfalto liso) o una función (x, y) → True donde no se pintan líneas (cruces);
+    cerca de un cruce la cinta se trocea más fino para que las líneas empiecen justo después."""
     z = lambda x, y: altura(x, y) + separacion
     zu = lambda x, y: altura(x, y) + (separacion - 0.012 if union is None else union)
     s = 0.0                                             # metros recorridos: la UV v sigue la calle
@@ -635,13 +638,24 @@ def cinta(nombre, puntos, ancho, separacion, anchos=None, union=None):
             continue
         nx, ny = -(yb - ya) / L * r, (xb - xa) / L * r
         trozos = max(1, math.ceil(L / PASO))
-        for k in range(trozos):
-            x1, y1 = xa + (xb - xa) * k / trozos, ya + (yb - ya) * k / trozos
-            x2, y2 = xa + (xb - xa) * (k + 1) / trozos, ya + (yb - ya) * (k + 1) / trozos
-            v1, v2 = (s + L * k / trozos) / 8, (s + L * (k + 1) / trozos) / 8
+        cortes = {k / trozos for k in range(trozos + 1)}
+        if callable(sin_lineas):          # un corte justo donde acaba la zona del cruce (sin trocear el resto)
+            if sin_lineas(xa, ya) and RADIO_CRUCE < L:
+                cortes.add(RADIO_CRUCE / L)
+            if sin_lineas(xb, yb) and RADIO_CRUCE < L:
+                cortes.add(1 - RADIO_CRUCE / L)
+        cortes = sorted(cortes)
+        for f1, f2 in zip(cortes, cortes[1:]):
+            if f2 - f1 < 1e-4:
+                continue
+            x1, y1 = xa + (xb - xa) * f1, ya + (yb - ya) * f1
+            x2, y2 = xa + (xb - xa) * f2, ya + (yb - ya) * f2
+            v1, v2 = (s + L * f1) / 8, (s + L * f2) / 8
+            liso = sin_lineas is True or (callable(sin_lineas) and sin_lineas((x1 + x2) / 2, (y1 + y2) / 2))
+            u0, u1 = (0.25, 0.25) if liso else (0, 1)          # 0,25: la franja de asfalto sin líneas de la textura
             cara(nombre, [(x1 - nx, y1 - ny, z(x1 - nx, y1 - ny)), (x2 - nx, y2 - ny, z(x2 - nx, y2 - ny)),
                           (x2 + nx, y2 + ny, z(x2 + nx, y2 + ny)), (x1 + nx, y1 + ny, z(x1 + nx, y1 + ny))],
-                 [(0, v1), (0, v2), (1, v2), (1, v1)])
+                 [(u0, v1), (u0, v2), (u1, v2), (u1, v1)])
         s += L
         for x, y in ((xa, ya), (xb, yb)):
             octo = [(x + r * math.cos(a), y + r * math.sin(a)) for a in (k * math.pi / 3 for k in range(6))]
@@ -776,6 +790,34 @@ def ancho_medido(xa, ya, xb, yb, ancho_osm):
 
 
 CALZADA_1M, BORDILLO_1M = calzada_real()
+
+# CRUCES: nodos donde se juntan tres o más tramos de calles de coches (un nodo intermedio de una vía cuenta dos). En
+# un cruce, en las rotondas y en los tramos muy cortos (salidas, isletas, vías partidas en trozos) no se pintan líneas
+# de carril: en la calle real tampoco las hay, y en trozos de pocos metros salían rayas sueltas en todas direcciones.
+# La forma real del asfalto del cruce ya la pinta el suelo (bordillos del AMB).
+grado_nodo = collections.Counter()
+for via in vias:
+    t = via["tags"]
+    if (t.get("highway") in ANCHOS and t["highway"] not in PEATONALES and t.get("area") != "yes"
+            and not es_puente(t)):
+        ns = [n for n in via["nodes"] if n in nodos]
+        for k, n in enumerate(ns):
+            grado_nodo[n] += 1 if k in (0, len(ns) - 1) else 2
+CASILLA_CRUCE, RADIO_CRUCE = 20.0, 8.0
+CRUCES = collections.defaultdict(list)
+for n, g in grado_nodo.items():
+    if g >= 3:
+        x, y = a_metros(*nodos[n])
+        CRUCES[(int(x // CASILLA_CRUCE), int(y // CASILLA_CRUCE))].append((x, y))
+
+
+def junto_a_cruce(x, y):
+    i, j = int(x // CASILLA_CRUCE), int(y // CASILLA_CRUCE)
+    return any(math.hypot(x - cx, y - cy) < RADIO_CRUCE
+               for di in (-1, 0, 1) for dj in (-1, 0, 1) for cx, cy in CRUCES.get((i + di, j + dj), ()))
+
+
+print(f"CRUCES: {sum(len(v) for v in CRUCES.values())} (sin líneas de carril a {RADIO_CRUCE:.0f} m)")
 x_centro, y_centro = a_metros(2.1534198, 41.4965060)
 salida = (float("inf"), None)    # (distancia al centro, punto y rumbo) sobre una calle
 for via in vias:
@@ -812,8 +854,10 @@ for via in vias:
         elif peatonal:
             cinta("peatonal", puntos, ANCHOS[tipo], 0.42 + 0.01 * (via["id"] % 3), None, 0.405)
         else:
+            largo = sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(puntos, puntos[1:]))
+            liso = t.get("junction") in ("roundabout", "circular") or largo < 25
             cinta("calzada", puntos, ANCHOS[tipo], 0.30 + 0.02 * RANGO_CALLE.get(tipo, 0) + 0.01 * (via["id"] % 2),
-                  anchos, 0.285)
+                  anchos, 0.285, True if liso else junto_a_cruce)
         if not peatonal:
             SIM_CINTAS.append((puntos, ANCHOS[tipo], SIM_CALZADA))
         if t.get("name"):
