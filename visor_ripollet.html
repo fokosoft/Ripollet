@@ -59,7 +59,7 @@
   summary { cursor: pointer; font: 400 11px var(--pixel); text-transform: uppercase; letter-spacing: .05em; color: var(--p-texto); }
   .subtitulo { margin: 14px 0 0; font: 400 10px var(--pixel); text-transform: uppercase; letter-spacing: .08em; color: var(--nota); }
   /* Título de cada panel: barra de ventana de tinta con letra de píxel; ✕ dentro, a la derecha */
-  .herramienta > b:first-of-type, #lluvia > b:first-of-type, #riesgo > b:first-of-type {
+  .herramienta > b:first-of-type, #lluvia > b:first-of-type, #riesgo > b:first-of-type, #creditos > b:first-of-type {
     display: block; margin: -10px -14px 10px; padding: 10px 46px 9px 14px; background: var(--t-fondo); color: var(--t-texto);
     font: 400 12px/1.3 var(--pixel); text-transform: uppercase; letter-spacing: .05em; }
   .herramienta > b:first-of-type + br, #lluvia > .cerrar + br, #riesgo > .cerrar + br { display: none; }
@@ -141,6 +141,10 @@
   #medicion table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
   #medicion td, #medicion th { border-bottom: 1px solid var(--linea); padding: 4px 6px; text-align: right; }
   #medicion td:first-child, #medicion th:first-child { text-align: left; }
+  #creditos { position: fixed; inset: 0; margin: auto; width: min(620px, calc(100vw - 32px)); height: fit-content;
+              max-height: calc(100vh - 48px); overflow: auto; display: none; max-width: none; z-index: 11; user-select: text; }
+  #creditos ul { margin: 6px 0 0; padding-left: 18px; } #creditos li { margin: 3px 0; } #creditos p { margin: 8px 0; }
+  #osm #verCreditos { font-weight: 700; }
   .cerrarExp, .cerrarMed { padding: 2px 4px; display: inline-grid; place-items: center; }
 
   /* Pantalla de carga: el nombre en píxel y bloques de teja que avanzan */
@@ -164,20 +168,21 @@
 
   /* ===== Barra, menú y hoja: una sola columna en escritorio (pensada primero para el móvil) ===== */
   #barra, #nav { display: flex; align-items: center; }
-  #barra { top: 12px; left: 12px; right: auto; width: 420px; max-width: none; gap: 8px; padding: 8px 10px 8px 12px; z-index: 4;
+  #barra { top: 12px; left: 12px; right: auto; width: 440px; max-width: none; gap: 8px; padding: 8px 10px 8px 12px; z-index: 4;
            box-sizing: border-box; height: 52px; }
   .marcaApp { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .marcaApp .px { width: 28px; height: 28px; }
+  #logo img { display: block; height: 38px; width: auto; }                 /* el escudo de Ripollet en píxel (js/logo.js) */
   .marcaApp span { display: flex; flex-direction: column; min-width: 0; line-height: 1.1; }
   .marcaApp b { font: 700 19px/1 var(--pixel); color: var(--p-texto); letter-spacing: .02em; text-transform: uppercase; }
   .marcaApp small { font: 400 9px var(--pixel); letter-spacing: .06em; text-transform: uppercase; color: var(--nota);
                     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
   .chip { height: 32px; padding: 0 9px !important; font-size: 13px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
-  #nav { top: 62px; left: 12px; right: auto; width: 420px; max-width: none; gap: 6px; padding: 8px; z-index: 4;
+  #nav { top: 62px; left: 12px; right: auto; width: 440px; max-width: none; gap: 6px; padding: 8px; z-index: 4;
          box-sizing: border-box; border-top: 0; }
-  #nav button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 4px; font-size: 13px; }
+  #nav button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 4px; font-size: 13px;
+                white-space: nowrap; }
   #nav .ico .px { width: 18px; height: 18px; }
-  #mapa { top: 114px; left: 12px; right: auto; width: 420px; max-width: none; max-height: calc(100vh - 140px);
+  #mapa { top: 114px; left: 12px; right: auto; width: 440px; max-width: none; max-height: calc(100vh - 140px);
           overflow: auto; display: none; box-sizing: border-box; border-top: 0; }
   #mapa.abierta { display: block; }
   #mapa section[hidden] { display: none; }
@@ -238,7 +243,7 @@
   @media (max-width: 760px) {
     #barra { top: 0; left: 0; right: 0; width: auto; height: auto; padding: 6px 10px; border-width: 0 0 2px;
              padding-top: max(6px, env(safe-area-inset-top)); box-shadow: 0 3px 0 rgba(22,24,29,.12); }
-    .marcaApp .px { width: 24px; height: 24px; }
+    #logo img { height: 32px; }
     #nav { top: auto; bottom: 0; left: 0; right: 0; width: auto; padding: 4px 4px max(4px, env(safe-area-inset-bottom));
            gap: 2px; z-index: 7; border-width: 2px 0 0; border-top-style: solid; box-shadow: none; }
     #nav button { flex-direction: column; gap: 3px; font-size: 11px; padding: 6px 2px; background: none;
@@ -253,6 +258,7 @@
     #mapa { max-height: 64vh; }
     .herramienta > b:first-of-type, #lluvia > b:first-of-type, #riesgo > b:first-of-type { margin-top: 0; }
     .panel > .cerrar { top: 26px; }
+    #creditos > .cerrar { top: 4px; }     /* sin asa: la ✕ en su barra de título */
     .mini { max-height: 64px !important; overflow: hidden !important; }
     .completa { max-height: calc(100vh - 130px) !important; }
     .asa { display: block; height: 22px; margin: 0 -14px 2px; cursor: pointer; position: relative; touch-action: manipulation; }
@@ -325,6 +331,7 @@
     <div id="trafico"></div>
     <div class="botones"><button id="arte"></button></div>
     <details id="vista" open></details>
+    <div class="botones"><button id="abrirCreditos" data-t="crBoton"></button></div>
   </section>
 </div>
 <div class="pista" id="pista" role="status" aria-live="polite"></div>
@@ -399,9 +406,10 @@
 
 <div id="explicacion" class="panel"></div>
 <div id="medicion" class="panel"></div>
+<div id="creditos" class="panel" role="dialog" aria-labelledby="crTitulo"><b id="crTitulo" data-t="crTitulo"></b><button class="cerrar">✕</button><div data-t="crTexto"></div></div>
 <div id="informe"></div>
 <div id="grano"></div>
-<div id="osm">© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ICGC · AMB · Catastro · <a href="https://open-meteo.com" target="_blank">Open-Meteo</a></div>
+<div id="osm">© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ICGC · AMB · Catastro · <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> · <a href="#creditos" id="verCreditos">FOKO SOFT</a></div>
 <script type="module">
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -612,7 +620,7 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
   l === "es" ? { navExplorar: "Explorar", navHerramientas: "Herramientas", navRiesgo: "Riesgo", navAjustes: "Ajustes",
                  navIr: "Ir a…", navPista: "Busca tu dirección o toca 🧰 Herramientas", navAsa: "Plegar o desplegar",
                  navCasa: "Mi casa", navBuscar: "Busca tu dirección", navBuscarEj: "Calle y número, p. ej. «Balmes 12»",
-                 navTecnico: "🛠 Modo técnico", navAmbiente: "🐦 Sonido de ambiente", navAmbienteAyuda: "Pájaros de primavera en bucle (se cargan 300 KB al activarlo). De noche se callan.", navTecnicoAyuda: "Muestra todas las herramientas de análisis (riesgo con Neutro, simulación de lluvia, vulnerabilidad, rehabilitación, planeamiento…) y cómo se calcula cada una.",
+                 navTecnico: "🛠 Modo técnico", crTitulo: "Créditos, ayuda y fuentes", crBoton: "ℹ️ Créditos, ayuda y fuentes", crTexto: "<p><b>Ripollet · maqueta 3D</b> es una aplicación de <b>FOKO SOFT</b>. Es un proyecto <b>independiente y no oficial</b>: no lo ha encargado ni lo avala ninguna administración pública. Los resultados son orientativos; para cualquier trámite, manda la información oficial.</p><p class=\"subtitulo\">Cómo se usa</p><ul><li><b>Moverse:</b> arrastra para desplazarte; con el ratón, clic derecho para girar y rueda para acercar; en el móvil, dos dedos para girar y acercar.</li><li><b>Mi casa:</b> busca tu calle y número (o toca tu edificio) y verás todo lo que le afecta.</li><li><b>Herramientas:</b> cada una pinta su capa sobre el mapa; toca el mapa para ver el dato de ese punto.</li><li><b>Recorrido guiado</b> (en Explorar): un paseo de dos minutos por lo principal.</li><li><b>Modo técnico</b> (en Ajustes): todas las herramientas de análisis y cómo se calcula cada una.</li><li>El botón de compartir copia un enlace a lo que estás viendo.</li></ul><p class=\"subtitulo\">De dónde salen los datos</p><ul><li><a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a>: calles, parques, tiendas y lugares (© colaboradores de OpenStreetMap, ODbL)</li><li>Dirección General del Catastro: edificios, plantas, sótanos, portales y año de construcción</li><li>ICGC: relieve (MDT 5 m), LiDAR (árboles y altura de los edificios) y coberturas del suelo</li><li>AMB: cartografía 1:1000 (bordillos y farolas) y horarios de autobús (GTFS)</li><li><a href=\"https://open-meteo.com\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a>: tiempo en directo y calidad del aire (CC BY 4.0)</li><li>ACA y SNCZI (MITECO), por el servicio IDEE: zonas inundables oficiales del río</li><li>INE: Atlas de distribución de renta · Idescat e ICGC: secciones censales (CC BY 4.0)</li><li>Generalitat de Catalunya, dades obertes: certificados energéticos (ICAEN), accidentes (Servei Català de Trànsit), calidad del aire (XVPCA), autobuses interurbanos y mapa de capacidad acústica</li><li>Diputació de Barcelona: planeamiento urbanístico (MUC)</li><li>Ripollet Aporta: sectores y calendarios de recogida de residuos</li><li>Agenda de ripollet.cat: actos (se actualiza cada día)</li><li><a href=\"https://freesound.org/people/steaq/sounds/548383/\" target=\"_blank\" rel=\"noopener\">Freesound</a>: sonido de ambiente (steaq, CC0)</li></ul><p class=\"subtitulo\">Hecho con</p><p>Blender y three.js (MIT) · letra Silkscreen (Jason Kottke, SIL OFL) · <b>Neutro</b>, el modelo que explica los puntos críticos de inundación (FOKO SOFT, Apache 2.0). Código abierto con licencia MIT en <a href=\"https://github.com/fokosoft/Ripollet\" target=\"_blank\" rel=\"noopener\">GitHub</a>.</p><p class=\"nota\">© 2026 <a href=\"https://github.com/fokosoft\" target=\"_blank\" rel=\"noopener\">FOKO SOFT</a></p>", navAmbiente: "🐦 Sonido de ambiente", navAmbienteAyuda: "Pájaros de primavera en bucle (se cargan 300 KB al activarlo). De noche se callan.", navTecnicoAyuda: "Muestra todas las herramientas de análisis (riesgo con Neutro, simulación de lluvia, vulnerabilidad, rehabilitación, planeamiento…) y cómo se calcula cada una.",
                  comoSeCalcula: "ℹ️ ¿Cómo se calcula?", ocultarCalculo: "Ocultar cómo se calcula",
                  compartirBoton: "🔗", enlaceCopiado: "Enlace copiado: pégalo donde quieras", copiaEnlace: "Copia este enlace:",
                  a11yCerrar: "Cerrar", a11yCompartir: "Compartir un enlace a esta vista", a11yTiempo: "Hora y tiempo: {0}. Abrir ajustes",
@@ -636,7 +644,7 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
              : { navExplorar: "Explorar", navHerramientas: "Eines", navRiesgo: "Risc", navAjustes: "Ajustos",
                  navIr: "Anar a…", navPista: "Cerca la teva adreça o toca 🧰 Eines", navAsa: "Plegar o desplegar",
                  navCasa: "La meva casa", navBuscar: "Cerca la teva adreça", navBuscarEj: "Carrer i número, p. ex. «Balmes 12»",
-                 navTecnico: "🛠 Mode tècnic", navAmbiente: "🐦 So d'ambient", navAmbienteAyuda: "Ocells de primavera en bucle (es carreguen 300 KB en activar-lo). De nit callen.", navTecnicoAyuda: "Mostra totes les eines d'anàlisi (risc amb Neutro, simulació de pluja, vulnerabilitat, rehabilitació, planejament…) i com es calcula cadascuna.",
+                 navTecnico: "🛠 Mode tècnic", crTitulo: "Crèdits, ajuda i fonts", crBoton: "ℹ️ Crèdits, ajuda i fonts", crTexto: "<p><b>Ripollet · maqueta 3D</b> és una aplicació de <b>FOKO SOFT</b>. És un projecte <b>independent i no oficial</b>: no l'ha encarregat ni l'avala cap administració pública. Els resultats són orientatius; per a qualsevol tràmit, mana la informació oficial.</p><p class=\"subtitulo\">Com es fa servir</p><ul><li><b>Moure's:</b> arrossega per desplaçar-te; amb el ratolí, clic dret per girar i roda per apropar; al mòbil, dos dits per girar i apropar.</li><li><b>La meva casa:</b> cerca el teu carrer i número (o toca el teu edifici) i veuràs tot el que l'afecta.</li><li><b>Eines:</b> cadascuna pinta la seva capa sobre el mapa; toca el mapa per veure la dada d'aquell punt.</li><li><b>Recorregut guiat</b> (a Explorar): un passeig de dos minuts pel més important.</li><li><b>Mode tècnic</b> (a Ajustos): totes les eines d'anàlisi i com es calcula cadascuna.</li><li>El botó de compartir copia un enllaç al que estàs veient.</li></ul><p class=\"subtitulo\">D'on surten les dades</p><ul><li><a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a>: carrers, parcs, botigues i llocs (© col·laboradors d'OpenStreetMap, ODbL)</li><li>Direcció General del Cadastre: edificis, plantes, soterranis, portals i any de construcció</li><li>ICGC: relleu (MDT 5 m), LiDAR (arbres i alçada dels edificis) i cobertes del sòl</li><li>AMB: cartografia 1:1000 (vorades i fanals) i horaris d'autobús (GTFS)</li><li><a href=\"https://open-meteo.com\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a>: temps en directe i qualitat de l'aire (CC BY 4.0)</li><li>ACA i SNCZI (MITECO), pel servei IDEE: zones inundables oficials del riu</li><li>INE: Atles de distribució de renda · Idescat i ICGC: seccions censals (CC BY 4.0)</li><li>Generalitat de Catalunya, dades obertes: certificats energètics (ICAEN), accidents (Servei Català de Trànsit), qualitat de l'aire (XVPCA), autobusos interurbans i mapa de capacitat acústica</li><li>Diputació de Barcelona: planejament urbanístic (MUC)</li><li>Ripollet Aporta: sectors i calendaris de recollida de residus</li><li>Agenda de ripollet.cat: actes (s'actualitza cada dia)</li><li><a href=\"https://freesound.org/people/steaq/sounds/548383/\" target=\"_blank\" rel=\"noopener\">Freesound</a>: so d'ambient (steaq, CC0)</li></ul><p class=\"subtitulo\">Fet amb</p><p>Blender i three.js (MIT) · lletra Silkscreen (Jason Kottke, SIL OFL) · <b>Neutro</b>, el model que explica els punts crítics d'inundació (FOKO SOFT, Apache 2.0). Codi obert amb llicència MIT a <a href=\"https://github.com/fokosoft/Ripollet\" target=\"_blank\" rel=\"noopener\">GitHub</a>.</p><p class=\"nota\">© 2026 <a href=\"https://github.com/fokosoft\" target=\"_blank\" rel=\"noopener\">FOKO SOFT</a></p>", navAmbiente: "🐦 So d'ambient", navAmbienteAyuda: "Ocells de primavera en bucle (es carreguen 300 KB en activar-lo). De nit callen.", navTecnicoAyuda: "Mostra totes les eines d'anàlisi (risc amb Neutro, simulació de pluja, vulnerabilitat, rehabilitació, planejament…) i com es calcula cadascuna.",
                  comoSeCalcula: "ℹ️ Com es calcula?", ocultarCalculo: "Amagar com es calcula",
                  compartirBoton: "🔗", enlaceCopiado: "Enllaç copiat: enganxa'l on vulguis", copiaEnlace: "Copia aquest enllaç:",
                  a11yCerrar: "Tancar", a11yCompartir: "Compartir un enllaç a aquesta vista", a11yTiempo: "Hora i temps: {0}. Obrir ajustos",
@@ -683,7 +691,7 @@ function ponerIconos() {
   for (const b of document.querySelectorAll(".cerrar, .cerrarExp, .cerrarMed")) b.innerHTML = iconoPx("cerrar");
   $("irCasa").innerHTML = iconoPx("lupa");
   $("compartir").innerHTML = iconoPx("compartir");
-  $("logo").innerHTML = iconoPx("casa");
+  $("logo").innerHTML = `<img src="${LOGO_PNG}" width="${LOGO_TAM[0]}" height="${LOGO_TAM[1]}" alt="">`;
 }
 
 function traducir() {
@@ -1083,7 +1091,8 @@ let modo = "mapa", vistaConductor = false;
 
 addEventListener("keydown", (e) => {
   if (modo === "mapa" && e.key === "Escape") {            // cierra lo último que se abrió
-    if (document.body.classList.contains("enRecorrido")) $("rcSalir").click();
+    if ($("creditos").style.display === "block") verCreditos(false);
+    else if (document.body.classList.contains("enRecorrido")) $("rcSalir").click();
     else if ($("explicacion").style.display === "block") $("explicacion").style.display = "none";
     else if (Object.values(PANELES_HERRAMIENTA).some((p) => p.div.style.display === "block") ||
              $("riesgo").style.display === "block" || $("lluvia").style.display === "block") mostrarPanel(null);
@@ -1299,6 +1308,11 @@ $("salir").onclick = salirDelCoche;
 $("camara").onclick = () => { vistaConductor = !vistaConductor; };
 $("reiniciar").onclick = aLaSalida;
 for (const b of document.querySelectorAll(".cerrar")) b.onclick = () => mostrarPanel(null);
+// CRÉDITOS, AYUDA Y FUENTES: desde Ajustes y desde «FOKO SOFT» en la línea de atribución
+function verCreditos(si) { $("creditos").style.display = si ? "block" : "none"; if (si) $("creditos").querySelector(".cerrar").focus(); }
+$("creditos").querySelector(".cerrar").onclick = () => verCreditos(false);
+$("abrirCreditos").onclick = () => verCreditos(true);
+$("verCreditos").onclick = (e) => { e.preventDefault(); verCreditos(true); };
 
 // ------------------------------------------------------------ física del coche
 const ADELANTE = new THREE.Vector3(), DERECHA = new THREE.Vector3(), ARRIBA = new THREE.Vector3(0, 1, 0);

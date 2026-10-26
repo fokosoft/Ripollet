@@ -6,6 +6,10 @@ herramientas con datos públicos. En castellano y catalán.
 
 **Abrir en línea:** https://fokosoft.github.io/Ripollet/ (GitHub Pages, desde la carpeta `web/`).
 
+Una aplicación de **[FOKO SOFT](https://github.com/fokosoft)**: proyecto independiente y no oficial, sin encargo ni aval
+de ninguna administración pública. En el visor, **«Créditos, ayuda y fuentes»** (en ⚙️ Ajustes, o pulsando «FOKO SOFT»
+en la línea de atribución) explica cómo se usa y de dónde sale cada dato, en castellano y catalán.
+
 ## Qué abrir
 
 | Archivo | Para qué |
@@ -59,9 +63,13 @@ sombras duras y botones que se hunden al pulsar; los títulos de los paneles son
 (Silkscreen) y la maqueta se apoya en una mesa con rejilla de puntos. Con la vista 3D, el mismo diseño en versión
 nocturna (acento sol). Todo con variables CSS (`--p-fondo`, `--acento`…) en un solo sitio.
 
+**Logo**: el escudo de Ripollet en píxel. `logo_pixel.py` (con Blender) pasa el dibujo original (1 MB, rejilla
+irregular) a un sprite de 64×81 de colores planos con el fondo transparente (2,9 KB) y un favicon de 64×64 solo con
+el escudo (2,5 KB), en `js/logo.js`.
+
 **Iconos de píxel propios** (32, de 16×16) en vez de emojis, que cambian de aspecto en cada sistema:
 `iconos_pixel.py` los guarda dibujados en texto y genera `js/iconos.js` (un sprite SVG de 17 KB, unos 4 KB comprimido;
-también el favicon). El contorno toma el color del texto, así el mismo icono sirve en botones claros y oscuros.
+el favicon es el escudo). El contorno toma el color del texto, así el mismo icono sirve en botones claros y oscuros.
 Accesibilidad comprobada con axe-core (0 fallos en los tres modos).
 
 ## Coche y sonido de ambiente

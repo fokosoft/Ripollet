@@ -15,7 +15,7 @@ DIR = os.path.dirname(os.path.abspath(__file__))
 DATOS = os.path.join(DIR, "datos_visor")
 BLOBS = ["codigos", "rasgos", "calles", "edificios", "terreno", "arboles", "aceras", "suelo4m",
          "techos2m", "acces1m", "grafo_nodos", "grafo_aristas", "solar2m"]
-MODULOS = ["neutro_nucleo.js", "iconos.js", "datos.js", "simulacion.js", "inundacion.js", "comun.js",   # en este orden
+MODULOS = ["neutro_nucleo.js", "iconos.js", "logo.js", "datos.js", "simulacion.js", "inundacion.js", "comun.js",   # en este orden
            "sombra.js", "accesibilidad.js", "incendio.js", "solar.js", "rutas.js", "proyectos.js",
            "incidencias_ciudad.js", "vulnerabilidad.js", "rehabilitacion.js", "seguridad.js", "lugares.js", "transporte.js", "ambiente.js", "residuos.js", "planeamiento.js", "micasa.js", "agenda.js", "tiempo_real.js", "pixel.js", "trafico.js", "farolas.js"]
 

@@ -599,22 +599,11 @@ def symbol(nombre, dibujo):
 
 sprite = ('<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0" aria-hidden="true" '
           'shape-rendering="crispEdges">' + "".join(symbol(n, d) for n, d in ICONOS.items()) + "</svg>")
-# Favicon: la casa del sprite con la tinta en negro (la página no lleva archivo de icono aparte)
-FAVICON = r'''// Favicon: la casa del sprite, con la tinta en negro
-{
-  const casa = document.getElementById("i-casa").innerHTML.replaceAll("currentColor", "#16181d");
-  const enlace = document.querySelector("link[rel=icon]") ?? document.head.appendChild(document.createElement("link"));
-  enlace.rel = "icon";
-  enlace.href = "data:image/svg+xml," + encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">${casa}</svg>`);
-}
-'''
 salida = os.path.join(os.path.dirname(os.path.abspath(__file__)), "js", "iconos.js")
 with open(salida, "w", encoding="utf-8") as f:
     f.write("// ICONOS DE PÍXEL (16×16, paleta de la maqueta): generado por iconos_pixel.py, no editar a mano.\n"
             f"const SPRITE_ICONOS = '{sprite}';\n"
             "document.body.insertAdjacentHTML(\"afterbegin\", SPRITE_ICONOS);\n"
-            + FAVICON +
             "/** El icono `nombre` como SVG en línea (decorativo: el texto del botón ya lo nombra). */\n"
             "export const iconoPx = (nombre) =>\n"
             "  `<svg class=\"px\" aria-hidden=\"true\" focusable=\"false\"><use href=\"#i-${nombre}\"/></svg>`;\n")
