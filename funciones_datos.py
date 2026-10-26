@@ -45,10 +45,31 @@ VELOCIDAD = {   # km/h para un vehículo de emergencia en circulación normal (0
     "residential": 30, "living_street": 20, "service": 20,
 }
 SIN_PEATONES = {"motorway", "motorway_link", "trunk", "trunk_link"}
+# Límite legal si OSM no lo dice (km/h). En ciudad (RD 970/2020): 30 en calles de un carril por sentido y 50 con dos
+# o más; las vías rápidas, lo habitual en la zona (la C-58 lleva maxspeed en OSM).
+LIMITE_TIPO = {"motorway": 120, "motorway_link": 60, "trunk": 80, "trunk_link": 50, "living_street": 20, "service": 20}
+
+
+def limite_legal(t):
+    """Velocidad máxima permitida (km/h) de una vía de coches: la de OSM o la general según tipo y carriles."""
+    try:
+        return int(float(t.get("maxspeed", "").split()[0]))
+    except (ValueError, IndexError):
+        pass
+    tipo = t.get("highway")
+    if tipo in LIMITE_TIPO:
+        return LIMITE_TIPO[tipo]
+    try:
+        carriles = int(t.get("lanes", "0"))
+    except ValueError:
+        carriles = 0
+    por_sentido = carriles if t.get("oneway") == "yes" else carriles // 2
+    return 50 if por_sentido >= 2 else 30
 
 
 def grafo(vias, nodos, a_metros, LIM, ANCHOS, PEATONALES):
-    """Nodos (x, z de three.js en dm, Int16) y aristas (a, b, velocidad | a pie << 7; Uint16). Sin sentidos únicos:
+    """Nodos (x, z de three.js en dm, Int16) y aristas (a, b, velocidad | a pie << 7 | límite legal / 10 << 8; Uint16;
+    velocidad = la de un vehículo de emergencia, límite = el permitido a los demás). Sin sentidos únicos:
     emergencias y peatones los pueden ignorar. Entra todo tramo con algún extremo dentro de la maqueta (+50 m)."""
     indice, puntos, aristas = {}, [], []
     dentro = lambda x, y: abs(x) <= LIM[0] + 50 and abs(y) <= LIM[1] + 50
@@ -69,10 +90,11 @@ def grafo(vias, nodos, a_metros, LIM, ANCHOS, PEATONALES):
         a_pie = tipo not in SIN_PEATONES
         if not velocidad and not a_pie:
             continue
+        limite = min(15, max(1, limite_legal(t) // 10)) if velocidad else 0    # en decenas, hacia abajo
         ns = [n for n in via["nodes"] if n in nodos]
         for a, b in zip(ns, ns[1:]):
             if dentro(*a_metros(*nodos[a])) or dentro(*a_metros(*nodos[b])):
-                aristas.append((nodo(a), nodo(b), velocidad | (128 if a_pie else 0)))
+                aristas.append((nodo(a), nodo(b), velocidad | (128 if a_pie else 0) | (limite << 8)))
     assert len(puntos) < 65536, "demasiados nodos para Uint16"
     return np.array(puntos, np.int16), np.array(aristas, np.uint16)
 

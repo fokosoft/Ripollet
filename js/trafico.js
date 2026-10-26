@@ -73,7 +73,8 @@ export function crearTrafico(ctx, div) {
   const imdMedia = total / largoRed;
 
   // Coches que hay a la vez en cada tramo a una hora: q (veh/h) × largo / velocidad real (60 % del límite)
-  const velReal = (e) => G.vel[e] * 0.6 / 3.6;                         // m/s
+  // m/s: el 60 % de la de emergencia, y nunca más que el límite legal de la calle
+  const velReal = (e) => Math.min(G.vel[e] * 0.6, G.limite[e] || 99) / 3.6;
   function esperados(pct) {
     const v = new Float32Array(G.na);
     for (let e = 0; e < G.na; e++) if (usaCoche(e)) v[e] = imd[e] * pct / 100 / 3600 * G.largo[e] / velReal(e);

@@ -56,6 +56,10 @@
   #velocidad { position: fixed; right: 16px; bottom: 34px; padding: 8px 16px; border-radius: 10px;
                background: rgba(0,0,0,.6); color: #fff; font-size: 28px; font-weight: 700; display: none; }
   #velocidad small { font-size: 14px; font-weight: 400; opacity: .8; }
+  /* señal de límite de velocidad de la calle por la que se va */
+  #senal { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px;
+           margin-left: 12px; vertical-align: middle; border: 5px solid #d62828; border-radius: 50%;
+           background: #fff; color: #111; font: 700 16px system-ui, sans-serif; }
   #tactil { position: fixed; left: 0; right: 0; bottom: 16px; display: none; justify-content: space-between;
             padding: 0 16px; pointer-events: none; }
   #tactil div { display: flex; gap: 10px; pointer-events: auto; }
@@ -274,6 +278,8 @@
   <section data-sec="ajustes" hidden>
     <label class="interruptor"><input type="checkbox" id="chkTecnico"> <span data-t="navTecnico"></span></label>
     <p class="nota" data-t="navTecnicoAyuda"></p>
+    <label class="interruptor"><input type="checkbox" id="chkAmbiente"> <span data-t="navAmbiente"></span></label>
+    <p class="nota" data-t="navAmbienteAyuda"></p>
     <div id="tiempoReal"></div>
     <div id="trafico"></div>
     <div class="botones"><button id="arte"></button></div>
@@ -290,7 +296,7 @@
 <div id="hud" class="panel"><span data-t="hud1"></span><br><span data-t="hud2"></span>
 <div class="botones"><button id="camara" data-t="camara"></button><button id="reiniciar" data-t="salida"></button>
 <button id="arteCoche" data-t="estiloV"></button><button id="salir" data-t="salir"></button></div></div>
-<div id="velocidad">0 <small>km/h</small></div>
+<div id="velocidad">0 <small>km/h</small><span id="senal" aria-hidden="true">30</span></div>
 <div id="tactil"><div><button data-tecla="ArrowLeft">◀</button><button data-tecla="ArrowRight">▶</button></div>
 <div><button data-tecla="ArrowDown">▼</button><button data-tecla="ArrowUp">▲</button></div></div>
 
@@ -382,7 +388,7 @@ const TEXTOS = {
     conducir: "🚗 Conducir", lluvia: "🌧 Lluvia", riesgo: "⚠️ Riesgo de inundación",
     estiloArte: "🎨 Estilo artístico", estiloReal: "🏙 Estilo realista",
     hud1: "<b>Conduciendo</b> · W/↑ acelerar · S/↓ frenar y marcha atrás · A D/← → girar",
-    hud2: "Espacio freno de mano · Shift turbo · C cámara · R volver a la salida",
+    hud2: "Espacio freno de mano · Shift acelera más · C cámara · R volver a la salida · nunca pasa del límite de la calle 🚦",
     camara: "Cámara (C)", salida: "Salida (R)", estiloV: "🎨 Estilo (V)", salir: "Salir del coche (Esc)",
     tituloLluvia: "🌧 Simulación de lluvia",
     ayudaLluvia: "Haz clic en el mapa para colocar una tormenta. El agua corre según el relieve real y los edificios.",
@@ -473,7 +479,7 @@ const TEXTOS = {
     conducir: "🚗 Conduir", lluvia: "🌧 Pluja", riesgo: "⚠️ Risc d'inundació",
     estiloArte: "🎨 Estil artístic", estiloReal: "🏙 Estil realista",
     hud1: "<b>Conduint</b> · W/↑ accelerar · S/↓ frenar i marxa enrere · A D/← → girar",
-    hud2: "Espai fre de mà · Shift turbo · C càmera · R tornar a la sortida",
+    hud2: "Espai fre de mà · Shift accelera més · C càmera · R tornar a la sortida · mai passa del límit del carrer 🚦",
     camara: "Càmera (C)", salida: "Sortida (R)", estiloV: "🎨 Estil (V)", salir: "Sortir del cotxe (Esc)",
     tituloLluvia: "🌧 Simulació de pluja",
     ayudaLluvia: "Fes clic al mapa per col·locar una tempesta. L'aigua corre segons el relleu real i els edificis.",
@@ -565,7 +571,7 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
   l === "es" ? { navExplorar: "Explorar", navHerramientas: "Herramientas", navRiesgo: "Riesgo", navAjustes: "Ajustes",
                  navIr: "Ir a…", navPista: "Busca tu dirección o toca 🧰 Herramientas", navAsa: "Plegar o desplegar",
                  navCasa: "Mi casa", navBuscar: "Busca tu dirección", navBuscarEj: "Calle y número, p. ej. «Balmes 12»",
-                 navTecnico: "🛠 Modo técnico", navTecnicoAyuda: "Muestra todas las herramientas de análisis (riesgo con Neutro, simulación de lluvia, vulnerabilidad, rehabilitación, planeamiento…) y cómo se calcula cada una.",
+                 navTecnico: "🛠 Modo técnico", navAmbiente: "🐦 Sonido de ambiente", navAmbienteAyuda: "Pájaros de primavera en bucle (se cargan 300 KB al activarlo). De noche se callan.", navTecnicoAyuda: "Muestra todas las herramientas de análisis (riesgo con Neutro, simulación de lluvia, vulnerabilidad, rehabilitación, planeamiento…) y cómo se calcula cada una.",
                  comoSeCalcula: "ℹ️ ¿Cómo se calcula?", ocultarCalculo: "Ocultar cómo se calcula",
                  compartirBoton: "🔗", enlaceCopiado: "Enlace copiado: pégalo donde quieras", copiaEnlace: "Copia este enlace:",
                  a11yCerrar: "Cerrar", a11yCompartir: "Compartir un enlace a esta vista", a11yTiempo: "Hora y tiempo: {0}. Abrir ajustes",
@@ -589,7 +595,7 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
              : { navExplorar: "Explorar", navHerramientas: "Eines", navRiesgo: "Risc", navAjustes: "Ajustos",
                  navIr: "Anar a…", navPista: "Cerca la teva adreça o toca 🧰 Eines", navAsa: "Plegar o desplegar",
                  navCasa: "La meva casa", navBuscar: "Cerca la teva adreça", navBuscarEj: "Carrer i número, p. ex. «Balmes 12»",
-                 navTecnico: "🛠 Mode tècnic", navTecnicoAyuda: "Mostra totes les eines d'anàlisi (risc amb Neutro, simulació de pluja, vulnerabilitat, rehabilitació, planejament…) i com es calcula cadascuna.",
+                 navTecnico: "🛠 Mode tècnic", navAmbiente: "🐦 So d'ambient", navAmbienteAyuda: "Ocells de primavera en bucle (es carreguen 300 KB en activar-lo). De nit callen.", navTecnicoAyuda: "Mostra totes les eines d'anàlisi (risc amb Neutro, simulació de pluja, vulnerabilitat, rehabilitació, planejament…) i com es calcula cadascuna.",
                  comoSeCalcula: "ℹ️ Com es calcula?", ocultarCalculo: "Amagar com es calcula",
                  compartirBoton: "🔗", enlaceCopiado: "Enllaç copiat: enganxa'l on vulguis", copiaEnlace: "Copia aquest enllaç:",
                  a11yCerrar: "Tancar", a11yCompartir: "Compartir un enllaç a aquesta vista", a11yTiempo: "Hora i temps: {0}. Obrir ajustos",
@@ -1227,14 +1233,51 @@ for (const b of document.querySelectorAll(".cerrar")) b.onclick = () => mostrarP
 // ------------------------------------------------------------ física del coche
 const ADELANTE = new THREE.Vector3(), DERECHA = new THREE.Vector3(), ARRIBA = new THREE.Vector3(0, 1, 0);
 
+// LÍMITE DE VELOCIDAD: el de la calle más cercana (tramos del grafo con coches a 12 m como mucho; el de OSM o el
+// general: 30 km/h con un carril por sentido, 50 con dos). Fuera de las calles (plazas, caminos), 20 km/h. En un
+// cruce, la calle transversal está igual de cerca: cuenta 8 m más lejos si no va en la dirección del coche.
+let tramosCasilla = null;
+const CASILLA_LIMITE = 25;
+function limiteAqui(x, z, rumbo) {
+  const G = crearGrafo(D), clave = (i, j) => i * 4096 + j;
+  if (!tramosCasilla) {          // índice de tramos por casillas de 25 m, la primera vez que se conduce
+    tramosCasilla = new Map();
+    for (let e = 0; e < G.na; e++) {
+      if (!G.vel[e] || !G.limite[e]) continue;
+      const a = G.A[3 * e], b = G.A[3 * e + 1], n = Math.ceil(G.largo[e] / 10);
+      for (let k = 0; k <= n; k++) {
+        const c = clave(Math.floor((G.x[a] + (G.x[b] - G.x[a]) * k / n) / CASILLA_LIMITE),
+                        Math.floor((G.z[a] + (G.z[b] - G.z[a]) * k / n) / CASILLA_LIMITE));
+        const l = tramosCasilla.get(c) ?? [];
+        if (l[l.length - 1] !== e) l.push(e);
+        tramosCasilla.set(c, l);
+      }
+    }
+  }
+  let mejor = 12, limite = 20;
+  const hx = Math.sin(rumbo), hz = Math.cos(rumbo);
+  const i0 = Math.floor(x / CASILLA_LIMITE), j0 = Math.floor(z / CASILLA_LIMITE);
+  for (let i = i0 - 1; i <= i0 + 1; i++) for (let j = j0 - 1; j <= j0 + 1; j++)
+    for (const e of tramosCasilla.get(clave(i, j)) ?? []) {
+      const a = G.A[3 * e], b = G.A[3 * e + 1], dx = G.x[b] - G.x[a], dz = G.z[b] - G.z[a];
+      const t = THREE.MathUtils.clamp(((x - G.x[a]) * dx + (z - G.z[a]) * dz) / (dx * dx + dz * dz || 1), 0, 1);
+      const l = Math.hypot(dx, dz) || 1;
+      const d = Math.hypot(x - G.x[a] - t * dx, z - G.z[a] - t * dz) + 8 * Math.abs(hx * dz - hz * dx) / l;
+      if (d < mejor) { mejor = d; limite = G.limite[e]; }
+    }
+  return limite;
+}
+
 function conducir(dt) {
-  const turbo = pulsada("ShiftLeft", "ShiftRight");
-  const maxima = turbo ? 30 : 19;                       // m/s (≈ 108 / 68 km/h)
+  const turbo = pulsada("ShiftLeft", "ShiftRight");     // acelera más, pero nunca pasa del límite
+  const limite = limiteAqui(estado.pos.x, estado.pos.z, estado.rumbo), maxima = limite / 3.6, antes0 = estado.vel;
   if (pulsada("KeyW", "ArrowUp")) estado.vel += (estado.vel < 0 ? 16 : turbo ? 11 : 7) * dt;
   else if (pulsada("KeyS", "ArrowDown")) estado.vel -= (estado.vel > 0 ? 16 : 5) * dt;
   else estado.vel -= Math.sign(estado.vel) * Math.min(Math.abs(estado.vel), 3 * dt);
   if (pulsada("Space")) estado.vel -= Math.sign(estado.vel) * Math.min(Math.abs(estado.vel), 22 * dt);
-  estado.vel = THREE.MathUtils.clamp(estado.vel, -7, maxima);
+  // Al entrar en una calle más lenta, frena suave (6 m/s²) hasta su límite
+  estado.vel = THREE.MathUtils.clamp(estado.vel, -Math.min(7, maxima), Math.max(maxima, antes0 - 6 * dt));
+  if ($("senal").textContent !== String(limite)) $("senal").textContent = limite;
 
   const objetivo = (pulsada("KeyA", "ArrowLeft") ? 1 : 0) - (pulsada("KeyD", "ArrowRight") ? 1 : 0);
   estado.giro += (objetivo - estado.giro) * Math.min(1, dt * 6);
@@ -2454,6 +2497,48 @@ function aplicarModo() {
   $("tfNota")?.classList.add("soloTecnico");
   marcarNav();
 }
+// SONIDO DE AMBIENTE: pájaros de primavera en bucle (CC0: «spring birds loop», steaq en Freesound). Apagado por
+// defecto y solo se descarga al activarlo (Opus 314 KB; MP3 si el navegador no tiene Opus). Sube y baja suave; se
+// calla de noche y con la pestaña oculta. Los navegadores no dejan sonar nada hasta el primer toque o tecla.
+const ambiente = (() => {
+  let audio = null, activo = false, bloqueado = false, pidiendo = false, anterior = 0;
+  try { activo = localStorage.getItem("ambiente") === "1"; } catch {}
+  function crear() {
+    const ext = new Audio().canPlayType('audio/ogg; codecs="opus"') ? "ogg" : "mp3";
+    const lista = [`ambiente.${ext}`, `web/ambiente.${ext}`];     // web/ o el visor de un solo archivo de la raíz
+    let i = 0;
+    audio = new Audio(lista[0]);
+    Object.assign(audio, { loop: true, volume: 0, preload: "auto" });
+    audio.onerror = () => { if (++i < lista.length) { audio.src = lista[i]; bloqueado = false; } };
+  }
+  function tocar() {              // play() es asíncrono: una petición cada vez
+    if (pidiendo) return;
+    pidiendo = true;
+    audio.play().then(() => { bloqueado = false; }, () => { bloqueado = true; }).finally(() => { pidiendo = false; });
+  }
+  for (const ev of ["pointerdown", "keydown"])
+    addEventListener(ev, () => { if (activo && audio && bloqueado) tocar(); }, { passive: true });
+  return {
+    get activo() { return activo; },
+    get audio() { return audio; },
+    poner(si) {
+      activo = si;
+      try { localStorage.setItem("ambiente", si ? "1" : "0"); } catch {}
+      if (si && !audio) crear();
+      if (si) tocar();
+    },
+    cadaFrame(dt) {
+      if (!audio) { if (activo) { crear(); tocar(); } return; }
+      const objetivo = activo && !document.hidden ? 0.45 * (1 - (tiempoReal?.noche?.() ?? 0)) : 0;
+      anterior += (objetivo - anterior) * Math.min(1, dt * 1.2);
+      audio.volume = Math.min(1, Math.max(0, anterior));
+      if (objetivo === 0 && anterior < 0.005 && !audio.paused) audio.pause();
+      else if (objetivo > 0 && audio.paused && !bloqueado) tocar();
+    },
+  };
+})();
+$("chkAmbiente").checked = ambiente.activo;
+$("chkAmbiente").onchange = () => ambiente.poner($("chkAmbiente").checked);
 $("chkTecnico").onchange = () => {
   modoTecnico = $("chkTecnico").checked;
   try { localStorage.setItem("modo", modoTecnico ? "tecnico" : "vecino"); } catch {}
@@ -2533,12 +2618,13 @@ renderer.setAnimationLoop(() => {
   pixelado.cadaFrame(dt);
   trafico.cadaFrame(dt);
   farolas.cadaFrame(dt);
+  ambiente.cadaFrame(dt);
   if (pixelado.activo) pixelado.render();
   else renderer.render(scene, camera);
   etiquetas.render(scene, camera);
 });
 // ?depurar: acceso a la escena desde la consola (pruebas automáticas de parpadeo y rendimiento)
-if (new URLSearchParams(location.search).has("depurar")) globalThis.VISOR = { THREE, scene, camera, controls, renderer, pixelado };
+if (new URLSearchParams(location.search).has("depurar")) globalThis.VISOR = { THREE, scene, camera, controls, renderer, pixelado, ambiente };
 </script>
 </body>
 </html>

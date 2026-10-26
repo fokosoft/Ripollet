@@ -50,6 +50,23 @@ Fonts). En «🎛 Vista»: Píxel / 3D, Maqueta, Girar, tamaño del píxel (2–
 en el navegador. Combina con el estilo realista o el artístico y con el coche. Además aligera la GPU (con píxel 4
 dibuja 16 veces menos). `?real` abre la vista 3D clásica.
 
+## Coche y sonido de ambiente
+
+**Coche (🚗 Conducir)**: nunca pasa del límite legal de la calle por la que va, que se ve en una señal junto al
+velocímetro. Límite: el `maxspeed` de OSM (200 vías) o, si no lo tiene, el general en ciudad (RD 970/2020): 30 km/h
+con un carril por sentido, 50 con dos o más, 20 en calles de prioridad peatonal y viales de servicio; la C-58, 120.
+Fuera de las calles, 20 km/h. Al entrar en una calle más lenta frena suave hasta su límite; en los cruces cuenta la
+calle que va en la dirección del coche. Shift acelera más, pero sin pasar del límite. Los coches del tráfico tampoco
+lo pasan. El límite va en el grafo de calles (bits 8–11 de cada tramo), sin datos nuevos.
+
+**Sonido de ambiente** (⚙️ Ajustes): pájaros de primavera en bucle, apagado por defecto y descargado solo al
+activarlo; sube y baja suave, se calla de noche y con la pestaña oculta, y se recuerda en el navegador. Grabación
+«spring birds loop with low cut new jersey LOOPED AND CLEANED» de
+[steaq en Freesound](https://freesound.org/people/steaq/sounds/548383/) (CC0). `comprimir_ambiente.py` (con Blender)
+la pasa de 23 MB en WAV estéreo a `web/ambiente.ogg` (Opus mono 24 kbps, 314 KB) y `web/ambiente.mp3` (MP3 40 kbps,
+586 KB, para navegadores sin Opus): ganancia normalizada (la grabación está muy baja), sin perder la banda de 2–8 kHz
+donde está casi todo el canto, y el bucle sigue durando 120,000 s exactos.
+
 ## Tráfico y gente (activado por defecto)
 
 Coches que circulan por el grafo de calles y peatones por aceras y caminos, en la cantidad que toca a la hora del
@@ -257,7 +274,7 @@ modificar de [PUBLIC-NEUTRO](https://github.com/fokosoft/PUBLIC-NEUTRO). Los dat
 © colaboradores de OpenStreetMap (ODbL) · tiempo: Open-Meteo (CC BY 4.0) · ICGC (MDT 5 m, cartografía 1:1000 del AMB) · Dirección General del
 Catastro · zonas inundables: ACA / SNCZI (MITECO), servicio IDEE · INE (Atlas de renta) · Idescat/ICGC (secciones
 censales, CC BY 4.0) · Generalitat de Catalunya, dades obertes (ICAEN, Servei Català de Trànsit, XVPCA, autobuses
-interurbanos, mapa de capacitat acústica) · AMB (GTFS) · Open-Meteo (calidad del aire, CC BY 4.0).
+interurbanos, mapa de capacitat acústica) · AMB (GTFS) · Open-Meteo (calidad del aire, CC BY 4.0) · sonido de ambiente: steaq en Freesound (CC0).
 
 En el repositorio no van los archivos de Blender, las cachés de descarga (teselas del Catastro, del LiDAR y del AMB,
 GTFS, tablas brutas del INE) ni los certificados energéticos por vivienda: se regeneran con los `obtener_*.py`.

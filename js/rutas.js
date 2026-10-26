@@ -70,13 +70,13 @@ export function crearGrafo(D) {
     vecino[lleno[a]] = b; arista[lleno[a]++] = e;
     vecino[lleno[b]] = a; arista[lleno[b]++] = e;
   }
-  const largo = new Float32Array(na), vel = new Uint8Array(na), pie = new Uint8Array(na);
+  const largo = new Float32Array(na), vel = new Uint8Array(na), pie = new Uint8Array(na), limite = new Uint8Array(na);
   for (let e = 0; e < na; e++) {
     const a = A[3 * e], b = A[3 * e + 1];
     largo[e] = Math.hypot(x[a] - x[b], z[a] - z[b]);
-    vel[e] = A[3 * e + 2] & 127; pie[e] = A[3 * e + 2] >> 7;
+    vel[e] = A[3 * e + 2] & 127; pie[e] = (A[3 * e + 2] >> 7) & 1; limite[e] = (A[3 * e + 2] >> 8) * 10;
   }
-  grafo = { nn, na, x, z, inicio, vecino, arista, largo, vel, pie, A };
+  grafo = { nn, na, x, z, inicio, vecino, arista, largo, vel, pie, limite, A };
   return grafo;
 }
 
