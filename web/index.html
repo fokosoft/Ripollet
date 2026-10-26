@@ -5548,6 +5548,187 @@ const herramientaPatrimonio = {
 };
 (globalThis.HERRAMIENTAS ??= []).push(herramientaPatrimonio);
 
+// ===== historia.js =====
+// RIPOLLET EN EL TIEMPO: la ortofoto de cada vuelo histórico (ICGC: 1946, 1956, 1977, 1986, 1994; IGN PNOA: 2004,
+// 2012, 2018; obtener_historico.py) sobre el relieve de la maqueta, y de los edificios de hoy solo los que ya existían
+// ese año según el Catastro (los demás se descartan en el shader: textura del año de cada celda de 4 m). Mientras se
+// mira el pasado se esconde lo moderno (árboles, tráfico, farolas, mobiliario, toldos) y las sombras proyectadas
+// (la foto ya trae las suyas). Las fotos se descargan al elegir cada año (≈ 200 KB cada una).
+
+const TEXTOS_HISTORIA = {
+  es: {
+    epocaBoton: "🕰 Ripollet en el tiempo", hiTitulo: "Ripollet en el tiempo", hiHoy: "Hoy", hiPlay: "▶ Ver crecer",
+    hiPausa: "⏸ Pausa", hiEdificios: "Edificios 3D que ya existían ese año (Catastro)",
+    hiCuenta: "<b>{0}</b> de {1} edificios de hoy ya existían en {2}.", hiCargando: "Cargando la foto de {0}…",
+    hiError: "No se ha podido cargar la foto de {0}.", hiFuente: "Foto: {0}",
+    hiNota: "Ortofotos históricas del ICGC (1946: vuelo americano serie A; 1956: serie B; 1977, 1986, 1994) y del " +
+      "IGN (PNOA 2004, 2012, 2018). El año de cada edificio es el de construcción del Catastro: en edificios muy " +
+      "reformados puede ser el de la reforma, y los que se derribaron no están.",
+  },
+  ca: {
+    epocaBoton: "🕰 Ripollet en el temps", hiTitulo: "Ripollet en el temps", hiHoy: "Avui", hiPlay: "▶ Veure créixer",
+    hiPausa: "⏸ Pausa", hiEdificios: "Edificis 3D que ja existien aquell any (Cadastre)",
+    hiCuenta: "<b>{0}</b> de {1} edificis d'avui ja existien el {2}.", hiCargando: "Carregant la foto del {0}…",
+    hiError: "No s'ha pogut carregar la foto del {0}.", hiFuente: "Foto: {0}",
+    hiNota: "Ortofotos històriques de l'ICGC (1946: vol americà sèrie A; 1956: sèrie B; 1977, 1986, 1994) i de " +
+      "l'IGN (PNOA 2004, 2012, 2018). L'any de cada edifici és el de construcció del Cadastre: en edificis molt " +
+      "reformats pot ser el de la reforma, i els que es van enderrocar no hi són.",
+  },
+};
+const VUELOS = [[1946, "ICGC"], [1956, "ICGC"], [1977, "ICGC"], [1986, "ICGC"], [1994, "ICGC"], [2004, "IGN · PNOA"],
+                [2012, "IGN · PNOA"], [2018, "IGN · PNOA"]];
+const EN_LINEA = "https://fokosoft.github.io/Ripollet/web/historico/";
+// Lo que se queda a la vista con una foto antigua: terreno, edificios (filtrados por año) e hitos
+const QUEDA = /^(suelo|tierra|muro_|tejado|azotea|piedra_casa|ladrillo|revoco|hueco|hierro|esfera|azulejo|agua)/;
+
+const herramientaHistoria = {
+  id: "epoca",
+  textos: TEXTOS_HISTORIA,
+  crear(ctx, div) {
+    const { THREE, D, SIM, scene, t, numero, $ } = ctx;
+    const R = ctx.rehab, nEd = R ? R.length / 5 : 0;
+
+    // ---------------------------------------------------------------- año de construcción de cada celda de 4 m
+    const datos = ctx.anoEdificios.textura.image.data;
+    if (R) {
+      const cod = (b) => { const a = R[(b - 1) * 5]; return a ? Math.max(1, Math.min(254, a - 1800)) : 0; };
+      for (let k = 0; k < datos.length; k++) datos[k] = D.edificios[k] ? cod(D.edificios[k]) : 0;
+      // Las paredes caen en el borde: las celdas vacías junto a un edificio toman su año (el mayor de los vecinos)
+      const copia = datos.slice(), nx = SIM.nx;
+      for (let k = 0; k < datos.length; k++) {
+        if (copia[k]) continue;
+        let m = 0;
+        for (const d of [-1, 1, -nx, nx, -nx - 1, -nx + 1, nx - 1, nx + 1]) m = Math.max(m, copia[k + d] ?? 0);
+        datos[k] = m;
+      }
+      ctx.anoEdificios.textura.needsUpdate = true;
+    }
+
+    // ---------------------------------------------------------------- la foto sobre el relieve
+    const L0 = D.terreno.lx, L1 = D.terreno.ly;
+    const matFoto = new THREE.ShaderMaterial({
+      uniforms: { tFoto: { value: null }, uL: { value: new THREE.Vector2(L0, L1) } },
+      vertexShader: `varying vec2 vUv;
+        uniform vec2 uL;
+        void main() {
+          vUv = vec2((position.x + uL.x) / (2.0 * uL.x), 1.0 - (position.z + uL.y) / (2.0 * uL.y));
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position + vec3(0.0, 1.0, 0.0), 1.0);
+        }`,
+      fragmentShader: `uniform sampler2D tFoto; varying vec2 vUv;
+        void main() { gl_FragColor = vec4(texture2D(tFoto, vUv).rgb, 1.0);
+          #include <colorspace_fragment>
+        }`,
+    });
+    const foto = new THREE.Mesh(ctx.geoCeldas, matFoto);
+    Object.assign(foto, { frustumCulled: false, visible: false });
+    scene.add(foto);
+    const cache = new Map();
+    function cargar(ano) {
+      if (!cache.has(ano)) {
+        // Junto a la página (web/), desde la raíz del repositorio (ripollet.html) o, con file://, de la web publicada
+        const urls = location.protocol === "file:" ? [EN_LINEA] : ["historico/", "web/historico/", EN_LINEA];
+        cache.set(ano, (async () => {
+          for (const base of urls) {
+            try {
+              const tex = await new THREE.TextureLoader().setCrossOrigin("anonymous").loadAsync(`${base}${ano}.jpg`);
+              tex.colorSpace = THREE.SRGBColorSpace;
+              tex.anisotropy = ctx.renderer.capabilities.getMaxAnisotropy();
+              return tex;
+            } catch {}
+          }
+          throw new Error("sin foto");
+        })());
+      }
+      return cache.get(ano);
+    }
+
+    // ---------------------------------------------------------------- esconder lo moderno
+    let escondidos = null, sombra = true;
+    function pasado(si) {
+      if (si && !escondidos) {
+        escondidos = [];
+        const raizGlb = ctx.mallasModelo.find((o) => !o.isInstancedMesh)?.parent;
+        for (const o of scene.children) {
+          if (o === foto || o.isLight || o.isCSS2DObject || !o.visible || o === raizGlb || o.type === "Object3D") continue;
+          o.visible = false; escondidos.push(o);
+        }
+        for (const o of raizGlb?.children ?? [])
+          if (o.visible && !QUEDA.test(o.material?.name ?? "")) { o.visible = false; escondidos.push(o); }
+        sombra = ctx.sol.castShadow;
+        ctx.sol.castShadow = false;
+      } else if (!si && escondidos) {
+        for (const o of escondidos) o.visible = true;
+        escondidos = null;
+        ctx.sol.castShadow = sombra;
+      }
+      foto.visible = si;
+    }
+
+    // ---------------------------------------------------------------- panel
+    div.innerHTML = `<b data-t="hiTitulo"></b>
+      <div id="hiAno" style="font:700 40px/1 var(--pixel);margin:8px 0 2px;color:var(--acento)"></div>
+      <div id="hiFoto" style="margin-top:2px;font-size:12px;opacity:.85"></div>
+      <input type="range" id="hiSlider" min="0" max="${VUELOS.length}" step="1" value="0" style="margin-top:8px">
+      <div id="hiMarcas" style="display:flex;justify-content:space-between;font-size:10px;opacity:.75"></div>
+      <div class="botones"><button id="hiPlay" class="principal"></button></div>
+      <label><input type="checkbox" id="hiEdif" checked> <span data-t="hiEdificios"></span></label>
+      <p id="hiCuenta"></p>
+      <p class="nota" data-t="hiNota"></p>`;
+    let indice = 0, reproduciendo = null, abierto = false;
+    async function poner(i) {
+      indice = i;
+      $("hiSlider").value = i;
+      const hoy = i >= VUELOS.length, ano = hoy ? 0 : VUELOS[i][0];
+      $("hiAno").textContent = hoy ? t("hiHoy") : ano;
+      ctx.anoEdificios.ano.value = !hoy && $("hiEdif").checked ? ano : 0;
+      ctx.anoEdificios.todos.value = !hoy && !$("hiEdif").checked ? 1 : 0;
+      cuenta(ano);
+      if (hoy || !abierto) { pasado(false); $("hiFoto").textContent = ""; return; }
+      pasado(true);
+      $("hiFoto").textContent = t("hiCargando", ano);
+      try {
+        const tex = await cargar(ano);
+        if (indice !== i || !abierto) return;
+        matFoto.uniforms.tFoto.value = tex;
+        $("hiFoto").textContent = t("hiFuente", VUELOS[i][1]);
+      } catch { if (indice === i) $("hiFoto").textContent = t("hiError", ano); }
+    }
+    function cuenta(ano) {
+      if (!R || !ano) { $("hiCuenta").innerHTML = ""; return; }
+      let n = 0;
+      for (let b = 0; b < nEd; b++) if (R[b * 5] && R[b * 5] <= ano) n++;
+      $("hiCuenta").innerHTML = t("hiCuenta", numero(n), numero(nEd), ano);
+    }
+    function rotulos() {
+      $("hiPlay").textContent = t(reproduciendo ? "hiPausa" : "hiPlay");
+      $("hiMarcas").innerHTML = [...VUELOS.map(([a]) => `'${String(a).slice(2)}`), t("hiHoy")].map((s) => `<span>${s}</span>`).join("");
+      $("hiSlider").setAttribute("aria-label", t("hiTitulo"));
+      poner(indice);
+    }
+    $("hiSlider").oninput = () => { parar(); poner(+$("hiSlider").value); };
+    $("hiEdif").onchange = () => poner(indice);
+    function parar() { clearInterval(reproduciendo); reproduciendo = null; $("hiPlay").textContent = t("hiPlay"); }
+    $("hiPlay").onclick = () => {
+      if (reproduciendo) return parar();
+      VUELOS.forEach(([a]) => cargar(a).catch(() => {}));          // precarga
+      poner(0);
+      reproduciendo = setInterval(() => { if (indice >= VUELOS.length) parar(); else poner(indice + 1); }, 2200);
+      $("hiPlay").textContent = t("hiPausa");
+    };
+    return {
+      alMostrar() { abierto = true; rotulos(); },
+      alOcultar() {
+        abierto = false; parar(); pasado(false);
+        ctx.anoEdificios.ano.value = 0; ctx.anoEdificios.todos.value = 0;
+      },
+      traducir: rotulos,
+      enlace: () => ({ ano: indice < VUELOS.length ? VUELOS[indice][0] : "hoy" }),
+      restaurar(params) { const a = +params.get("ano"); const i = VUELOS.findIndex(([v]) => v === a); if (i >= 0) poner(i); },
+    };
+  },
+};
+(globalThis.HERRAMIENTAS ??= []).push(herramientaHistoria);
+
 // ===== tiempo_real.js =====
 // TIEMPO REAL en el mapa: el sol está donde está ahora en Ripollet (día, noche, amanecer y ocaso, con su luz y sus
 // sombras) y el tiempo es el de ahora (Open-Meteo, sin clave): nubes que apagan el sol, niebla, lluvia que se ve caer,
@@ -6797,7 +6978,8 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
   l === "es" ? { navExplorar: "Explorar", navHerramientas: "Herramientas", navRiesgo: "Riesgo", navAjustes: "Ajustes",
                  navIr: "Ir a…", navPista: "Busca tu dirección o toca 🧰 Herramientas", navAsa: "Plegar o desplegar",
                  navCasa: "Mi casa", navBuscar: "Busca tu dirección", navBuscarEj: "Calle y número, p. ej. «Balmes 12»",
-                 navTecnico: "🛠 Modo técnico", lluviaRealBoton: "🌧 Lluvia de ahora en Ripollet", lluviaRealSi: "Última hora: <b>{0} mm/h</b> · {1} mm en 3 h (Open-Meteo). Llueve sobre toda la maqueta con esa intensidad.", lluviaRealNo: "Ahora no llueve en Ripollet (Open-Meteo: {0} mm en la última hora).", lluviaRealSin: "Sin el tiempo de ahora: activa el tiempo real en Ajustes.", lluviaAhora: "🌧 Está lloviendo ({0} mm/h): mira dónde se acumula el agua ahora", crTitulo: "Créditos, ayuda y fuentes", crBoton: "ℹ️ Créditos, ayuda y fuentes", crTexto: "<p><b>Ripollet · maqueta 3D</b> es una aplicación de <b>FOKO SOFT</b>. Es un proyecto <b>independiente y no oficial</b>: no lo ha encargado ni lo avala ninguna administración pública. Los resultados son orientativos; para cualquier trámite, manda la información oficial.</p><p class=\"subtitulo\">Cómo se usa</p><ul><li><b>Moverse:</b> arrastra para desplazarte; con el ratón, clic derecho para girar y rueda para acercar; en el móvil, dos dedos para girar y acercar.</li><li><b>Mi casa:</b> busca tu calle y número (o toca tu edificio) y verás todo lo que le afecta.</li><li><b>Herramientas:</b> cada una pinta su capa sobre el mapa; toca el mapa para ver el dato de ese punto.</li><li><b>Recorrido guiado</b> (en Explorar): un paseo de dos minutos por lo principal.</li><li><b>Modo técnico</b> (en Ajustes): todas las herramientas de análisis y cómo se calcula cada una.</li><li>El botón de compartir copia un enlace a lo que estás viendo.</li></ul><p class=\"subtitulo\">De dónde salen los datos</p><ul><li><a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a>: calles, parques, tiendas y lugares (© colaboradores de OpenStreetMap, ODbL)</li><li>Dirección General del Catastro: edificios, plantas, sótanos, portales y año de construcción</li><li>ICGC: relieve (MDT 5 m), LiDAR (árboles y altura de los edificios) y coberturas del suelo</li><li>AMB: cartografía 1:1000 (bordillos y farolas) y horarios de autobús (GTFS)</li><li><a href=\"https://open-meteo.com\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a>: tiempo en directo y calidad del aire (CC BY 4.0)</li><li>ACA y SNCZI (MITECO), por el servicio IDEE: zonas inundables oficiales del río</li><li>INE: Atlas de distribución de renta · Idescat e ICGC: secciones censales (CC BY 4.0)</li><li>Generalitat de Catalunya, dades obertes: certificados energéticos (ICAEN), accidentes (Servei Català de Trànsit), calidad del aire (XVPCA), autobuses interurbanos y mapa de capacidad acústica</li><li>Diputació de Barcelona: planeamiento urbanístico (MUC) e inventario «Mapes de Patrimoni Cultural» (ruta de patrimonio e hitos modelados)</li><li>Ripollet Aporta: sectores y calendarios de recogida de residuos</li><li>Agenda de ripollet.cat: actos (se actualiza cada día)</li><li><a href=\"https://freesound.org/people/steaq/sounds/548383/\" target=\"_blank\" rel=\"noopener\">Freesound</a>: sonido de ambiente (steaq, CC0)</li></ul><p class=\"subtitulo\">Hecho con</p><p>Blender y three.js (MIT) · letra Silkscreen (Jason Kottke, SIL OFL) · <b>Neutro</b>, el modelo que explica los puntos críticos de inundación (FOKO SOFT, Apache 2.0). Código abierto con licencia MIT en <a href=\"https://github.com/fokosoft/Ripollet\" target=\"_blank\" rel=\"noopener\">GitHub</a>.</p><p class=\"nota\">© 2026 <a href=\"https://github.com/fokosoft\" target=\"_blank\" rel=\"noopener\">FOKO SOFT</a></p>", navAmbiente: "🐦 Sonido de ambiente", navAmbienteAyuda: "Pájaros de primavera en bucle (se cargan 300 KB al activarlo). De noche se callan.", navTecnicoAyuda: "Muestra todas las herramientas de análisis (riesgo con Neutro, simulación de lluvia, vulnerabilidad, rehabilitación, planeamiento…) y cómo se calcula cada una.",
+                 navTecnico: "🛠 Modo técnico", lluviaRealBoton: "🌧 Lluvia de ahora en Ripollet", lluviaRealSi: "Última hora: <b>{0} mm/h</b> · {1} mm en 3 h (Open-Meteo). Llueve sobre toda la maqueta con esa intensidad.", lluviaRealNo: "Ahora no llueve en Ripollet (Open-Meteo: {0} mm en la última hora).", lluviaRealSin: "Sin el tiempo de ahora: activa el tiempo real en Ajustes.", lluviaAhora: "🌧 Está lloviendo ({0} mm/h): mira dónde se acumula el agua ahora", crTitulo: "Créditos, ayuda y fuentes", crBoton: "ℹ️ Créditos, ayuda y fuentes", crTexto: "<p><b>Ripollet · maqueta 3D</b> es una aplicación de <b>FOKO SOFT</b>. Es un proyecto <b>independiente y no oficial</b>: no lo ha encargado ni lo avala ninguna administración pública. Los resultados son orientativos; para cualquier trámite, manda la información oficial.</p><p class=\"subtitulo\">Cómo se usa</p><ul><li><b>Moverse:</b> arrastra para desplazarte; con el ratón, clic derecho para girar y rueda para acercar; en el móvil, dos dedos para girar y acercar.</li><li><b>Mi casa:</b> busca tu calle y número (o toca tu edificio) y verás todo lo que le afecta.</li><li><b>Herramientas:</b> cada una pinta su capa sobre el mapa; toca el mapa para ver el dato de ese punto.</li><li><b>Recorrido guiado</b> (en Explorar): un paseo de dos minutos por lo principal.</li><li><b>Modo técnico</b> (en Ajustes): todas las herramientas de análisis y cómo se calcula cada una.</li><li>El botón de compartir copia un enlace a lo que estás viendo.</li></ul><p class=\"subtitulo\">De dónde salen los datos</p><ul><li><a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a>: calles, parques, tiendas y lugares (© colaboradores de OpenStreetMap, ODbL)</li><li>Dirección General del Catastro: edificios, plantas, sótanos, portales y año de construcción</li><li>ICGC: relieve (MDT 5 m), LiDAR (árboles y altura de los edificios), coberturas del suelo y ortofotos históricas (1946–1994)</li>
+<li>IGN: ortofotos del PNOA (2004, 2012, 2018)</li><li>AMB: cartografía 1:1000 (bordillos y farolas) y horarios de autobús (GTFS)</li><li><a href=\"https://open-meteo.com\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a>: tiempo en directo y calidad del aire (CC BY 4.0)</li><li>ACA y SNCZI (MITECO), por el servicio IDEE: zonas inundables oficiales del río</li><li>INE: Atlas de distribución de renta · Idescat e ICGC: secciones censales (CC BY 4.0)</li><li>Generalitat de Catalunya, dades obertes: certificados energéticos (ICAEN), accidentes (Servei Català de Trànsit), calidad del aire (XVPCA), autobuses interurbanos y mapa de capacidad acústica</li><li>Diputació de Barcelona: planeamiento urbanístico (MUC) e inventario «Mapes de Patrimoni Cultural» (ruta de patrimonio e hitos modelados)</li><li>Ripollet Aporta: sectores y calendarios de recogida de residuos</li><li>Agenda de ripollet.cat: actos (se actualiza cada día)</li><li><a href=\"https://freesound.org/people/steaq/sounds/548383/\" target=\"_blank\" rel=\"noopener\">Freesound</a>: sonido de ambiente (steaq, CC0)</li></ul><p class=\"subtitulo\">Hecho con</p><p>Blender y three.js (MIT) · letra Silkscreen (Jason Kottke, SIL OFL) · <b>Neutro</b>, el modelo que explica los puntos críticos de inundación (FOKO SOFT, Apache 2.0). Código abierto con licencia MIT en <a href=\"https://github.com/fokosoft/Ripollet\" target=\"_blank\" rel=\"noopener\">GitHub</a>.</p><p class=\"nota\">© 2026 <a href=\"https://github.com/fokosoft\" target=\"_blank\" rel=\"noopener\">FOKO SOFT</a></p>", navAmbiente: "🐦 Sonido de ambiente", navAmbienteAyuda: "Pájaros de primavera en bucle (se cargan 300 KB al activarlo). De noche se callan.", navTecnicoAyuda: "Muestra todas las herramientas de análisis (riesgo con Neutro, simulación de lluvia, vulnerabilidad, rehabilitación, planeamiento…) y cómo se calcula cada una.",
                  comoSeCalcula: "ℹ️ ¿Cómo se calcula?", ocultarCalculo: "Ocultar cómo se calcula",
                  compartirBoton: "🔗", enlaceCopiado: "Enlace copiado: pégalo donde quieras", copiaEnlace: "Copia este enlace:",
                  a11yCerrar: "Cerrar", a11yCompartir: "Compartir un enlace a esta vista", a11yTiempo: "Hora y tiempo: {0}. Abrir ajustes",
@@ -6822,7 +7004,8 @@ for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_
              : { navExplorar: "Explorar", navHerramientas: "Eines", navRiesgo: "Risc", navAjustes: "Ajustos",
                  navIr: "Anar a…", navPista: "Cerca la teva adreça o toca 🧰 Eines", navAsa: "Plegar o desplegar",
                  navCasa: "La meva casa", navBuscar: "Cerca la teva adreça", navBuscarEj: "Carrer i número, p. ex. «Balmes 12»",
-                 navTecnico: "🛠 Mode tècnic", lluviaRealBoton: "🌧 Pluja d'ara a Ripollet", lluviaRealSi: "Darrera hora: <b>{0} mm/h</b> · {1} mm en 3 h (Open-Meteo). Plou sobre tota la maqueta amb aquesta intensitat.", lluviaRealNo: "Ara no plou a Ripollet (Open-Meteo: {0} mm en la darrera hora).", lluviaRealSin: "Sense el temps d'ara: activa el temps real a Ajustos.", lluviaAhora: "🌧 Està plovent ({0} mm/h): mira on s'acumula l'aigua ara", crTitulo: "Crèdits, ajuda i fonts", crBoton: "ℹ️ Crèdits, ajuda i fonts", crTexto: "<p><b>Ripollet · maqueta 3D</b> és una aplicació de <b>FOKO SOFT</b>. És un projecte <b>independent i no oficial</b>: no l'ha encarregat ni l'avala cap administració pública. Els resultats són orientatius; per a qualsevol tràmit, mana la informació oficial.</p><p class=\"subtitulo\">Com es fa servir</p><ul><li><b>Moure's:</b> arrossega per desplaçar-te; amb el ratolí, clic dret per girar i roda per apropar; al mòbil, dos dits per girar i apropar.</li><li><b>La meva casa:</b> cerca el teu carrer i número (o toca el teu edifici) i veuràs tot el que l'afecta.</li><li><b>Eines:</b> cadascuna pinta la seva capa sobre el mapa; toca el mapa per veure la dada d'aquell punt.</li><li><b>Recorregut guiat</b> (a Explorar): un passeig de dos minuts pel més important.</li><li><b>Mode tècnic</b> (a Ajustos): totes les eines d'anàlisi i com es calcula cadascuna.</li><li>El botó de compartir copia un enllaç al que estàs veient.</li></ul><p class=\"subtitulo\">D'on surten les dades</p><ul><li><a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a>: carrers, parcs, botigues i llocs (© col·laboradors d'OpenStreetMap, ODbL)</li><li>Direcció General del Cadastre: edificis, plantes, soterranis, portals i any de construcció</li><li>ICGC: relleu (MDT 5 m), LiDAR (arbres i alçada dels edificis) i cobertes del sòl</li><li>AMB: cartografia 1:1000 (vorades i fanals) i horaris d'autobús (GTFS)</li><li><a href=\"https://open-meteo.com\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a>: temps en directe i qualitat de l'aire (CC BY 4.0)</li><li>ACA i SNCZI (MITECO), pel servei IDEE: zones inundables oficials del riu</li><li>INE: Atles de distribució de renda · Idescat i ICGC: seccions censals (CC BY 4.0)</li><li>Generalitat de Catalunya, dades obertes: certificats energètics (ICAEN), accidents (Servei Català de Trànsit), qualitat de l'aire (XVPCA), autobusos interurbans i mapa de capacitat acústica</li><li>Diputació de Barcelona: planejament urbanístic (MUC) i inventari «Mapes de Patrimoni Cultural» (ruta del patrimoni i fites modelades)</li><li>Ripollet Aporta: sectors i calendaris de recollida de residus</li><li>Agenda de ripollet.cat: actes (s'actualitza cada dia)</li><li><a href=\"https://freesound.org/people/steaq/sounds/548383/\" target=\"_blank\" rel=\"noopener\">Freesound</a>: so d'ambient (steaq, CC0)</li></ul><p class=\"subtitulo\">Fet amb</p><p>Blender i three.js (MIT) · lletra Silkscreen (Jason Kottke, SIL OFL) · <b>Neutro</b>, el model que explica els punts crítics d'inundació (FOKO SOFT, Apache 2.0). Codi obert amb llicència MIT a <a href=\"https://github.com/fokosoft/Ripollet\" target=\"_blank\" rel=\"noopener\">GitHub</a>.</p><p class=\"nota\">© 2026 <a href=\"https://github.com/fokosoft\" target=\"_blank\" rel=\"noopener\">FOKO SOFT</a></p>", navAmbiente: "🐦 So d'ambient", navAmbienteAyuda: "Ocells de primavera en bucle (es carreguen 300 KB en activar-lo). De nit callen.", navTecnicoAyuda: "Mostra totes les eines d'anàlisi (risc amb Neutro, simulació de pluja, vulnerabilitat, rehabilitació, planejament…) i com es calcula cadascuna.",
+                 navTecnico: "🛠 Mode tècnic", lluviaRealBoton: "🌧 Pluja d'ara a Ripollet", lluviaRealSi: "Darrera hora: <b>{0} mm/h</b> · {1} mm en 3 h (Open-Meteo). Plou sobre tota la maqueta amb aquesta intensitat.", lluviaRealNo: "Ara no plou a Ripollet (Open-Meteo: {0} mm en la darrera hora).", lluviaRealSin: "Sense el temps d'ara: activa el temps real a Ajustos.", lluviaAhora: "🌧 Està plovent ({0} mm/h): mira on s'acumula l'aigua ara", crTitulo: "Crèdits, ajuda i fonts", crBoton: "ℹ️ Crèdits, ajuda i fonts", crTexto: "<p><b>Ripollet · maqueta 3D</b> és una aplicació de <b>FOKO SOFT</b>. És un projecte <b>independent i no oficial</b>: no l'ha encarregat ni l'avala cap administració pública. Els resultats són orientatius; per a qualsevol tràmit, mana la informació oficial.</p><p class=\"subtitulo\">Com es fa servir</p><ul><li><b>Moure's:</b> arrossega per desplaçar-te; amb el ratolí, clic dret per girar i roda per apropar; al mòbil, dos dits per girar i apropar.</li><li><b>La meva casa:</b> cerca el teu carrer i número (o toca el teu edifici) i veuràs tot el que l'afecta.</li><li><b>Eines:</b> cadascuna pinta la seva capa sobre el mapa; toca el mapa per veure la dada d'aquell punt.</li><li><b>Recorregut guiat</b> (a Explorar): un passeig de dos minuts pel més important.</li><li><b>Mode tècnic</b> (a Ajustos): totes les eines d'anàlisi i com es calcula cadascuna.</li><li>El botó de compartir copia un enllaç al que estàs veient.</li></ul><p class=\"subtitulo\">D'on surten les dades</p><ul><li><a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a>: carrers, parcs, botigues i llocs (© col·laboradors d'OpenStreetMap, ODbL)</li><li>Direcció General del Cadastre: edificis, plantes, soterranis, portals i any de construcció</li><li>ICGC: relleu (MDT 5 m), LiDAR (arbres i alçada dels edificis), cobertes del sòl i ortofotos històriques (1946–1994)</li>
+<li>IGN: ortofotos del PNOA (2004, 2012, 2018)</li><li>AMB: cartografia 1:1000 (vorades i fanals) i horaris d'autobús (GTFS)</li><li><a href=\"https://open-meteo.com\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a>: temps en directe i qualitat de l'aire (CC BY 4.0)</li><li>ACA i SNCZI (MITECO), pel servei IDEE: zones inundables oficials del riu</li><li>INE: Atles de distribució de renda · Idescat i ICGC: seccions censals (CC BY 4.0)</li><li>Generalitat de Catalunya, dades obertes: certificats energètics (ICAEN), accidents (Servei Català de Trànsit), qualitat de l'aire (XVPCA), autobusos interurbans i mapa de capacitat acústica</li><li>Diputació de Barcelona: planejament urbanístic (MUC) i inventari «Mapes de Patrimoni Cultural» (ruta del patrimoni i fites modelades)</li><li>Ripollet Aporta: sectors i calendaris de recollida de residus</li><li>Agenda de ripollet.cat: actes (s'actualitza cada dia)</li><li><a href=\"https://freesound.org/people/steaq/sounds/548383/\" target=\"_blank\" rel=\"noopener\">Freesound</a>: so d'ambient (steaq, CC0)</li></ul><p class=\"subtitulo\">Fet amb</p><p>Blender i three.js (MIT) · lletra Silkscreen (Jason Kottke, SIL OFL) · <b>Neutro</b>, el model que explica els punts crítics d'inundació (FOKO SOFT, Apache 2.0). Codi obert amb llicència MIT a <a href=\"https://github.com/fokosoft/Ripollet\" target=\"_blank\" rel=\"noopener\">GitHub</a>.</p><p class=\"nota\">© 2026 <a href=\"https://github.com/fokosoft\" target=\"_blank\" rel=\"noopener\">FOKO SOFT</a></p>", navAmbiente: "🐦 So d'ambient", navAmbienteAyuda: "Ocells de primavera en bucle (es carreguen 300 KB en activar-lo). De nit callen.", navTecnicoAyuda: "Mostra totes les eines d'anàlisi (risc amb Neutro, simulació de pluja, vulnerabilitat, rehabilitació, planejament…) i com es calcula cadascuna.",
                  comoSeCalcula: "ℹ️ Com es calcula?", ocultarCalculo: "Amagar com es calcula",
                  compartirBoton: "🔗", enlaceCopiado: "Enllaç copiat: enganxa'l on vulguis", copiaEnlace: "Copia aquest enllaç:",
                  a11yCerrar: "Tancar", a11yCompartir: "Compartir un enllaç a aquesta vista", a11yTiempo: "Hora i temps: {0}. Obrir ajustos",
@@ -6856,7 +7039,7 @@ const ICONO_DE = {
   abrirRecorrido: "play", abrirMicasa: "casa", conducir: "coche", abrirLluvia: "lluvia", abrirRiesgo: "gota",
   sombra: "arbol", acces: "silla", incendio: "fuego", solar: "sol", emerg: "cruz", minutos: "reloj", proy: "grua",
   incid: "nota", vulner: "personas", rehab: "ladrillos", seguridad: "semaforo", lugares: "tienda", transporte: "bus",
-  ambiente: "altavoz", residuos: "contenedor", plan: "plano", agenda: "calendario", patri: "columna",
+  ambiente: "altavoz", residuos: "contenedor", plan: "plano", agenda: "calendario", patri: "columna", epoca: "reloj",
 };
 function ponerIconos() {
   for (const b of document.querySelectorAll("#nav [data-sec]")) b.querySelector(".ico").innerHTML = iconoPx(ICONO_DE[b.dataset.sec]);
@@ -6994,6 +7177,27 @@ const datosCapaTechos = new Uint8Array((S1.nx / 2) * (S1.ny / 2) * 4);
 const texCapaTechos = new THREE.DataTexture(datosCapaTechos, S1.nx / 2, S1.ny / 2, THREE.RGBAFormat, THREE.UnsignedByteType);
 Object.assign(texCapaTechos, { generateMipmaps: false, colorSpace: THREE.SRGBColorSpace, needsUpdate: true });
 const capaTechosActiva = { value: 0 };
+// AÑO DE LOS EDIFICIOS (Ripollet en el tiempo, js/historia.js): año de construcción de cada celda de 4 m − 1800; las
+// paredes y tejados de los edificios posteriores al año que se mira se descartan (uTodos: se esconden todos)
+const texAnoEdif = new THREE.DataTexture(new Uint8Array(SIM.nx * SIM.ny), SIM.nx, SIM.ny, THREE.RedFormat, THREE.UnsignedByteType);
+Object.assign(texAnoEdif, { magFilter: THREE.NearestFilter, minFilter: THREE.NearestFilter, generateMipmaps: false,
+                            unpackAlignment: 1, needsUpdate: true });
+const anoEdificios = { textura: texAnoEdif, ano: { value: 0 }, todos: { value: 0 } };
+const uniformesAno = () => ({ tAnoEdif: { value: texAnoEdif }, uAnoVista: anoEdificios.ano, uTodosFuera: anoEdificios.todos,
+  uOrigenSim: { value: new THREE.Vector2(SIM.x0, SIM.z0) }, uTamSim: { value: new THREE.Vector2(SIM.nx * SIM.celda, SIM.ny * SIM.celda) } });
+const GLSL_ANO = `
+  uniform sampler2D tAnoEdif;
+  uniform float uAnoVista, uTodosFuera;
+  uniform vec2 uOrigenSim, uTamSim;
+  void ocultarSiPosterior() {
+    if (uTodosFuera > 0.5) discard;
+    if (uAnoVista > 0.5) {
+      float c = texture2D(tAnoEdif, (vMundo.xz - uOrigenSim) / uTamSim).r * 255.0;
+      if (c > 0.5 && c > uAnoVista - 1800.0 + 0.5) discard;
+    }
+  }
+`;
+const ANO_EN_MAIN = ["#include <clipping_planes_fragment>", "#include <clipping_planes_fragment>\n ocultarSiPosterior();"];
 const uniformesTechos = () => ({ tCapaTechos: { value: texCapaTechos }, uCapaTechosActiva: capaTechosActiva,
   uOrigen1m: { value: new THREE.Vector2(SIM.x0, SIM.z0) }, uTam1m: { value: new THREE.Vector2(S1.nx, S1.ny) } });
 const GLSL_TECHOS = `
@@ -7076,10 +7280,10 @@ function pintarAceras(material, panot) {
 /** Cubiertas realistas: la capa de cubiertas de la herramienta abierta, encima de la textura. */
 function pintarTechos(material) {
   material.onBeforeCompile = (s) => {
-    Object.assign(s.uniforms, uniformesTechos());
+    Object.assign(s.uniforms, uniformesTechos(), uniformesAno());
     s.vertexShader = "varying vec3 vMundo;\n" + s.vertexShader.replace(...VERTICE_MUNDO);
-    s.fragmentShader = "varying vec3 vMundo;\n" + GLSL_TECHOS + s.fragmentShader.replace(
-      "#include <map_fragment>", "#include <map_fragment>\n diffuseColor.rgb = conTechos(diffuseColor.rgb);");
+    s.fragmentShader = "varying vec3 vMundo;\n" + GLSL_TECHOS + GLSL_ANO + s.fragmentShader.replace(
+      "#include <map_fragment>", "#include <map_fragment>\n diffuseColor.rgb = conTechos(diffuseColor.rgb);").replace(...ANO_EN_MAIN);
   };
   material.customProgramCacheKey = () => "techos";
   material.needsUpdate = true;
@@ -7093,8 +7297,10 @@ const nocheVentanas = { value: 0 };
 function pintarVentanas(material) {
   material.onBeforeCompile = (s) => {
     s.uniforms.uNocheV = nocheVentanas;
+    Object.assign(s.uniforms, uniformesAno());
     s.vertexShader = "varying vec3 vMundo;\n" + s.vertexShader.replace(...VERTICE_MUNDO);
-    s.fragmentShader = "varying vec3 vMundo;\nuniform float uNocheV;\nfloat luzVentana = 0.0;\n" + s.fragmentShader
+    s.fragmentShader = "varying vec3 vMundo;\nuniform float uNocheV;\nfloat luzVentana = 0.0;\n" + GLSL_ANO + s.fragmentShader
+      .replace(...ANO_EN_MAIN)
       .replace("#include <map_fragment>", `#include <map_fragment>
         #ifdef USE_MAP
         {
@@ -7743,14 +7949,17 @@ function materialArtistico(original) {
     });
     if (original.name === "suelo") Object.assign(s.uniforms, uniformesAceras());
     if (ES_TECHO(original.name)) Object.assign(s.uniforms, uniformesTechos());
+    const edificio = ES_TECHO(original.name) || original.name.startsWith("muro_");
+    if (edificio) Object.assign(s.uniforms, uniformesAno());
     s.vertexShader = "varying vec3 vMundo;\n" + s.vertexShader.replace(...VERTICE_MUNDO);
     s.fragmentShader = `varying vec3 vMundo;
       ${original.name === "suelo" ? "#define CON_ACERAS\n" + GLSL_ACERAS : ""}
       ${ES_TECHO(original.name) ? "#define CON_TECHOS\n" + GLSL_TECHOS : ""}
+      ${edificio ? GLSL_ANO : ""}
       uniform vec3 uBase, uOscuro, uClaro, uMota;
       uniform float uMotas, uEscala;
       uniform vec2 uUmbral;
-      ` + s.fragmentShader.replace("#include <map_fragment>", `#include <map_fragment>
+      ` + (edificio ? s.fragmentShader.replace(...ANO_EN_MAIN) : s.fragmentShader).replace("#include <map_fragment>", `#include <map_fragment>
       {
         // 3 tonos según la luminancia de la textura (ventanas, juntas, líneas...)
         float lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
@@ -7786,7 +7995,8 @@ function materialArtistico(original) {
       }`);
   };
   m.customProgramCacheKey = () => (original.name === "suelo" ? "estilo-arte-suelo"      // el suelo lleva aceras
-                                  : ES_TECHO(original.name) ? "estilo-arte-techos" : "estilo-arte");
+                                  : ES_TECHO(original.name) ? "estilo-arte-techos"
+                                  : original.name.startsWith("muro_") ? "estilo-arte-muros" : "estilo-arte");
   materialesArte.set(original, m);
   return m;
 }
@@ -8645,6 +8855,7 @@ $("verMedicion").onclick = () => {
 // las pinta la herramienta abierta.
 const CTX = {
   THREE, scene, camera, renderer, controls, CSS2DObject, D, DATOS, SIM, S1, altura, sol, sombrasMapa, geoCeldas,
+  mallasModelo, anoEdificios,
   simulacion, FISICA, INTENSIDADES, volarA, $, t, tx, numero, idioma: () => idioma, estiloArte: () => estiloArte,
   nombreCalle, choca, SOTANOS, secciones4m: SECCIONES_4M, rehab: REHAB, lugaresOsm: LUGARES_OSM, transporte: TRANSPORTE, acustica4m: ACUSTICA_4M, direcciones: DIRECCIONES,
   sectores4m: SECTORES_4M, planeamiento4m: PLANEAMIENTO_4M, residuos: RESIDUOS, agendaLocal: AGENDA_LOCAL, rutaPatrimonio: RUTA_PATRIMONIO,
@@ -8869,7 +9080,7 @@ $("abrirRecorrido").onclick = () => recorrido.empezar();
 
 // ------------------------------------------------------------ modos: vecino (por defecto) y técnico
 // Vecino: lo que afecta a cada uno, con Mi casa en el centro. Técnico: todas las herramientas de análisis.
-const HERR_VECINO = ["micasa", "residuos", "agenda", "lugares", "transporte", "patri", "sombra", "incid"];
+const HERR_VECINO = ["micasa", "residuos", "agenda", "lugares", "transporte", "patri", "epoca", "sombra", "incid"];
 function aplicarModo() {
   document.body.classList.toggle("vecino", !modoTecnico);
   for (const b of $("herramientas").children) {

@@ -90,6 +90,15 @@ Accesibilidad comprobada con axe-core (0 fallos en los tres modos).
   calles a pie (3,1 km), con la ficha de cada una. `obtener_patrimonio.py` baja el inventario (168 fichas) y
   `ruta_patrimonio.py` elige y ordena las paradas.
 
+## Ripollet en el tiempo
+
+Herramienta con un deslizador de años: la ortofoto de cada vuelo sobre el relieve (ICGC: 1946, 1956, 1977, 1986,
+1994; IGN PNOA: 2004, 2012, 2018) y, de los edificios de hoy, solo los que ya existían según su año de construcción
+del Catastro (494 en 1946, 1243 en 1986, 1882 en 2018). «Ver crecer» pasa los años solo. Con una foto antigua se
+esconde lo moderno (árboles, tráfico, farolas, mobiliario) y las sombras proyectadas. `obtener_historico.py` recorta
+cada vuelo al rectángulo de la maqueta a 2 m/píxel (≈ 200 KB por foto, 1,5 MB en total en `web/historico/`); cada
+una se descarga solo al elegir su año (`ripollet.html` en local las toma de la web publicada).
+
 ## Coche y sonido de ambiente
 
 **Coche (🚗 Conducir)**: nunca pasa del límite legal de la calle por la que va, que se ve en una señal junto al

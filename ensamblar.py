@@ -17,7 +17,7 @@ BLOBS = ["codigos", "rasgos", "calles", "edificios", "terreno", "arboles", "acer
          "techos2m", "acces1m", "grafo_nodos", "grafo_aristas", "solar2m"]
 MODULOS = ["neutro_nucleo.js", "iconos.js", "logo.js", "datos.js", "simulacion.js", "inundacion.js", "comun.js",   # en este orden
            "sombra.js", "accesibilidad.js", "incendio.js", "solar.js", "rutas.js", "proyectos.js",
-           "incidencias_ciudad.js", "vulnerabilidad.js", "rehabilitacion.js", "seguridad.js", "lugares.js", "transporte.js", "ambiente.js", "residuos.js", "planeamiento.js", "micasa.js", "agenda.js", "patrimonio.js", "tiempo_real.js", "pixel.js", "trafico.js", "farolas.js", "mobiliario.js"]
+           "incidencias_ciudad.js", "vulnerabilidad.js", "rehabilitacion.js", "seguridad.js", "lugares.js", "transporte.js", "ambiente.js", "residuos.js", "planeamiento.js", "micasa.js", "agenda.js", "patrimonio.js", "historia.js", "tiempo_real.js", "pixel.js", "trafico.js", "farolas.js", "mobiliario.js"]
 
 
 def leer(ruta, modo="r"):
