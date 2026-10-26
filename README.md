@@ -72,6 +72,24 @@ el escudo (2,5 KB), en `js/logo.js`.
 el favicon es el escudo). El contorno toma el color del texto, así el mismo icono sirve en botones claros y oscuros.
 Accesibilidad comprobada con axe-core (0 fallos en los tres modos).
 
+## Detalles del modelo con datos reales
+
+- **Hitos modelados a mano** (`hitos_ripollet.py`) según su ficha del inventario «Mapes de Patrimoni Cultural» de la
+  Diputació de Barcelona y con la altura del LiDAR: el campanario modernista de Sant Esteve (1892, 25 m), la iglesia
+  en piedra, el Molí d'en Rata (1825), la chimenea hexagonal del Molí d'en Calvet (28 m) y el molino de viento de 1870.
+- **Pasos de cebra** en los 39 pasos de peatones de OSM, solo sobre la calzada real; **toldos** en 197 bajos de
+  tiendas, bares y restaurantes de OSM, en la pared que da a la calle.
+- **Mobiliario** (`js/mobiliario.js`, instancias, no pesa en el GLB): los contenedores en su sitio real (Ripollet
+  Aporta), marquesinas en las paradas de autobús y **placas solares** en los 73 edificios cuyo certificado energético
+  dice que tienen fotovoltaica.
+- **Estación del año**: las copas de hoja ancha cambian de color con la fecha (otoño, invierno sin hoja, flor en
+  primavera); de noche, una de cada tres **ventanas** se enciende.
+- **Lluvia real**: si en la última hora han caído 0,5 mm o más en Ripollet (Open-Meteo), Explorar lo avisa y el panel
+  de lluvia la simula sobre toda la maqueta, desde seco, para ver dónde se acumula el agua ahora.
+- **Ruta de patrimonio** (herramienta, también en modo vecino): 18 paradas del inventario por el casco antiguo, por
+  calles a pie (3,1 km), con la ficha de cada una. `obtener_patrimonio.py` baja el inventario (168 fichas) y
+  `ruta_patrimonio.py` elige y ordena las paradas.
+
 ## Coche y sonido de ambiente
 
 **Coche (🚗 Conducir)**: nunca pasa del límite legal de la calle por la que va, que se ve en una señal junto al
