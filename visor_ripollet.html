@@ -253,13 +253,13 @@
     /* Hojas desde abajo: la del menú y las de las herramientas */
     #mapa, #lluvia, #riesgo, .herramienta, #explicacion {
       top: auto !important; left: 0 !important; right: 0 !important; bottom: 62px !important; width: auto !important;
-      max-width: none !important; max-height: 50vh; padding: 4px 14px 12px; border-width: 2px 0 0 !important;
+      max-width: none !important; max-height: 44vh; padding: 4px 14px 12px; border-width: 2px 0 0 !important;
       border-style: solid !important; box-shadow: 0 -3px 0 rgba(22,24,29,.12); z-index: 6; }
     #mapa { max-height: 64vh; }
     .herramienta > b:first-of-type, #lluvia > b:first-of-type, #riesgo > b:first-of-type { margin-top: 0; }
     .panel > .cerrar { top: 26px; }
     #creditos > .cerrar { top: 4px; }     /* sin asa: la ✕ en su barra de título */
-    .mini { max-height: 64px !important; overflow: hidden !important; }
+    .mini { max-height: 64px !important; overflow: hidden !important; cursor: pointer; }
     .completa { max-height: calc(100vh - 130px) !important; }
     .asa { display: block; height: 22px; margin: 0 -14px 2px; cursor: pointer; position: relative; touch-action: manipulation; }
     .asa::before { content: ""; position: absolute; left: 50%; top: 8px; width: 40px; height: 6px; margin-left: -20px;
@@ -1250,6 +1250,13 @@ function ponerAsa(panel) {
     else if (dy > 40) poner(antes === "completa" ? "media" : "mini");
   };
   asa.onclick = null;
+  // Plegada (solo se ve la barra del título): tocarla la vuelve a desplegar
+  if (!panel.dataset.hoja) {
+    panel.dataset.hoja = "1";
+    panel.addEventListener("click", (e) => {
+      if (esMovil() && estadoDe() === "mini" && !e.target.closest(".cerrar, .asa")) poner("media");
+    });
+  }
   Object.assign(asa, { tabIndex: 0 });
   asa.setAttribute("role", "button");
   asa.onkeydown = (e) => {
@@ -1259,7 +1266,44 @@ function ponerAsa(panel) {
   };
 }
 
+// HOJAS EN EL MÓVIL Y MAPA: las hojas abiertas (menú, riesgo, lluvia, herramientas)
+const hojasAbiertas = () => [$("mapa"), $("riesgo"), $("lluvia"), ...document.querySelectorAll(".herramienta")]
+  .filter((h) => (h.id === "mapa" ? h.classList.contains("abierta") : h.style.display === "block"));
+// Al arrastrar el mapa, las hojas se pliegan a su barra de título: la herramienta sigue puesta (sus iconos, su capa)
+// y el mapa queda a la vista; tocar la barra la despliega otra vez. Un toque sin arrastrar no pliega nada.
+{
+  let p0 = null;
+  renderer.domElement.addEventListener("pointerdown", (e) => { p0 = [e.clientX, e.clientY]; });
+  renderer.domElement.addEventListener("pointermove", (e) => {
+    if (!p0 || !esMovil() || Math.hypot(e.clientX - p0[0], e.clientY - p0[1]) < 12) return;
+    p0 = null;
+    for (const h of hojasAbiertas()) { h.classList.add("mini"); h.classList.remove("completa"); }
+  });
+  addEventListener("pointerup", () => { p0 = null; });
+}
+// El centro de la vista va al hueco que dejan libre la barra (y el recorrido) arriba y la hoja abajo: lo que se mira
+// (el punto al que se vuela, los iconos de la herramienta) no queda detrás de la hoja. Suave, en cada fotograma.
+let desplVista = 0;
+function ajustarVista() {
+  let objetivo = 0;
+  if (esMovil() && modo === "mapa") {
+    let arriba = $("barra").getBoundingClientRect().bottom, abajo = $("nav").getBoundingClientRect().top;
+    if (document.body.classList.contains("enRecorrido")) arriba = Math.max(arriba, $("recorrido").getBoundingClientRect().bottom);
+    for (const h of hojasAbiertas()) abajo = Math.min(abajo, h.getBoundingClientRect().top);
+    if (abajo - arriba > 80) objetivo = innerHeight / 2 - (arriba + abajo) / 2;
+  }
+  desplVista += (objetivo - desplVista) * 0.15;
+  if (objetivo === 0 && Math.abs(desplVista) < 0.5) {
+    desplVista = 0;
+    if (camera.view?.enabled) camera.clearViewOffset();
+    return;
+  }
+  camera.setViewOffset(innerWidth, innerHeight, 0, desplVista, innerWidth, innerHeight);
+}
+
 function entrarAlCoche() {
+  desplVista = 0;
+  camera.clearViewOffset();
   pixelado?.alEntrarCoche();
   modo = "coche";
   aLaSalida();
@@ -2691,6 +2735,7 @@ renderer.setAnimationLoop(() => {
       if (vuelo.t === 1) vuelo = null;
     }
     controls.update();
+    ajustarVista();
     // Plano cercano lo más lejos posible: la precisión de la profundidad depende de él, y con 1 m fijo, de lejos
     // calles, parques y tejados se pelean y parpadean. Nada del modelo queda más cerca que su caja (si la cámara
     // está fuera) ni que el 2 % de la distancia al punto que se mira.
