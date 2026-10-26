@@ -61,9 +61,24 @@ while mejora:
                 mejora = True
 ruta = orden
 largo = sum(math.hypot(b["x"] - a["x"], b["z"] - a["z"]) for a, b in zip(ruta, ruta[1:]))
+# YACIMIENTOS ARQUEOLÓGICOS del inventario: los de dentro de la maqueta con su marca, y los de justo fuera (a menos
+# de 1 km del borde) en la lista, con la dirección en la que quedan
+yacimientos = []
+for e in fichas.values():
+    if "Jaciment" not in (e["tipologia"] or ""):
+        continue
+    x, z = round((e["lon"] - LON0) * KX, 1), round(-(e["lat"] - LAT0) * KY, 1)
+    LX, LZ = (ESTE - OESTE) / 2 * KX - 5, (NORTE - SUR) / 2 * KY - 5
+    fuera = max(abs(x) - LX, abs(z) - LZ, 0)
+    if fuera > 1000:
+        continue
+    yacimientos.append({"n": e["nombre"], "e": " · ".join(e["epoca"] or []), "a": e["any"] or e["siglo"] or "",
+                        "x": x, "z": z, "dentro": fuera == 0, "d": resumen(e["descripcion"], 420),
+                        "h": resumen(e["historia"], 300), "u": e["url"]})
 salida = os.path.join(DIR, "datos_visor", "ruta_patrimonio.bin")
 with open(salida, "wb") as f:
-    f.write(json.dumps({"fuente": "Mapes de Patrimoni Cultural (Diputació de Barcelona)", "paradas": ruta},
+    f.write(json.dumps({"fuente": "Mapes de Patrimoni Cultural (Diputació de Barcelona)", "paradas": ruta, "yacimientos": yacimientos},
                        ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+print(f"YACIMIENTOS: {len(yacimientos)} ({sum(y['dentro'] for y in yacimientos)} dentro de la maqueta)")
 print(f"RUTA DE PATRIMONIO: {len(ruta)} paradas, ~{largo / 1000:.1f} km en línea recta entre ellas · "
       f"{os.path.getsize(salida) / 1024:.1f} KB")

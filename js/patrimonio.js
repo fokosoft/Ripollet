@@ -3,6 +3,7 @@
 // las paradas numeradas en el mapa y un modo paseo que vuela de una a otra con su ficha (descripción e historia
 // resumidas, en catalán como en el inventario, y el enlace a la ficha completa).
 import { crearGrafo, tiempos, nodoCercano, nodosDe } from './rutas.js';
+import { iconoPx } from './iconos.js';
 
 export const TEXTOS_PATRIMONIO = {
   es: {
@@ -10,6 +11,9 @@ export const TEXTOS_PATRIMONIO = {
     paResumen: "{0} paradas por el casco antiguo · {1} km a pie · unos {2} min sin contar las paradas.",
     paEmpezar: "▶ Empezar el paseo", paParada: "Parada {0} de {1}", paAnterior: "◀ Anterior", paSiguiente: "Siguiente ▶",
     paFicha: "Ficha completa", paHistoria: "Historia", paIdioma: "Texto de la ficha del inventario (en catalán).",
+    paYac: "Yacimientos arqueológicos", paYacAyuda: "Bajo los parques y calles de hoy: poblados de la Edad del Bronce, " +
+      "una necrópolis neolítica y una villa romana. No se ven: están excavados o bajo tierra.",
+    paFuera: "fuera de la maqueta, a {0} m al {1}", paRumbos: ["norte", "este", "sur", "oeste"],
     paNota: "Paradas y textos: inventario «Mapes de Patrimoni Cultural» de la Diputació de Barcelona. La ruta va por " +
       "calles y caminos a pie y es la más corta entre las paradas; algunos elementos son de propiedad privada: se ven " +
       "desde la calle.",
@@ -19,6 +23,9 @@ export const TEXTOS_PATRIMONIO = {
     paResumen: "{0} parades pel nucli antic · {1} km a peu · uns {2} min sense comptar les parades.",
     paEmpezar: "▶ Començar el passeig", paParada: "Parada {0} de {1}", paAnterior: "◀ Anterior", paSiguiente: "Següent ▶",
     paFicha: "Fitxa completa", paHistoria: "Història", paIdioma: "Text de la fitxa de l'inventari.",
+    paYac: "Jaciments arqueològics", paYacAyuda: "Sota els parcs i carrers d'avui: poblats de l'Edat del Bronze, " +
+      "una necròpolis neolítica i una vil·la romana. No es veuen: estan excavats o sota terra.",
+    paFuera: "fora de la maqueta, a {0} m al {1}", paRumbos: ["nord", "est", "sud", "oest"],
     paNota: "Parades i textos: inventari «Mapes de Patrimoni Cultural» de la Diputació de Barcelona. La ruta va per " +
       "carrers i camins a peu i és la més curta entre les parades; alguns elements són de propietat privada: es veuen " +
       "des del carrer.",
@@ -80,6 +87,22 @@ const herramientaPatrimonio = {
       return d;
     });
 
+    // Yacimientos: marca de vasija (dentro de la maqueta); los de fuera, solo en la lista
+    const Y = ctx.rutaPatrimonio.yacimientos ?? [];
+    const marcasY = Y.map((y, i) => {
+      if (!y.dentro) return null;
+      const d = document.createElement("div");
+      d.className = "marca";
+      Object.assign(d.style, { background: "#f5ead0", color: "#16181d", width: "30px", height: "30px", borderColor: "#7a4b32" });
+      d.innerHTML = iconoPx("vasija");
+      d.title = y.n;
+      d.onclick = () => verYac(i);
+      const o = new ctx.CSS2DObject(d);
+      o.position.set(y.x, ctx.altura(y.x, y.z) + 4, y.z);
+      grupo.add(o);
+      return d;
+    });
+
     // ---------------------------------------------------------------- panel
     div.innerHTML = `<b data-t="paTitulo"></b>
       <p id="paResumen"></p>
@@ -89,6 +112,8 @@ const herramientaPatrimonio = {
         <p style="font-size:12px;margin:6px 0"><a id="paEnlace" target="_blank" rel="noopener"></a> · <span data-t="paIdioma"></span></p>
         <div class="botones"><button id="paAnterior"></button><button id="paSiguiente" class="principal"></button></div></div>
       <ol id="paLista" style="margin:10px 0 0;padding-left:22px"></ol>
+      <p class="subtitulo" data-t="paYac"></p><p style="margin:4px 0;font-size:13px" data-t="paYacAyuda"></p>
+      <ul id="paYacLista" style="margin:4px 0 0;padding-left:20px"></ul>
       <p class="nota" data-t="paNota"></p>`;
     let actual = -1;
     function ir(i) {
@@ -106,7 +131,34 @@ const herramientaPatrimonio = {
       marcas.forEach((d, k) => { d.style.background = k === actual ? "#16181d" : "#b8322f"; d.style.transform = k === actual ? "scale(1.25)" : ""; });
       for (const [k, li] of [...$("paLista").children].entries()) li.style.fontWeight = k === actual ? "700" : "";
     }
+    /** Ficha de un yacimiento (en la misma caja que las paradas); los de fuera, el punto del borde más cercano. */
+    function verYac(i) {
+      const y = Y[i], LX = D.terreno.lx, LZ = D.terreno.ly;
+      const cx = Math.max(-LX + 30, Math.min(LX - 30, y.x)), cz = Math.max(-LZ + 30, Math.min(LZ - 30, y.z));
+      ctx.volarA(new THREE.Vector3(cx, 0, cz), y.dentro ? 0.3 : 0.6);
+      actual = -1;
+      $("paFichaCaja").hidden = false;
+      $("paNumero").textContent = y.e;
+      $("paNombre").textContent = y.n + (y.a ? ` (${y.a})` : "");
+      $("paTexto").textContent = y.d;
+      $("paHist").textContent = y.h || "—";
+      Object.assign($("paEnlace"), { href: y.u, textContent: t("paFicha") });
+      $("paAnterior").disabled = $("paSiguiente").disabled = true;
+      marcasY.forEach((d, k) => { if (d) d.style.transform = k === i ? "scale(1.3)" : ""; });
+    }
+    const fueraDe = (y) => {
+      const dx = Math.abs(y.x) - D.terreno.lx, dz = Math.abs(y.z) - D.terreno.ly;
+      const rumbo = dx > dz ? (y.x > 0 ? 1 : 3) : (y.z > 0 ? 2 : 0);
+      return t("paFuera", Math.round(Math.max(dx, dz) / 10) * 10, ctx.tx("paRumbos")[rumbo]);
+    };
     function rotulos() {
+      $("paYacLista").replaceChildren(...Y.map((y, i) => {
+        const li = document.createElement("li");
+        li.dataset.x = 1;
+        li.innerHTML = `${esc(y.n)} <small>${esc(y.e)}${y.dentro ? "" : ` · ${esc(fueraDe(y))}`}</small>`;
+        li.onclick = () => verYac(i);
+        return li;
+      }));
       $("paResumen").textContent = t("paResumen", R.length, numero(metros / 1000, 1), Math.round(metros / VEL_PIE / 60));
       $("paEmpezar").textContent = t("paEmpezar");
       $("paAnterior").textContent = t("paAnterior");

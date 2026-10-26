@@ -99,6 +99,17 @@ esconde lo moderno (árboles, tráfico, farolas, mobiliario) y las sombras proye
 cada vuelo al rectángulo de la maqueta a 2 m/píxel (≈ 200 KB por foto, 1,5 MB en total en `web/historico/`); cada
 una se descarga solo al elegir su año (`ripollet.html` en local las toma de la web publicada).
 
+## Naturaleza y arqueología
+
+- **Naturaleza** (herramienta, también en modo vecino): 3545 observaciones de GBIF.org (iNaturalist, eBird, Ornitho…)
+  dentro de la maqueta, 464 especies con su nombre en castellano y catalán: por grupos (aves, plantas, insectos, otros),
+  solo lo visto en esta época del año, lo que se ha observado a menos de 100 m del punto tocado y lo más observado.
+  En el mapa, de día, **bandadas de pájaros animados** sobrevuelan los sitios con más observaciones de aves (el río,
+  los parques). `obtener_naturaleza.py` → blob «naturaleza» (98 KB sin comprimir).
+- **Yacimientos arqueológicos** (en la herramienta de patrimonio): los 6 del inventario de la Diputació de Barcelona,
+  3 con su marca en la maqueta (poblados de la Edad del Bronce de los Pinetons y de la carretera de Santiga) y 3 justo
+  fuera (necrópolis neolítica de la Bòbila Padró, villa romana de Can Tiana, Mas Duran).
+
 ## Coche y sonido de ambiente
 
 **Coche (🚗 Conducir)**: nunca pasa del límite legal de la calle por la que va, que se ve en una señal junto al
