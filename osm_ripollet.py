@@ -11,6 +11,7 @@ import random
 import re
 import sys
 import base64
+import zlib
 import urllib.request
 import numpy as np
 from mathutils import Matrix, Vector
@@ -259,6 +260,8 @@ MATERIALES = {
     "puente": ((0.74, 0.72, 0.68), None, None, None),      # hormigón: tablero, barandillas y pilas
     "aparcamiento": ((0.32, 0.32, 0.34), None, None, None),  # asfalto liso, sin líneas de carril
 }
+import hitos_ripollet as HR                 # noqa: E402  (hitos modelados a mano)
+MATERIALES.update(HR.MATERIALES_HITOS)
 COLOR_MURO = {
     "crema": (0.93, 0.86, 0.70), "melocoton": (0.95, 0.73, 0.55), "blanco": (0.95, 0.94, 0.90),
     "ocre": (0.86, 0.66, 0.38), "rosa": (0.90, 0.64, 0.60), "gris": (0.78, 0.78, 0.80),
@@ -292,6 +295,9 @@ def cara(nombre, verts, uvs=None):
         for l, uv in zip(f.loops, uvs):
             l[capa].uv = uv
     return f
+
+
+DIBUJO = HR.Dibujo(cara)
 
 
 def prisma(muro, techo, p, z0, z1, tejado=0.0, ocultas=()):
@@ -460,6 +466,24 @@ def simplificar(p, tolerancia=0.15, minimo=0.3):
     return p
 
 
+HITO_XY = {k: (a_metros(lon, lat)[0] + HR.AJUSTE.get(k, (0, 0))[0], a_metros(lon, lat)[1] + HR.AJUSTE.get(k, (0, 0))[1])
+           for k, (lat, lon) in HR.HITOS.items()}
+HITO_DIBUJADO = {}          # lo que necesitan los hitos que se dibujan después (campanario: centro, lado y giro)
+
+
+def cerca_de(punto, p, d):
+    """¿El punto está dentro del polígono o a menos de d m de su borde?"""
+    if punto_en_poligono(*punto, p):
+        return True
+    x, y = punto
+    for (ax, ay), (bx, by) in zip(p, p[1:] + p[:1]):
+        dx, dy = bx - ax, by - ay
+        t = max(0.0, min(1.0, ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy or 1)))
+        if math.hypot(x - ax - t * dx, y - ay - t * dy) < d:
+            return True
+    return False
+
+
 def dibujar_edificio(partes, tipo, id_osm, semilla, sotano=0, ref=None):
     """Un edificio = una o varias partes (polígono, altura) con la misma base y el mismo color: así las paredes
     que comparten dos partes de igual altura coinciden y se pueden quitar (no se ven y pesan)."""
@@ -478,6 +502,11 @@ def dibujar_edificio(partes, tipo, id_osm, semilla, sotano=0, ref=None):
     suelos = [altura(x, y) for p, _ in partes for x, y in p]
     z0, zt = min(suelos) - 1.0, max(suelos)
     indice = n_edificios
+    # Hitos: la iglesia de Sant Esteve en piedra (su campanario se modela aparte, en la parte pequeña del Catastro
+    # donde está) y el Molí d'en Rata (la parte de 6 × 10,5 m junto al punto de su ficha) modelado a mano
+    iglesia = any(punto_en_poligono(*HITO_XY["esglesia"], p) for p, _ in partes)
+    if iglesia:
+        pared, techo, casa = "piedra_casa", "tejado", True
     # Pared tapada: la misma arista, recorrida al revés, en otra parte igual de alta o más
     clave = lambda a, b: (round(a[0], 2), round(a[1], 2), round(b[0], 2), round(b[1], 2))
     aristas = {}
@@ -488,12 +517,22 @@ def dibujar_edificio(partes, tipo, id_osm, semilla, sotano=0, ref=None):
     for p, alto in partes:
         tejado = min(2.5, math.sqrt(abs(area_firmada(p))) * 0.22) if casa else 0
         ocultas = {i for i in range(len(p)) if aristas.get(clave(p[i], p[i - 1]), -1) >= alto}
-        prisma(pared, techo, p, z0, zt + alto, tejado, ocultas)
+        if iglesia and abs(area_firmada(p)) < 40 and cerca_de(HITO_XY["campanar"], p, 3):
+            cx, cy = sum(x for x, _ in p) / len(p), sum(y for _, y in p) / len(p)
+            HITO_DIBUJADO["campanar"] = (cx, cy, min(5.5, max(4.0, math.sqrt(abs(area_firmada(p))))))
+        elif abs(area_firmada(p)) < 100 and cerca_de(HITO_XY["moli_rata"], p, 2):
+            HR.moli_rata(DIBUJO, p, min(altura(x, y) for x, y in p), max(altura(x, y) for x, y in p), alto)
+        else:
+            prisma(pared, techo, p, z0, zt + alto, tejado, ocultas)
         SIM_EDIFICIOS.append((p, indice))
         rasterizar(p, True, EDIF_1M, 1.0)
         rasterizar(p, zt + alto, TECHO_1M, 1.0, maximo=True)
         rasterizar(p, indice + 1, EDIF_2M, 2.0)
-    if tipo == "church":  # campanario
+    if iglesia:             # orientación de la nave (su lado más largo), para alinear el campanario
+        q = max(partes, key=lambda r: abs(area_firmada(r[0])))[0]
+        a, b = max(zip(q, q[1:] + q[:1]), key=lambda e: math.hypot(e[1][0] - e[0][0], e[1][1] - e[0][1]))
+        HITO_DIBUJADO["giro"] = math.atan2(b[1] - a[1], b[0] - a[0])
+    elif tipo == "church":  # campanario genérico (otras iglesias)
         p = max(partes, key=lambda q: abs(area_firmada(q[0])))[0]
         cx, cy = sum(x for x, _ in p) / len(p), sum(y for _, y in p) / len(p)
         torre = [(cx - 2.5, cy - 2.5), (cx + 2.5, cy - 2.5), (cx + 2.5, cy + 2.5), (cx - 2.5, cy + 2.5)]
@@ -604,6 +643,106 @@ else:
                 lo, hi = 4, 6
             alto = rnd.randint(lo, hi) * PLANTA + rnd.uniform(0.3, 1.0)
         dibujar_edificio([(p, alto)], tipo, id_osm, id_osm)
+
+# HITOS que no son edificios del Catastro: altura = lo más alto del LiDAR (edificios o «vegetación», que es como
+# clasifica la chimenea, tan delgada) a 3 m del punto, menos el suelo
+DSM_VEG = None
+if DSM_EDIF is not None and all(os.path.exists(os.path.join(_teselas, f"veg_{tx}_{ty}.npy")) for tx in range(6) for ty in range(8)):
+    DSM_VEG = np.zeros((N1Y, N1X), np.float32)
+    for ty in range(8):
+        for tx in range(6):
+            DSM_VEG[ty * N1Y // 8:(ty + 1) * N1Y // 8, tx * N1X // 6:(tx + 1) * N1X // 6] =                 np.load(os.path.join(_teselas, f"veg_{tx}_{ty}.npy"))
+    DSM_VEG -= ELEV_MIN
+
+
+def alto_lidar(x, y, minimo, maximo, defecto):
+    if DSM_VEG is None:
+        return defecto
+    i, j = int(x + LIM[0]), int(-y + LIM[1])
+    cima = max(DSM_EDIF[j - 3:j + 4, i - 3:i + 4].max(), DSM_VEG[j - 3:j + 4, i - 3:i + 4].max())
+    h = float(cima) - altura(x, y)
+    return h if minimo <= h <= maximo else defecto
+
+
+if "campanar" in HITO_DIBUJADO:
+    cx, cy, lado = HITO_DIBUJADO["campanar"]
+    h = alto_lidar(cx, cy, 24, 45, 34)
+    HR.campanar(DIBUJO, cx, cy, altura(cx, cy), h, HITO_DIBUJADO.get("giro", 0.0), lado)
+    print(f"HITOS: campanario de Sant Esteve de {h:.1f} m")
+x, y = HITO_XY["xemeneia"]
+h = alto_lidar(x, y, 15, 45, 30)
+HR.xemeneia(DIBUJO, x, y, altura(x, y), h)
+x, y = HITO_XY["moli_vent"]
+HR.moli_vent(DIBUJO, x, y, altura(x, y), alto_lidar(x, y, 4, 9, 6.5), math.radians(-40))
+print(f"HITOS: chimenea del Molí d'en Calvet de {h:.1f} m, molino de viento y Molí d'en Rata")
+
+# TOLDOS: en los bajos de las tiendas, bares y restaurantes de OSM (obtener_lugares.py): en la pared más cercana a
+# su punto (10 m como mucho) que dé a la calle, a 2,6–3,1 m del suelo, de 3 m de ancho y 1,1 m de vuelo; uno cada
+# 3,5 m como mucho por pared y de colores de la paleta (por el nombre del local, siempre el mismo)
+TOLDO_COLORES = {"toldo_rojo": (0.72, 0.20, 0.18), "toldo_verde": (0.24, 0.54, 0.23), "toldo_azul": (0.16, 0.43, 0.69),
+                 "toldo_naranja": (0.94, 0.54, 0.24)}
+for k, c in TOLDO_COLORES.items():
+    MATERIALES[k] = (c, None, None, None)
+RUTA_LUGARES_T = os.path.join(DIR, "datos_osm", "lugares.json")
+if os.path.exists(RUTA_LUGARES_T):
+    paredes = {}                                   # casilla de 10 m → paredes (a, b) de los edificios
+    for pol, _ in SIM_EDIFICIOS:
+        for a, b in zip(pol, pol[1:] + pol[:1]):
+            if math.hypot(b[0] - a[0], b[1] - a[1]) < 3.4:
+                continue
+            for cx in range(int(min(a[0], b[0]) // 10), int(max(a[0], b[0]) // 10) + 1):
+                for cy in range(int(min(a[1], b[1]) // 10), int(max(a[1], b[1]) // 10) + 1):
+                    paredes.setdefault((cx, cy), []).append((a, b))
+
+    def edificio_en(x, y):
+        i, j = int(x + LIM[0]), int(-y + LIM[1])
+        return 0 <= i < N1X and 0 <= j < N1Y and EDIF_1M[j, i]
+
+    puestos, n_toldos = [], 0
+    with open(RUTA_LUGARES_T, encoding="utf-8") as f:
+        locales = [l for l in json.load(f) if l["c"] in ("tiendas", "bares", "comida") and l.get("t") != "mall"]
+    for l in locales:
+        x, y = l["x"], -l["z"]
+        candidatas = []
+        for cx in range(int(x // 10) - 1, int(x // 10) + 2):
+            for cy in range(int(y // 10) - 1, int(y // 10) + 2):
+                for a, b in paredes.get((cx, cy), ()):
+                    dx, dy = b[0] - a[0], b[1] - a[1]
+                    L2 = dx * dx + dy * dy
+                    t = max(0.0, min(1.0, ((x - a[0]) * dx + (y - a[1]) * dy) / L2))
+                    d = math.hypot(x - a[0] - t * dx, y - a[1] - t * dy)
+                    if d < 10:
+                        candidatas.append((d, a, b, t))
+        # La pared más cercana que dé a la calle (las medianeras y las de dentro de la manzana no)
+        elegida = None
+        for _, a, b, t in sorted(candidatas, key=lambda c: c[0]):
+            L = math.hypot(b[0] - a[0], b[1] - a[1])
+            ux, uy = (b[0] - a[0]) / L, (b[1] - a[1]) / L
+            nx, ny = -uy, ux                            # fuera: a la izquierda (polígonos horarios, area_firmada > 0)
+            t = min(max(t, 1.7 / L), 1 - 1.7 / L)
+            px, py = a[0] + ux * L * t, a[1] + uy * L * t
+            if not edificio_en(px + nx * 1.5, py + ny * 1.5) and not edificio_en(px + nx * 3, py + ny * 3):
+                elegida = (L, ux, uy, nx, ny, px, py)
+                break
+        if elegida is None:
+            continue
+        L, ux, uy, nx, ny, px, py = elegida
+        if any(math.hypot(px - qx, py - qy) < 3.5 for qx, qy in puestos):
+            continue                                    # ya hay un toldo al lado
+        puestos.append((px, py))
+        g = altura(px, py)
+        ancho, vuelo, zt, zf = min(3.0, L - 0.4) / 2, 1.1, g + 3.1, g + 2.65
+        mat = list(TOLDO_COLORES)[zlib.crc32(l.get("n", "").encode()) % len(TOLDO_COLORES)]
+        a1, b1 = (px - ux * ancho, py - uy * ancho), (px + ux * ancho, py + uy * ancho)
+        a2, b2 = (a1[0] + nx * vuelo, a1[1] + ny * vuelo), (b1[0] + nx * vuelo, b1[1] + ny * vuelo)
+        o = 0.05                                        # separado de la pared, que no se pelee con ella
+        a1, b1 = (a1[0] + nx * o, a1[1] + ny * o), (b1[0] + nx * o, b1[1] + ny * o)
+        cara(mat, [(a1[0], a1[1], zt), (b1[0], b1[1], zt), (b2[0], b2[1], zf), (a2[0], a2[1], zf)])       # lona
+        cara(mat, [(a2[0], a2[1], zf), (b2[0], b2[1], zf), (b2[0], b2[1], zf - 0.3), (a2[0], a2[1], zf - 0.3)])  # faldón
+        cara(mat, [(a1[0], a1[1], zt), (a2[0], a2[1], zf), (a2[0], a2[1], zf - 0.3)])                    # costados
+        cara(mat, [(b1[0], b1[1], zt), (b2[0], b2[1], zf - 0.3), (b2[0], b2[1], zf)])
+        n_toldos += 1
+    print(f"TOLDOS: {n_toldos} de {len(locales)} tiendas, bares y restaurantes")
 
 # ---------------------------------------------------------------- calles
 ANCHOS = {
@@ -865,6 +1004,32 @@ for via in vias:
     elif "waterway" in t:
         cinta("agua", puntos, 14 if t["waterway"] == "river" else 3, 0.2)
         SIM_CINTAS.append((puntos, 14 if t["waterway"] == "river" else 3, SIM_AGUA))
+
+# PASOS DE CEBRA: los pasos de peatones de OSM (footway=crossing): franjas blancas de 0,5 m cada metro a lo ancho de
+# la calle y de 4 m en su sentido, solo sobre la calzada real (bordillos del AMB) y por encima de todas las cintas
+MATERIALES["cebra"] = ((0.93, 0.93, 0.90), None, None, None)
+n_cebras = 0
+for via in vias:
+    if via["tags"].get("footway") != "crossing":
+        continue
+    pts = [a_metros(*nodos[n]) for n in via["nodes"] if n in nodos]
+    for (xa, ya), (xb, yb) in zip(pts, pts[1:]):
+        L = math.hypot(xb - xa, yb - ya)
+        if L < 0.8:
+            continue
+        ux, uy = (xb - xa) / L, (yb - ya) / L          # a lo ancho de la calle (el sentido del paso)
+        vx, vy = -uy * 2.0, ux * 2.0                    # medio largo de la franja, en el sentido de la calle
+        for k in range(int(L)):
+            cx, cy = xa + ux * (k + 0.5), ya + uy * (k + 0.5)
+            c = celda_1m(cx, cy)
+            if CALZADA_1M is not None and (not c or not CALZADA_1M[c]):
+                continue
+            z = altura(cx, cy) + 0.40
+            e = 0.25
+            cara("cebra", [(cx - ux * e - vx, cy - uy * e - vy, z), (cx + ux * e - vx, cy + uy * e - vy, z),
+                           (cx + ux * e + vx, cy + uy * e + vy, z), (cx - ux * e + vx, cy - uy * e + vy, z)])
+            n_cebras += 1
+print(f"PASOS DE CEBRA: {n_cebras} franjas")
 
 # ---------------------------------------------------------------- zonas verdes, agua y vegetación
 # zona: (material del suelo, tipo de planta, m² por planta, máximo de plantas)
