@@ -44,12 +44,12 @@ export function crearPixelado(ctx, div) {
     uniforms: {
       tColor: { value: rt.texture }, tDepth: { value: rt.depthTexture }, uTam: { value: new THREE.Vector2(1, 1) },
       uNear: { value: 1 }, uFar: { value: 1e4 }, uPaleta: { value: 1 }, uTramado: { value: 0 }, uContornos: { value: 1 },
-      uFondo: { value: new THREE.Color() }, uPal: { value: PALETA.map((h) => new THREE.Color("#" + h).convertLinearToSRGB()) },
+      uFondo: { value: new THREE.Color() }, uDesp: { value: new THREE.Vector2() }, uPal: { value: PALETA.map((h) => new THREE.Color("#" + h).convertLinearToSRGB()) },
     },
     vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
     fragmentShader: `
       uniform sampler2D tColor, tDepth;
-      uniform vec2 uTam;
+      uniform vec2 uTam, uDesp;
       uniform float uNear, uFar, uPaleta, uTramado, uContornos;
       uniform vec3 uFondo;
       uniform vec3 uPal[32];
@@ -62,8 +62,9 @@ export function crearPixelado(ctx, div) {
         return m[i] / 16.0 - 0.47;
       }
       void main() {
-        float d0 = texture2D(tDepth, vUv).r;
-        vec3 c = d0 >= 0.99999 ? uFondo : aSRGB(texture2D(tColor, vUv).rgb);
+        vec2 uv = vUv + uDesp;                        // el resto del encaje al píxel (ver render)
+        float d0 = texture2D(tDepth, uv).r;
+        vec3 c = d0 >= 0.99999 ? uFondo : aSRGB(texture2D(tColor, uv).rgb);
         // Contorno: este píxel está delante de un vecino bastante más lejano (borde de un objeto o de la maqueta)
         float borde = 0.0;
         if (uContornos > 0.5 && d0 < 0.99999) {
@@ -71,14 +72,14 @@ export function crearPixelado(ctx, div) {
           vec2 p = 1.0 / uTam;
           for (int k = 0; k < 4; k++) {
             vec2 o = k == 0 ? vec2(p.x, 0.0) : k == 1 ? vec2(-p.x, 0.0) : k == 2 ? vec2(0.0, p.y) : vec2(0.0, -p.y);
-            float d = texture2D(tDepth, vUv + o).r;
+            float d = texture2D(tDepth, uv + o).r;
             if ((d >= 0.99999 ? 1e9 : lineal(d)) - l0 > umbral) borde = 1.0;
           }
         }
         if (uPaleta > 0.5 && d0 < 0.99999) {
           float lum = dot(c, vec3(0.299, 0.587, 0.114));
           c = clamp(mix(vec3(lum), c, 1.15), 0.0, 1.0);                 // un poco más de color, como el pixel art
-          if (uTramado > 0.5) c += bayer(floor(vUv * uTam)) * 0.09;
+          if (uTramado > 0.5) c += bayer(floor(uv * uTam)) * 0.09;
           vec3 mejor = uPal[0]; float dm = 1e9;
           for (int q = 0; q < 32; q++) {
             vec3 e = c - uPal[q];
@@ -92,6 +93,7 @@ export function crearPixelado(ctx, div) {
       }`,
     depthTest: false, depthWrite: false,
   });
+  const derecha = new THREE.Vector3(), arriba = new THREE.Vector3(), guardada = new THREE.Vector3();
   const escenaQuad = new THREE.Scene(), camQuad = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   escenaQuad.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat));
 
@@ -106,8 +108,21 @@ export function crearPixelado(ctx, div) {
     // Sin bruma: el diorama se ve limpio de punta a punta (solo cambian números, no hay que recompilar)
     const niebla = scene.fog, cerca = niebla?.near, lejos = niebla?.far;
     if (niebla) { niebla.near = 1e7; niebla.far = 2e7; }
+    // ENCAJE AL PÍXEL: la cámara se mueve a saltos de un píxel grande (lo que mide un píxel a la distancia del punto
+    // que se mira) y la imagen final se desplaza el resto. Al arrastrar el mapa, cada cosa sigue en sus mismos
+    // píxeles en vez de «bailar» (bordes, ventanas y líneas que cambian de forma en cada fotograma).
+    const tamPix = 2 * camera.position.distanceTo(controls.target) * Math.tan(camera.fov * Math.PI / 360) / h;
+    derecha.setFromMatrixColumn(camera.matrixWorld, 0); arriba.setFromMatrixColumn(camera.matrixWorld, 1);
+    const pd = camera.position.dot(derecha) / tamPix, pa = camera.position.dot(arriba) / tamPix;
+    const fd = pd - Math.round(pd), fa = pa - Math.round(pa);
+    guardada.copy(camera.position);
+    camera.position.addScaledVector(derecha, -fd * tamPix).addScaledVector(arriba, -fa * tamPix);
+    camera.updateMatrixWorld();
+    U.uDesp.value.set(fd / w, fa / h);
     renderer.setRenderTarget(rt);
     renderer.render(scene, camera);
+    camera.position.copy(guardada);
+    camera.updateMatrixWorld();
     if (niebla) { niebla.near = cerca; niebla.far = lejos; }
     renderer.setRenderTarget(null);
     renderer.render(escenaQuad, camQuad);

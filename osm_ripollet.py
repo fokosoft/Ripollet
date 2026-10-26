@@ -612,12 +612,17 @@ ANCHOS = {
     "path": 1.8, "track": 3,
 }
 PEATONALES = {"pedestrian", "footway", "cycleway", "steps", "path", "track", "living_street"}
+RANGO_CALLE = {"motorway": 4, "trunk": 4, "primary": 3, "secondary": 2, "secondary_link": 2, "tertiary": 1,
+               "tertiary_link": 1}
 
 
-def cinta(nombre, puntos, ancho, separacion, anchos=None):
+def cinta(nombre, puntos, ancho, separacion, anchos=None, union=None):
     """Cinta pegada al terreno: tramos cortos para seguir la pendiente y un octógono en cada nodo para rellenar las
-    uniones. `anchos`: el ancho de cada tramo (medido de bordillo a bordillo), o el mismo `ancho` para todos."""
+    uniones. `anchos`: el ancho de cada tramo (medido de bordillo a bordillo), o el mismo `ancho` para todos.
+    `union`: altura de los octógonos; por debajo de todas las cintas de su tipo para que las líneas pintadas
+    queden siempre encima en vez de pelearse con el asfalto liso de la unión (parpadeo)."""
     z = lambda x, y: altura(x, y) + separacion
+    zu = lambda x, y: altura(x, y) + (separacion - 0.012 if union is None else union)
     s = 0.0                                             # metros recorridos: la UV v sigue la calle
     for i in range(len(puntos) - 1):
         r = (anchos[i] if anchos else ancho) / 2
@@ -641,7 +646,7 @@ def cinta(nombre, puntos, ancho, separacion, anchos=None):
         for x, y in ((xa, ya), (xb, yb)):
             octo = [(x + r * math.cos(a), y + r * math.sin(a)) for a in (k * math.pi / 3 for k in range(6))]
             # Las uniones toman una franja de asfalto sin líneas pintadas
-            cara(nombre, [(px, py, z(px, py)) for px, py in octo], [(0.25, py / 8) for _, py in octo])
+            cara(nombre, [(px, py, zu(px, py)) for px, py in octo], [(0.25, py / 8) for _, py in octo])
 
 
 def es_puente(t):
@@ -800,7 +805,15 @@ for via in vias:
                 CALLES_CON_NOMBRE.append((puntos, t["name"]))
             continue
         anchos = None if peatonal else [ancho_medido(*a, *b, ANCHOS[tipo]) for a, b in zip(puntos, puntos[1:])]
-        cinta("peatonal" if peatonal else "calzada", puntos, ANCHOS[tipo], 0.4 if peatonal else 0.3, anchos)
+        # Alturas distintas para que las calles que se cruzan no se peleen: la de más categoría encima y, entre
+        # iguales, una u otra según el número de vía de OSM (pasos de 1 cm; las uniones, por debajo de todas)
+        if peatonal and CALZADA_1M is not None and t.get("footway") in ("sidewalk", "crossing", "traffic_island"):
+            pass    # aceras y pasos de OSM: el suelo ya pinta la acera real (bordillos del AMB); la cinta iría desplazada
+        elif peatonal:
+            cinta("peatonal", puntos, ANCHOS[tipo], 0.42 + 0.01 * (via["id"] % 3), None, 0.405)
+        else:
+            cinta("calzada", puntos, ANCHOS[tipo], 0.30 + 0.02 * RANGO_CALLE.get(tipo, 0) + 0.01 * (via["id"] % 2),
+                  anchos, 0.285)
         if not peatonal:
             SIM_CINTAS.append((puntos, ANCHOS[tipo], SIM_CALZADA))
         if t.get("name"):
@@ -851,8 +864,9 @@ for id_osm, t, ids_nodo in areas:
     if not p:
         continue
     suelo = VEGETACION[zona][0] if zona in VEGETACION else {"plaza": "puente"}.get(zona, zona)
-    # Separación ligeramente distinta por zona para que las que se solapan no parpadeen
-    drapear(suelo, p, {"pista": 0.15, "agua": 0.12, "plaza": 0.1, "aparcamiento": 0.1}.get(zona, 0.06) + 0.008 * (id_osm % 5))
+    # Separación distinta por zona para que las que se solapan no parpadeen (pasos de 1,2 cm; todas por debajo
+    # de las calles, que empiezan a 0,285 m)
+    drapear(suelo, p, {"pista": 0.22, "agua": 0.16, "plaza": 0.1, "aparcamiento": 0.1}.get(zona, 0.04) + 0.012 * (id_osm % 4))
     if zona in ("plaza", "aparcamiento"):
         continue                      # suelo urbano sellado: para la simulación no cambia nada
     SIM_ZONAS.append((p, {"bosque": SIM_BOSQUE, "matorral": SIM_MATORRAL, "agua": SIM_AGUA}.get(zona, SIM_CESPED)))

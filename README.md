@@ -193,6 +193,30 @@ Carga: 2,5–3 s en escritorio y 5–7 s en el móvil simulado (red local), con 
 (en «🎛 Vista»): «ligera» quita las sombras proyectadas y dibuja a resolución 1:1; viene por defecto en pantallas
 táctiles. En el mapa, la herramienta de tiendas solo dibuja los 60 iconos más cercanos a donde se mira.
 
+## Sin parpadeos (medido el 26 oct 2026)
+
+Medida: la escena se dibuja 8 veces moviendo la cámara una cienmilésima de la distancia y se cuentan los píxeles que
+cambian de color (solo cambian donde dos superficies se pelean por la profundidad). Abrir con `?depurar` deja la
+escena en `VISOR` para repetirla desde la consola.
+
+| Vista | Antes | Ahora |
+|---|---|---|
+| 3D de lejos (2,2 km) | 1,47 % | 0,01 % |
+| 3D media (450 m) | 0,024 % | 0,009 % |
+| Maqueta píxel (6,5 km) | 1,28 % | 0,03 % |
+
+- **Plano cercano dinámico**: lo más lejos posible (la caja del modelo o el 2 % de la distancia); con 1 m fijo, la
+  profundidad no distinguía capas a 6–40 cm de distancia vista desde 2 km.
+- **Capas planas a alturas distintas**: zonas a pasos de 1,2 cm, calles por categoría (la mayor encima) y las uniones
+  por debajo de las cintas, para que las líneas pintadas no se peleen con el asfalto liso.
+- **Aceras y pasos de OSM** (`footway=sidewalk/crossing`) no se dibujan donde hay bordillos del AMB: el suelo ya pinta
+  la acera real, y la cinta de OSM iba desplazada encima del carril.
+- **Texturas que no chisporrotean**: mipmaps en la rejilla de aceras, grano del asfalto y la tierra que se apaga
+  cuando es menor que un píxel, coberturas suavizadas entre celdas de 2 m y `normalBias` en las sombras (sin rayas que
+  bailan con el sol bajo).
+- **Vista píxel encajada**: la cámara se mueve a saltos de un píxel grande y la imagen se desplaza el resto; al
+  arrastrar el mapa, los píxeles que cambian pasan del 15–18 % al 0–6 % (lo que queda es la perspectiva).
+
 ## Peso (optimizado)
 
 Árboles con instancias en vez de geometría, vértices compartidos y sin normales (sombreado plano en la GPU), Draco

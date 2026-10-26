@@ -706,6 +706,8 @@ function sombrasMapa() {
   Object.assign(sol.shadow.camera, { left: -radioMapa, right: radioMapa, top: radioMapa, bottom: -radioMapa,
                                      near: 1, far: 3 * radioMapa });
   sol.shadow.camera.updateProjectionMatrix();
+  // Medio texel del mapa de sombras (≈ 0,6 m): sin «acné» (rayas que bailan en suelos y tejados con el sol bajo)
+  sol.shadow.normalBias = 0.3;
 }
 sombrasMapa();
 
@@ -715,7 +717,8 @@ sombrasMapa();
 const S1 = DATOS.aceras;
 const texSuelo1m = new THREE.DataTexture(Uint8Array.from(D.suelo1m, (v) => (v === 1 ? 128 : v === 2 ? 255 : 0)),
                                          S1.nx, S1.ny, THREE.RedFormat, THREE.UnsignedByteType);
-Object.assign(texSuelo1m, { magFilter: THREE.LinearFilter, minFilter: THREE.LinearFilter, generateMipmaps: false,
+// Con mipmaps: de lejos, los bordes de 1 m se promedian en vez de saltar de píxel en píxel al mover la cámara
+Object.assign(texSuelo1m, { magFilter: THREE.LinearFilter, minFilter: THREE.LinearMipmapLinearFilter, generateMipmaps: true,
                             unpackAlignment: 1, needsUpdate: true });
 // CAPA DE 1 m de las herramientas (sombra, accesibilidad…): RGBA sobre el suelo, la pinta la que esté abierta
 const datosCapa1m = new Uint8Array(S1.nx * S1.ny * 4);
@@ -761,11 +764,27 @@ const GLSL_ACERAS = `
     if (k > 0.5) return mix(c, vec3(0.62, 0.62, 0.61), 0.6) * (0.92 + 0.16 * g);   // urbano pavimentado
     return c;
   }
+  // Lo mismo mezclando el color de las 4 celdas de 2 m vecinas: bordes suaves y sin escalones que bailan
+  vec3 colorCoberturaSuave(vec3 c, float g) {
+    vec2 T = uTam1m / 2.0, q = (vMundo.xz - uOrigen1m) / 2.0 - 0.5, b = floor(q), f = fract(q);
+    vec3 r[4];
+    for (int i = 0; i < 4; i++) {
+      vec2 o = vec2(float(i - 2 * (i / 2)), float(i / 2));
+      r[i] = colorCobertura(c, floor(texture2D(tCobertes, (b + o + 0.5) / T).r * 255.0 + 0.5), g);
+    }
+    return mix(mix(r[0], r[1], f.x), mix(r[2], r[3], f.x), f.y);
+  }
   vec3 conCapa(vec3 c) {   // la capa de la herramienta abierta, encima del suelo
     vec4 k = texture2D(tCapa1m, (vMundo.xz - uOrigen1m) / uTam1m);
     return mix(c, k.rgb, k.a * uCapa1mActiva);
   }
   float tipoSuelo() { return texture2D(tSuelo1m, (vMundo.xz - uOrigen1m) / uTam1m).r; }   // 0 nada · 0,5 acera · 1 calzada
+  // Grano aleatorio en celdas de 1/f m que se apaga (0,5) cuando una celda es más pequeña que un píxel: así no
+  // chisporrotea de lejos al mover la cámara
+  float grano(float f) {
+    float g = fract(sin(dot(floor(vMundo.xz * f), vec2(12.9898, 78.233))) * 43758.5453);
+    return mix(g, 0.5, smoothstep(0.4, 1.0, length(fwidth(vMundo.xz)) * f));
+  }
 `;
 const VERTICE_MUNDO = ["#include <project_vertex>", `#include <project_vertex>
   #ifdef USE_INSTANCING
@@ -783,14 +802,11 @@ function pintarAceras(material, panot) {
       "#include <map_fragment>", `#include <map_fragment>
       {
         float t = tipoSuelo();
-        if (t > 0.75) {
-          float g = fract(sin(dot(floor(vMundo.xz * 3.0), vec2(12.9898, 78.233))) * 43758.5453);
-          diffuseColor.rgb = vec3(0.07, 0.075, 0.085) * (0.85 + 0.3 * g);     // asfalto con grano
-        } else if (t > 0.25) diffuseColor.rgb = texture2D(tPanot, vec2(vMundo.x, -vMundo.z) / 2.0).rgb;   // panot
-        else {
-          float g = fract(sin(dot(floor(vMundo.xz * 1.5), vec2(12.9898, 78.233))) * 43758.5453);
-          diffuseColor.rgb = colorCobertura(diffuseColor.rgb, cobertura(), g);
-        }
+        // asfalto con grano, del mismo color medio que la textura de las calles (franja sin líneas) para que no se note
+        // dónde acaba la cinta de la calle y empieza la calzada real pintada en el suelo
+        if (t > 0.75) diffuseColor.rgb = vec3(0.085, 0.087, 0.096) * (0.85 + 0.3 * grano(3.0));
+        else if (t > 0.25) diffuseColor.rgb = texture2D(tPanot, vec2(vMundo.x, -vMundo.z) / 2.0).rgb;   // panot
+        else diffuseColor.rgb = colorCoberturaSuave(diffuseColor.rgb, grano(1.5));
         diffuseColor.rgb = conCapa(diffuseColor.rgb);
       }`);
   };
@@ -1165,13 +1181,14 @@ function entrarAlCoche() {
   coche.grupo.visible = true;
   controls.enabled = false;
   vuelo = null;
-  camera.near = 0.1;
+  camera.near = 0.3;               // la cámara va 8 m detrás del coche: 0,3 m basta y la profundidad es más precisa
   camera.fov = 65;
   camera.updateProjectionMatrix();
   scene.fog.near = 300;
   scene.fog.far = 1500;
   Object.assign(sol.shadow.camera, { left: -120, right: 120, top: 120, bottom: -120, near: 1, far: 600 });
   sol.shadow.camera.updateProjectionMatrix();
+  sol.shadow.normalBias = 0.05;    // medio texel del mapa de sombras (240 m / 4096)
   document.body.classList.add("conduciendo");
   mostrarPanel(null);
   $("hud").style.display = "block";
@@ -2489,6 +2506,9 @@ else {
   if (P.has("recorrido")) setTimeout(() => recorrido.empezar(), 1500);
 }
 const reloj = new THREE.Clock();
+// Todo lo que se dibuja (relieve, edificios, árboles, nubes de tormenta) cabe en esta caja
+const CAJA_MODELO = new THREE.Box3(new THREE.Vector3(-D.terreno.lx - 250, -50, -D.terreno.ly - 250),
+                                   new THREE.Vector3(D.terreno.lx + 250, 450, D.terreno.ly + 250));
 renderer.setAnimationLoop(() => {
   const dt = Math.min(reloj.getDelta(), 0.05);
   if (modo === "coche") conducir(dt);
@@ -2501,6 +2521,11 @@ renderer.setAnimationLoop(() => {
       if (vuelo.t === 1) vuelo = null;
     }
     controls.update();
+    // Plano cercano lo más lejos posible: la precisión de la profundidad depende de él, y con 1 m fijo, de lejos
+    // calles, parques y tejados se pelean y parpadean. Nada del modelo queda más cerca que su caja (si la cámara
+    // está fuera) ni que el 2 % de la distancia al punto que se mira.
+    const cerca = Math.max(0.5, 0.02 * camera.position.distanceTo(controls.target), 0.9 * CAJA_MODELO.distanceToPoint(camera.position));
+    if (Math.abs(cerca - camera.near) > 0.05 * camera.near) { camera.near = cerca; camera.updateProjectionMatrix(); }
   }
   actualizarLluvia(dt);
   for (const p of Object.values(PANELES_HERRAMIENTA)) p.creada?.cadaFrame?.(dt);
@@ -2512,6 +2537,8 @@ renderer.setAnimationLoop(() => {
   else renderer.render(scene, camera);
   etiquetas.render(scene, camera);
 });
+// ?depurar: acceso a la escena desde la consola (pruebas automáticas de parpadeo y rendimiento)
+if (new URLSearchParams(location.search).has("depurar")) globalThis.VISOR = { THREE, scene, camera, controls, renderer, pixelado };
 </script>
 </body>
 </html>
