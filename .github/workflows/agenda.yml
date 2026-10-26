@@ -1,0 +1,21 @@
+# Actualiza cada día web/agenda.json con la agenda de ripollet.cat (el navegador no la puede leer directamente).
+name: Agenda
+on:
+  schedule:
+    - cron: "15 5 * * *"      # 05:15 UTC, cada día
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  agenda:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Descargar la agenda
+        run: python3 obtener_agenda.py
+      - name: Guardar si ha cambiado
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/agenda.json
+          git diff --cached --quiet || (git commit -m "Agenda actualizada" && git push)

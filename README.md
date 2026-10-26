@@ -87,6 +87,10 @@ vulnerabilidad, autobuses, una ficha de Mi casa y Ripollet de noche), manual o a
 **Compartir** (🔗 en la barra): copia un enlace con la vista exacta y la herramienta abierta (y su estado, p. ej. la
 casa elegida): `?h=micasa&casa=156&ir=33,904&cam=63,77,91`. En el móvil abre el menú de compartir del sistema.
 
+| ♻️ Recogida de residuos | Los 4 sectores del servicio «Ripollet Aporta» y qué toca sacar hoy, mañana y cada día (puerta a puerta en Centre y Pinetons de 21 a 22 h; contenedores en Can Mas–Maragall y Tiana–Pont Vell), 108 contenedores, 5 áreas de emergencia con sus horarios y 20 buzones de textil sanitario; el más cercano a cada punto. También en «Mi casa» | Mapa público del servicio (Google My Maps, KML, nov. 2023) y calendarios de ripollet.cat (imágenes transcritas). El mapa deja huecos entre sectores: dentro de Ripollet se asigna el sector más cercano a ≤ 200 m y se marca como «probable» (81 ha) |
+| 🏛 Planeamiento | Calificación del suelo de cada parcela (25 calificaciones: residencial, actividad económica, transformación, urbanizable, parques, equipamientos, viario…), con su explicación. «Nuevos proyectos» dice qué calificación pisa un edificio nuevo y avisa si cae en suelo público no edificable; «Mi casa» la muestra | Mapa urbanístic de Catalunya (Generalitat), servicio CARTOBASE/MUC de la Diputació de Barcelona, enero de 2023 |
+| 📅 Agenda | Los actos de la agenda de ripollet.cat (hoy, próximos 7 días o todo) en una lista y en el mapa, situados por el nombre del lugar o su dirección | `obtener_agenda.py` → `web/agenda.json`, que una tarea de GitHub (`.github/workflows/agenda.yml`) actualiza cada día: el navegador no puede leer ripollet.cat directamente (no permite CORS). Dentro del visor va una copia por si no hay conexión |
+
 Todas son orientativas y lo dicen en su nota: sirven para priorizar y para conversar, no sustituyen un proyecto técnico.
 
 ## Cómo se genera (de cero)
@@ -112,6 +116,10 @@ python obtener_catastro.py
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_direcciones.py  # portales del Catastro
 #    Coberturas del suelo (ICGC) para el suelo que OSM no describe
 python obtener_cobertes.py
+#    Recogida de residuos, planeamiento y agenda
+..lender-5.2.3-windows-x64.2\pythonin\python.exe -I obtener_residuos.py
+..lender-5.2.3-windows-x64.2\pythonin\python.exe -I obtener_planeamiento.py
+python obtener_agenda.py
 #    Aparcamientos y plazas de OSM que no vienen en la descarga principal (datos_osm/superficies.json)
 ..\blender-5.2.3-windows-x64\5.2\python\bin\python.exe -I obtener_superficies.py
 # 1. Maqueta, datos del visor y ensamblado (≈ 1 min). Descarga y guarda en caché el relieve del ICGC.

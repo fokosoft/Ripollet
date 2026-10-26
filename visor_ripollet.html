@@ -27,6 +27,7 @@
   .panel { position: fixed; top: 12px; left: 12px; right: 12px; max-width: 460px; padding: 10px 14px;
            background: rgba(0,0,0,.6); color: #fff; border-radius: 8px; font-size: 14px; line-height: 1.4; }
   .panel b { color: #ffd166; }
+  .panel a { color: #9fd3ff; } body.claro .panel a { color: #1f5fa8; }
   .botones { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
   button { font: inherit; font-size: 13px; padding: 5px 10px; border: 0; border-radius: 6px; cursor: pointer;
            background: rgba(255,255,255,.18); color: #fff; }
@@ -351,7 +352,8 @@ const DATOS = __DATOS__;          // lugares, equipamientos, calles, tamaños (d
 const BLOBS = __BLOBS__;          // binarios comprimidos (null en la versión web: se piden aparte)
 const GLB = "__GLB__";
 const MEMORIA = __MEMORIA__;      // lo que aprendió Neutro (entrenar_neutro.mjs)
-const MEDICION = __MEDICION__;    // cómo se midió Neutro frente a un rival clásico
+const MEDICION = __MEDICION__;
+const AGENDA_LOCAL = __AGENDA__;  // copia de web/agenda.json (por si no se puede leer la actualizada)    // cómo se midió Neutro frente a un rival clásico
 const $ = (id) => document.getElementById(id);
 
 // ------------------------------------------------------------ idiomas (castellano / catalán)
@@ -1563,6 +1565,11 @@ const LUGARES_OSM = BLOBS && !BLOBS.lugares ? null : await cargarBinario("lugare
 // Portales del Catastro: [calle, número, x, z, edificio] (obtener_direcciones.py)
 const DIRECCIONES = BLOBS && !BLOBS.direcciones ? null : await cargarBinario("direcciones", Uint8Array, BLOBS)
   .then((b) => JSON.parse(new TextDecoder().decode(b))).catch(() => null);
+// Recogida de residuos: sector de cada celda y puntos y calendarios; planeamiento: calificación de cada celda
+const SECTORES_4M = BLOBS && !BLOBS.sectores ? null : await cargarBinario("sectores", Uint8Array, BLOBS).catch(() => null);
+const PLANEAMIENTO_4M = BLOBS && !BLOBS.planeamiento ? null : await cargarBinario("planeamiento", Uint16Array, BLOBS).catch(() => null);
+const RESIDUOS = BLOBS && !BLOBS.residuos ? null : await cargarBinario("residuos", Uint8Array, BLOBS)
+  .then((b) => JSON.parse(new TextDecoder().decode(b))).catch(() => null);
 // Zona de capacidad acústica de cada celda de 4 m (obtener_ambiente.py)
 const ACUSTICA_4M = BLOBS && !BLOBS.acustica ? null : await cargarBinario("acustica", Uint8Array, BLOBS).catch(() => null);
 const TRANSPORTE = BLOBS && !BLOBS.transporte ? null : await cargarBinario("transporte", Uint8Array, BLOBS)
@@ -2146,6 +2153,7 @@ const CTX = {
   THREE, scene, camera, renderer, controls, CSS2DObject, D, DATOS, SIM, S1, altura, sol, sombrasMapa, geoCeldas,
   simulacion, FISICA, INTENSIDADES, volarA, $, t, tx, numero, idioma: () => idioma, estiloArte: () => estiloArte,
   nombreCalle, choca, SOTANOS, secciones4m: SECCIONES_4M, rehab: REHAB, lugaresOsm: LUGARES_OSM, transporte: TRANSPORTE, acustica4m: ACUSTICA_4M, direcciones: DIRECCIONES,
+  sectores4m: SECTORES_4M, planeamiento4m: PLANEAMIENTO_4M, residuos: RESIDUOS, agendaLocal: AGENDA_LOCAL,
   compartir: (extra) => compartir(extra),
   capa1m: { datos: datosCapa1m, actualizar: () => { texCapa1m.needsUpdate = true; },
             ver: (v) => { capa1mActiva.value = v ? 1 : 0; } },

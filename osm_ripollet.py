@@ -1466,6 +1466,49 @@ if os.path.exists(RUTA_DIR):
         f.write(json.dumps(lista, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
     print(f"DIRECCIONES: {len(lista)} portales con calle · {sum(1 for q in lista if q[4])} con su edificio")
 
+# RECOGIDA DE RESIDUOS (obtener_residuos.py): sector de cada celda de 4 m y puntos y calendarios (blob «residuos»)
+RUTA_RESIDUOS = os.path.join(DIR, "datos_publicos", "residuos.json")
+if os.path.exists(RUTA_RESIDUOS):
+    with open(RUTA_RESIDUOS, encoding="utf-8") as f:
+        RES = json.load(f)
+    id_sector = np.zeros((SNY, SNX), np.uint8)
+    for s_ in sorted(RES["sectores"], key=lambda s_: -abs(area_firmada([(x, -z) for x, z in s_["anillo"]]))):
+        rasterizar([(x, -z) for x, z in s_["anillo"]], s_["sector"], id_sector, CELDA_SIM)
+    # El mapa del servicio deja huecos entre sectores (p. ej. alrededor de la calle Balmes): dentro de Ripollet, cada
+    # celda de un hueco toma el sector más cercano a 200 m o menos, marcado como «probable» (sector + 4)
+    if SECCIONES is not None:
+        crece = id_sector.copy()
+        for _ in range(50):
+            n_ = crece.copy()
+            for d0, d1 in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                vecino = np.roll(crece, (d0, d1), axis=(0, 1))
+                n_ = np.where((n_ == 0) & (vecino > 0), vecino, n_)
+            crece = n_
+        hueco = (id_sector == 0) & (crece > 0) & (id_seccion > 0)
+        id_sector[hueco] = crece[hueco] + 4
+        print(f"RESIDUOS: {hueco.sum() * CELDA_SIM ** 2 / 1e4:.0f} ha de huecos con sector probable")
+    guardar("sectores", id_sector)
+    with open(os.path.join(SALIDA_DATOS, "residuos.bin"), "wb") as f:
+        f.write(json.dumps({k: RES[k] for k in ("fuente", "calendarios", "puntos")}, ensure_ascii=False,
+                           separators=(",", ":")).encode("utf-8"))
+    print(f"RESIDUOS: {np.count_nonzero(id_sector) * CELDA_SIM ** 2 / 1e4:.0f} ha con sector · {len(RES['puntos'])} puntos")
+
+# PLANEAMIENTO (obtener_planeamiento.py): calificación MUC de cada celda de 4 m (índice en la lista de datos.json)
+PLANEAMIENTO = None
+RUTA_PLAN = os.path.join(DIR, "datos_publicos", "planeamiento.json")
+if os.path.exists(RUTA_PLAN):
+    with open(RUTA_PLAN, encoding="utf-8") as f:
+        PL = json.load(f)
+    claves = sorted({(z["codigo"], z["nombre"]) for z in PL["zonas"]})
+    indice_q = {c: k + 1 for k, c in enumerate(claves)}
+    id_plan = np.zeros((SNY, SNX), np.uint16)
+    contornos = [(abs(area_firmada(a)), indice_q[(z["codigo"], z["nombre"])], a) for z in PL["zonas"] for a in z["anillos"]]
+    for _, k, a in sorted(contornos, key=lambda c: -c[0]):   # los grandes primero; los agujeros los tapan los de dentro
+        rasterizar([tuple(p) for p in a], k, id_plan, CELDA_SIM)
+    guardar("planeamiento", id_plan)
+    PLANEAMIENTO = {"fuente": PL["fuente"], "lista": [{"codigo": c, "nombre": n} for c, n in claves]}
+    print(f"PLANEAMIENTO: {len(claves)} calificaciones · {np.count_nonzero(id_plan) * CELDA_SIM ** 2 / 1e4:.0f} ha")
+
 # COBERTURAS DEL SUELO (obtener_cobertes.py): rejilla de 2 m, para pintar el suelo que OSM no describe
 RUTA_COBERTES = os.path.join(DIR, "datos_publicos", "cobertes_2m.bin")
 if os.path.exists(RUTA_COBERTES):
@@ -1538,6 +1581,7 @@ datos = {
     "arbolesReales": bool(LIDAR),
     "puentes": PUENTES,
     "zonasAcusticas": ZONAS_ACUSTICAS,
+    "planeamiento": PLANEAMIENTO,
     "accidentes": (json.load(open(os.path.join(DIR, "datos_publicos", "accidentes_ripollet.json"), encoding="utf-8"))
                    if os.path.exists(os.path.join(DIR, "datos_publicos", "accidentes_ripollet.json")) else None),
     "direcciones": DIRECCIONES,     # índice de edificio → dirección (de los certificados energéticos)

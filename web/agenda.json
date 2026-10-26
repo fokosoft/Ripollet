@@ -1,0 +1,141 @@
+{
+"fuente": "Agenda de ripollet.cat",
+"actos": [
+{
+"titulo": "Activitats al Casal de Joves",
+"inicio": "2026-10-01T00:00:00+02:00",
+"fin": "2026-10-31T23:59:59+01:00",
+"lugar": "Casal de Joves",
+"descripcion": "Tot el mes d'octubre",
+"url": "https://www.ripollet.cat/actualitat/agenda/activitats-al-casal-de-joves-1"
+},
+{
+"titulo": "Esportiva’t: JESA Ripollet",
+"inicio": "2026-10-01T00:00:00+02:00",
+"fin": "2026-10-31T23:59:59+01:00",
+"lugar": "Ripollet",
+"descripcion": "Tot el mes d'octubre",
+"url": "https://www.ripollet.cat/actualitat/agenda/esportiva2019t-jesa-ripollet-1"
+},
+{
+"titulo": "1a Matinal motera i cotxes americans",
+"inicio": "2026-10-25T09:00:00+01:00",
+"fin": "2026-10-25T14:00:00+01:00",
+"lugar": "Recinte firal de Ripollet",
+"descripcion": "A les 9 h, al recinte firal",
+"url": "https://www.ripollet.cat/actualitat/agenda/1a-matinal-motera-i-cotxes-americans"
+},
+{
+"titulo": "Cerimònia d’Entrega dels Premis de Fotografia de Festa Major",
+"inicio": "2026-10-25T11:00:00+01:00",
+"fin": "2026-10-25T23:59:59+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "A les 11 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/cerimonia-d2019entrega-dels-premis-de-fotografia-de-festa-major-1"
+},
+{
+"titulo": "Jugatecambiental Maria Regordosa i Masot: “Construïm una brúixola”",
+"inicio": "2026-10-25T11:30:00+01:00",
+"fin": "2026-10-25T13:30:00+01:00",
+"lugar": "al parc de Maria Regordosa i Masot",
+"descripcion": "D’11.30 a 13.30 h, al parc de Maria Regordosa i Masot",
+"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-maria-regordosa-i-masot-201cconstruim-una-bruixola201d"
+},
+{
+"titulo": "Binga musical",
+"inicio": "2026-10-25T12:00:00+01:00",
+"fin": "2026-10-25T15:00:00+01:00",
+"lugar": "Carrer Nou de Ripollet",
+"descripcion": "De 12 a 15 h, al carrer Nou",
+"url": "https://www.ripollet.cat/actualitat/agenda/binga-musical"
+},
+{
+"titulo": "Petits consells per a grans persones",
+"inicio": "2026-10-27T11:00:00+01:00",
+"fin": "2026-10-27T12:00:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "D’11 a 12 h, al Centre Cultural.",
+"url": "https://www.ripollet.cat/actualitat/agenda/petits-consells-per-a-grans-persones"
+},
+{
+"titulo": "Club de lectura d’àlbums il·lustrats per adults: Sóc un gos",
+"inicio": "2026-10-27T18:30:00+01:00",
+"fin": "2026-10-27T19:30:00+01:00",
+"lugar": "Biblioteca Municipal de Ripollet",
+"descripcion": "A les 18.30 h, a la Biblioteca Municipal",
+"url": "https://www.ripollet.cat/actualitat/agenda/club-de-lectura-d2019albums-il-lustrats-per-adults-soc-un-gos"
+},
+{
+"titulo": "Hora del conte: “Va de bruixes”",
+"inicio": "2026-10-28T17:30:00+01:00",
+"fin": "2026-10-28T18:30:00+01:00",
+"lugar": "Biblioteca Municipal de Ripollet",
+"descripcion": "A les 17.30 h, a la Biblioteca Municipal",
+"url": "https://www.ripollet.cat/actualitat/agenda/hora-del-conte-201cva-de-bruixes201d"
+},
+{
+"titulo": "Club de Novel·la: Les lleis de la frontera",
+"inicio": "2026-10-28T18:30:00+01:00",
+"fin": "2026-10-28T19:30:00+01:00",
+"lugar": "Biblioteca Municipal de Ripollet",
+"descripcion": "A les 18.30 h, a la Biblioteca Municipal",
+"url": "https://www.ripollet.cat/actualitat/agenda/club-de-novel-la-les-lleis-de-la-frontera"
+},
+{
+"titulo": "Halloween a LaLibre",
+"inicio": "2026-10-28T19:00:00+01:00",
+"fin": "2026-10-28T20:00:00+01:00",
+"lugar": "La Libre, Ripollet",
+"descripcion": "A les 19 h, a LaLibre",
+"url": "https://www.ripollet.cat/actualitat/agenda/halloween-a-lalibre"
+},
+{
+"titulo": "El Museu endolceix les festes: “Panellets”",
+"inicio": "2026-10-29T18:00:00+01:00",
+"fin": "2026-10-29T19:00:00+01:00",
+"lugar": "CIP Molí d’en Rata",
+"descripcion": "A les 18 h, al CIP Molí d’en Rata",
+"url": "https://www.ripollet.cat/actualitat/agenda/el-museu-endolceix-les-festes-201cpanellets201d"
+},
+{
+"titulo": "Nits de Música: Versions",
+"inicio": "2026-10-29T19:00:00+01:00",
+"fin": "2026-10-29T20:00:00+01:00",
+"lugar": "Teatre Auditori del Mercat Vell",
+"descripcion": "A les 19 h, al Teatre Auditori del Mercat Vell",
+"url": "https://www.ripollet.cat/actualitat/agenda/nits-de-musica-versions"
+},
+{
+"titulo": "Túnel del terror infantil: “El otro lado: No mires atrás”",
+"inicio": "2026-10-30T17:45:00+01:00",
+"fin": "2026-10-30T20:00:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "De 17.45 a 20 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/tunel-del-terror-infantil-201cel-otro-lado-no-mires-atras201d"
+},
+{
+"titulo": "Teatre: Permagel",
+"inicio": "2026-10-30T20:30:00+01:00",
+"fin": "2026-10-30T21:30:00+01:00",
+"lugar": "Teatre Auditori del Mercat Vell",
+"descripcion": "A les 20.30 h, al Teatre Auditori del Mercat Vell",
+"url": "https://www.ripollet.cat/actualitat/agenda/teatre-permagel"
+},
+{
+"titulo": "Túnel del terror d’adults: “Museo Warren”",
+"inicio": "2026-10-31T18:45:00+01:00",
+"fin": "2026-10-31T22:30:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "De 18.45 a 22.30 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/tunel-del-terror-d2019adults-201cmuseo-warren201d"
+},
+{
+"titulo": "CastaFest",
+"inicio": "2026-10-31T23:00:00+01:00",
+"fin": "2026-11-01T00:00:00+01:00",
+"lugar": "Escola Escursell i Bartalot de Ripollet.",
+"descripcion": "A partir de les 23 h, al pati de l’escola Escursell i Bartalot",
+"url": "https://www.ripollet.cat/actualitat/agenda/castafest"
+}
+]
+}

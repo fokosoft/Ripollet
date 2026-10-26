@@ -2,6 +2,7 @@
 // sobre calles, plazas y vecinos a lo largo del día, qué pasa con la lluvia en ese suelo y con qué choca.
 import { rejilla2m, relieve2m } from './comun.js';
 import { posicionSol } from './sombra.js';
+import { calificacionEn, familiaMUC } from './planeamiento.js';
 
 export const TEXTOS_PROYECTOS = {
   es: {
@@ -15,7 +16,7 @@ export const TEXTOS_PROYECTOS = {
     prLluvia: "<b>Lluvia</b>: la huella ({0} m²) pasa a ser cubierta: con {1} mm/h escurren {2} m³ más en una hora " +
       "(antes se infiltraban). Agua simulada en ese suelo: {3}.",
     prSeco: "seco en todos los escenarios", prAgua: "{0} mm/h → {1} cm",
-    prChoques: "<b>Choques</b>: {0}", prNada: "ninguno; el edificio más cercano está a {0} m.",
+    prChoques: "<b>Choques</b>: {0}", prPlan: "<b>Planeamiento</b>: pisa {0}.", prPlanAviso: " ⚠️ Parte cae en suelo público no edificable ({0}).", prNada: "ninguno; el edificio más cercano está a {0} m.",
     prConEdificios: "pisa {0} m² de edificios existentes", prCalzada: "{0} m² de calzada", prAcera: "{0} m² de acera",
     prArboles: "{0} árboles de OSM", prCerca: "el edificio más cercano está a {0} m",
     prNota: "Sombra geométrica con cielo despejado; lluvia con la infiltración de cada suelo y los escenarios ya " +
@@ -32,7 +33,7 @@ export const TEXTOS_PROYECTOS = {
     prLluvia: "<b>Pluja</b>: la petjada ({0} m²) passa a ser coberta: amb {1} mm/h escolen {2} m³ més en una hora " +
       "(abans s'infiltraven). Aigua simulada en aquest sòl: {3}.",
     prSeco: "sec en tots els escenaris", prAgua: "{0} mm/h → {1} cm",
-    prChoques: "<b>Xocs</b>: {0}", prNada: "cap; l'edifici més proper és a {0} m.",
+    prChoques: "<b>Xocs</b>: {0}", prPlan: "<b>Planejament</b>: trepitja {0}.", prPlanAviso: " ⚠️ Una part cau en sòl públic no edificable ({0}).", prNada: "cap; l'edifici més proper és a {0} m.",
     prConEdificios: "trepitja {0} m² d'edificis existents", prCalzada: "{0} m² de calçada", prAcera: "{0} m² de vorera",
     prArboles: "{0} arbres d'OSM", prCerca: "l'edifici més proper és a {0} m",
     prNota: "Ombra geomètrica amb cel serè; pluja amb la infiltració de cada sòl i els escenaris ja simulats (no es " +
@@ -66,7 +67,7 @@ const herramientaProyectos = {
       <ul id="prLista"></ul>
       <label><span data-t="prDia"></span> <select id="prDia"></select></label>
       <label><span id="prHoraT"></span><input type="range" id="prHora" min="8" max="18" step="1" value="12" style="width:100%"></label>
-      <p id="prSombra"></p><p id="prLluvia"></p><p id="prChoques"></p>
+      <p id="prSombra"></p><p id="prLluvia"></p><p id="prChoques"></p><p id="prPlan"></p>
       <p class="nota" data-t="prNota"></p>`;
     const val = (id) => +$(id).value;
     const altoDe = (plantas) => 4 + (plantas - 1) * 3 + 0.6;   // como los del Catastro en la maqueta
@@ -211,10 +212,21 @@ const herramientaProyectos = {
     }
 
     function analizar() {
-      if (!elegido) { $("prSombra").textContent = $("prLluvia").textContent = $("prChoques").textContent = ""; return; }
+      if (!elegido) { $("prSombra").textContent = $("prLluvia").textContent = $("prChoques").textContent = $("prPlan").textContent = ""; return; }
       $("prSombra").innerHTML = t("prSombra", ...analizarSombra(elegido));
       $("prLluvia").innerHTML = t("prLluvia", ...analizarLluvia(elegido));
       $("prChoques").innerHTML = t("prChoques", analizarChoques(elegido));
+      // Planeamiento bajo la huella: calificaciones y su parte; aviso si pisa parques, viario o ríos
+      const cuenta = new Map();
+      for (const [q] of elegido.huella1m) {
+        const i = q % S1.nx, j = (q - i) / S1.nx, c = calificacionEn(ctx, SIM.x0 + i + 0.5, SIM.z0 + j + 0.5);
+        const k = c ? `${c.codigo} (${c.nombre})` : "—";
+        cuenta.set(k, (cuenta.get(k) ?? 0) + 1);
+      }
+      const total = elegido.huella1m.length || 1, partes = [...cuenta].sort((a, b) => b[1] - a[1]);
+      const prohibido = partes.filter(([k]) => ["SV", "SX", "SH", "SF"].includes(familiaMUC(k)));
+      $("prPlan").innerHTML = ctx.planeamiento4m ? t("prPlan", partes.map(([k, n]) => `${k} ${Math.round(100 * n / total)} %`).join(", ")) +
+        (prohibido.length ? t("prPlanAviso", prohibido.map(([k]) => k.split(" ")[0]).join(", ")) : "") : "";
     }
 
     function rotulos() {

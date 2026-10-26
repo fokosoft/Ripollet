@@ -17,7 +17,7 @@ BLOBS = ["codigos", "rasgos", "calles", "edificios", "terreno", "arboles", "acer
          "techos2m", "acces1m", "grafo_nodos", "grafo_aristas", "solar2m"]
 MODULOS = ["neutro_nucleo.js", "datos.js", "simulacion.js", "inundacion.js", "comun.js",   # en este orden
            "sombra.js", "accesibilidad.js", "incendio.js", "solar.js", "rutas.js", "proyectos.js",
-           "incidencias_ciudad.js", "vulnerabilidad.js", "rehabilitacion.js", "seguridad.js", "lugares.js", "transporte.js", "ambiente.js", "micasa.js", "tiempo_real.js", "pixel.js", "trafico.js", "farolas.js"]
+           "incidencias_ciudad.js", "vulnerabilidad.js", "rehabilitacion.js", "seguridad.js", "lugares.js", "transporte.js", "ambiente.js", "residuos.js", "planeamiento.js", "micasa.js", "agenda.js", "tiempo_real.js", "pixel.js", "trafico.js", "farolas.js"]
 
 
 def leer(ruta, modo="r"):
@@ -71,12 +71,15 @@ def construir():
     datos = leer(os.path.join(DATOS, "datos.json"))
     comprimidos = {b: zlib.compress(leer(os.path.join(DATOS, b + ".bin"), "rb"), 9) for b in BLOBS}
     comprimidos.update({b: zlib.compress(v, 9) for b, v in fisica().items()})
-    for opcional in ("oficial", "sotanos", "farolas", "secciones", "rehab", "lugares", "transporte", "acustica", "direcciones", "copas", "cobertes"):   # zonas inundables oficiales, sótanos (Catastro), farolas (AMB)
+    for opcional in ("oficial", "sotanos", "farolas", "secciones", "rehab", "lugares", "transporte", "acustica", "direcciones", "copas", "cobertes", "sectores", "residuos", "planeamiento"):   # zonas inundables oficiales, sótanos (Catastro), farolas (AMB)
         if os.path.exists(os.path.join(DATOS, opcional + ".bin")):
             comprimidos[opcional] = zlib.compress(leer(os.path.join(DATOS, opcional + ".bin"), "rb"), 9)
     memoria = opcional_json("neutro_memoria.json")       # lo que aprendió Neutro (entrenar_neutro.mjs)
     medicion = opcional_json("neutro_medicion.json")     # cómo se midió, frente a qué rival
     codigo_modulos = modulos()
+
+    # Agenda: copia de web/agenda.json dentro del visor, por si no se puede leer la actualizada (archivo local)
+    agenda = opcional_json(os.path.join("web", "agenda.json"))
 
     def visor(blobs, glb):
         return (leer(os.path.join(DIR, "visor_ripollet.html"))
@@ -85,7 +88,8 @@ def construir():
                 .replace("__BLOBS__", blobs)
                 .replace("__GLB__", glb)
                 .replace("__MEMORIA__", memoria)
-                .replace("__MEDICION__", medicion))
+                .replace("__MEDICION__", medicion)
+                .replace("__AGENDA__", agenda))
 
     # 1) Un solo archivo
     b64 = {b: base64.b64encode(c).decode() for b, c in comprimidos.items()}

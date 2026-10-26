@@ -1,0 +1,2923 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>RIPOLLET APORTA NOV2023</name>
+    <description>Nuevos sectores y  ubicaciones de áreas de emergencia</description>
+    <Style id="icon-1899-0288D1-nodesc-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-nodesc-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-BDBDBD-normal">
+      <IconStyle>
+        <color>ffbdbdbd</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-BDBDBD-highlight">
+      <IconStyle>
+        <color>ffbdbdbd</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-BDBDBD">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-BDBDBD-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-BDBDBD-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-F57C00-normal">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-F57C00-highlight">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-F57C00">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-F57C00-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-F57C00-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-F57C00-nodesc-normal">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-F57C00-nodesc-highlight">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-F57C00-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-F57C00-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-F57C00-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-F9A825-normal">
+      <IconStyle>
+        <color>ff25a8f9</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-F9A825-highlight">
+      <IconStyle>
+        <color>ff25a8f9</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-F9A825">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-F9A825-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-F9A825-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-FF5252-normal">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-FF5252-highlight">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-FF5252">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-FF5252-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-FF5252-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-0-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-1.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-0-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-1.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-0-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-0-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-0-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-1-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-2.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-1-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-2.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-1-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-1-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-1-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-10-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-11.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-10-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-11.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-10-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-10-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-10-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-11-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-12.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-11-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-12.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-11-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-11-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-11-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-12-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-13.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-12-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-13.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-12-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-12-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-12-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-13-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-14.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-13-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-14.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-13-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-13-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-13-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-14-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-15.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-14-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-15.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-14-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-14-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-14-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-15-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-16.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-15-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-16.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-15-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-15-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-15-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-16-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-17.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-16-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-17.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-16-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-16-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-16-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-17-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-18.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-17-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-18.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-17-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-17-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-17-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-18-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-19.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-18-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-19.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-18-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-18-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-18-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-19-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-20.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-19-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-20.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-19-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-19-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-19-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-2-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-3.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-2-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-3.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-2-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-2-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-2-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-3-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-4.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-3-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-4.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-3-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-3-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-3-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-4-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-5.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-4-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-5.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-4-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-4-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-4-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-5-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-6.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-5-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-6.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-5-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-5-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-5-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-6-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-7.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-6-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-7.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-6-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-6-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-6-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-7-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-8.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-7-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-8.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-7-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-7-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-7-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-8-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-9.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-8-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-9.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-8-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-8-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-8-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-seq2-6-9-880E4F-nodesc-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-10.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-seq2-6-9-880E4F-nodesc-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-10.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-seq2-6-9-880E4F-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-seq2-6-9-880E4F-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-seq2-6-9-880E4F-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-0288D1-2000-77-normal">
+      <LineStyle>
+        <color>ffd18802</color>
+        <width>2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4dd18802</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-0288D1-2000-77-highlight">
+      <LineStyle>
+        <color>ffd18802</color>
+        <width>3</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4dd18802</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-0288D1-2000-77">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-0288D1-2000-77-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-0288D1-2000-77-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-9C27B0-1200-77-normal">
+      <LineStyle>
+        <color>ffb0279c</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4db0279c</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-9C27B0-1200-77-highlight">
+      <LineStyle>
+        <color>ffb0279c</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4db0279c</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-9C27B0-1200-77">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-9C27B0-1200-77-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-9C27B0-1200-77-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-E65100-2000-77-normal">
+      <LineStyle>
+        <color>ff0051e6</color>
+        <width>2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4d0051e6</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-E65100-2000-77-highlight">
+      <LineStyle>
+        <color>ff0051e6</color>
+        <width>3</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4d0051e6</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-E65100-2000-77">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-E65100-2000-77-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-E65100-2000-77-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-FFD600-1200-77-normal">
+      <LineStyle>
+        <color>ff00d6ff</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4d00d6ff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-FFD600-1200-77-highlight">
+      <LineStyle>
+        <color>ff00d6ff</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4d00d6ff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-FFD600-1200-77">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-FFD600-1200-77-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-FFD600-1200-77-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-FFD600-2000-77-normal">
+      <LineStyle>
+        <color>ff00d6ff</color>
+        <width>2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4d00d6ff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-FFD600-2000-77-highlight">
+      <LineStyle>
+        <color>ff00d6ff</color>
+        <width>3</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4d00d6ff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-FFD600-2000-77">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-FFD600-2000-77-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-FFD600-2000-77-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Sector 1: Centre</name>
+      <Placemark>
+        <name>Sector 1</name>
+        <description><![CDATA[RECOLLIDA PAP<br> Començament servei  nov 2023<br>Recollida Dimarts: Paper-Cartró + Envasos Recollida Dijous:    Resta + Envasos<br>Recollida Diumenges: Paper-Cartró + Envasos]]></description>
+        <styleUrl>#poly-0288D1-2000-77</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                2.152486,41.4985752,0
+                2.1523258,41.4985572,0
+                2.1523158,41.498499,0
+                2.1523708,41.498454,0
+                2.1523878,41.498437,0
+                2.1524408,41.498332,0
+                2.1524768,41.498261,0
+                2.1525048,41.498198,0
+                2.1525638,41.498068,0
+                2.1524668,41.498053,0
+                2.1527288,41.497492,0
+                2.1528848,41.497528,0
+                2.1530108,41.497185,0
+                2.1530338,41.497153,0
+                2.1531098,41.497179,0
+                2.1531328,41.49712,0
+                2.1532308,41.497157,0
+                2.1532988,41.497076,0
+                2.1536078,41.497249,0
+                2.1537968,41.497319,0
+                2.1539128,41.497275,0
+                2.1540518,41.497159,0
+                2.1541758,41.497208,0
+                2.1543268,41.49717,0
+                2.1547988,41.496839,0
+                2.1550748,41.496844,0
+                2.1553308,41.496665,0
+                2.1555588,41.496623,0
+                2.1557168,41.496537,0
+                2.1558428,41.496587,0
+                2.1560858,41.496666,0
+                2.1561328,41.496801,0
+                2.1562258,41.496743,0
+                2.1562378,41.496535,0
+                2.1566548,41.496301,0
+                2.1572848,41.49608,0
+                2.1576838,41.49595,0
+                2.1581208,41.495663,0
+                2.1584518,41.495436,0
+                2.1587191,41.4954821,0
+                2.1590638,41.4954022,0
+                2.1594488,41.495301,0
+                2.1596798,41.495655,0
+                2.1600031,41.4957922,0
+                2.1602405,41.4959776,0
+                2.1602668,41.496482,0
+                2.1607548,41.49699,0
+                2.1601998,41.49725,0
+                2.1576975,41.4982632,0
+                2.1590208,41.498842,0
+                2.1606918,41.4995777,0
+                2.1620954,41.4989549,0
+                2.1612225,41.4979945,0
+                2.1620968,41.497602,0
+                2.1626988,41.497271,0
+                2.1632028,41.497085,0
+                2.1636868,41.496828,0
+                2.1639278,41.496724,0
+                2.1650708,41.496157,0
+                2.1652588,41.496368,0
+                2.1654168,41.496555,0
+                2.1654538,41.496638,0
+                2.1658418,41.496774,0
+                2.1653578,41.497548,0
+                2.1651158,41.497844,0
+                2.1649688,41.498339,0
+                2.1647998,41.498687,0
+                2.1648148,41.498845,0
+                2.1649338,41.499139,0
+                2.1650818,41.499363,0
+                2.1657518,41.49964,0
+                2.1655138,41.499862,0
+                2.1651368,41.499732,0
+                2.1646318,41.499856,0
+                2.1644548,41.500143,0
+                2.1643008,41.500467,0
+                2.1640588,41.500733,0
+                2.1640948,41.501004,0
+                2.1632318,41.501085,0
+                2.1625048,41.50027,0
+                2.1620678,41.500451,0
+                2.1616988,41.500611,0
+                2.1618028,41.500725,0
+                2.1621708,41.501211,0
+                2.1625628,41.501756,0
+                2.1627508,41.502005,0
+                2.1632928,41.502131,0
+                2.1635428,41.502217,0
+                2.1632888,41.502552,0
+                2.1628538,41.502392,0
+                2.1628318,41.502266,0
+                2.1626058,41.502205,0
+                2.1624538,41.50231,0
+                2.1626268,41.502579,0
+                2.1625338,41.502878,0
+                2.1621688,41.503389,0
+                2.1620268,41.503583,0
+                2.1617098,41.503607,0
+                2.1612248,41.503513,0
+                2.1608578,41.503427,0
+                2.1607078,41.503374,0
+                2.1610028,41.503002,0
+                2.1610318,41.502794,0
+                2.1607098,41.502425,0
+                2.1604278,41.502085,0
+                2.1595098,41.500908,0
+                2.1593498,41.500862,0
+                2.1592088,41.500749,0
+                2.1600258,41.500383,0
+                2.1602288,41.4998,0
+                2.1596178,41.499481,0
+                2.1592458,41.499973,0
+                2.1590808,41.500129,0
+                2.1588488,41.500163,0
+                2.1580468,41.500233,0
+                2.1577128,41.500248,0
+                2.1576458,41.499728,0
+                2.1576378,41.499604,0
+                2.1575188,41.499586,0
+                2.1573818,41.49954,0
+                2.1569378,41.499621,0
+                2.1567978,41.499792,0
+                2.1565718,41.499693,0
+                2.1564748,41.499824,0
+                2.1563538,41.499975,0
+                2.1561858,41.499923,0
+                2.1559808,41.499922,0
+                2.1555008,41.500021,0
+                2.1553918,41.50006,0
+                2.1546618,41.500158,0
+                2.1545168,41.50014,0
+                2.1540058,41.500105,0
+                2.1534278,41.500088,0
+                2.1534768,41.499591,0
+                2.1532288,41.499568,0
+                2.1531038,41.499335,0
+                2.1528388,41.49897,0
+                2.1526528,41.498724,0
+                2.1526218,41.498616,0
+                2.152486,41.4985752,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Sector 3: Pinetons</name>
+      <Placemark>
+        <name>Sector 3</name>
+        <description><![CDATA[RIP_AP_SECTORES NOV2023<br>Començament servei  nov 2023<br>Recollida Dilluns: Paper-Cartró + Envasos Recollida Dimecres: Resta + Envasos <br>Recollida Divendres: Paper-Cartró + Envasos]]></description>
+        <styleUrl>#poly-E65100-2000-77</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                2.1490522,41.504471,0
+                2.1490712,41.504313,0
+                2.1491102,41.504145,0
+                2.1491802,41.503963,0
+                2.1494532,41.503505,0
+                2.1500462,41.502525,0
+                2.1512262,41.500548,0
+                2.1519922,41.4993,0
+                2.1521952,41.499173,0
+                2.1523472,41.499109,0
+                2.1525532,41.499026,0
+                2.1524842,41.498872,0
+                2.1525292,41.49881,0
+                2.1524322,41.498698,0
+                2.1524552,41.498574,0
+                2.1526202,41.498632,0
+                2.1526532,41.498737,0
+                2.1529522,41.499156,0
+                2.1531022,41.499366,0
+                2.1532122,41.499574,0
+                2.1532652,41.50013,0
+                2.1539832,41.500124,0
+                2.1546602,41.500184,0
+                2.1554012,41.500071,0
+                2.1559882,41.499948,0
+                2.1562002,41.499948,0
+                2.1563652,41.50001,0
+                2.1565852,41.499736,0
+                2.1568112,41.499833,0
+                2.1569512,41.499646,0
+                2.1571428,41.4996292,0
+                2.1575816,41.4996587,0
+                2.1576878,41.5003149,0
+                2.1590105,41.5002341,0
+                2.1592646,41.5006761,0
+                2.1591325,41.5007484,0
+                2.1594261,41.5009734,0
+                2.1608503,41.5027734,0
+                2.1609113,41.5029724,0
+                2.1604359,41.5037982,0
+                2.1598794,41.5040092,0
+                2.1598421,41.5041235,0
+                2.1598982,41.504252,0
+                2.1600022,41.504726,0
+                2.1598792,41.505138,0
+                2.1596912,41.505522,0
+                2.1574112,41.506028,0
+                2.1572472,41.506031,0
+                2.1572022,41.50596,0
+                2.1571202,41.505909,0
+                2.1569972,41.505902,0
+                2.1568702,41.505932,0
+                2.1568032,41.506008,0
+                2.1567732,41.506093,0
+                2.1567022,41.506292,0
+                2.1564832,41.50703,0
+                2.1563662,41.507361,0
+                2.1560112,41.507458,0
+                2.1549742,41.507669,0
+                2.1546002,41.507717,0
+                2.1544492,41.50773,0
+                2.1542902,41.507682,0
+                2.1542702,41.507637,0
+                2.1543792,41.507359,0
+                2.1544772,41.507092,0
+                2.1547102,41.506522,0
+                2.1541872,41.506515,0
+                2.1536692,41.506478,0
+                2.1531492,41.506396,0
+                2.1526922,41.506286,0
+                2.1522502,41.50615,0
+                2.1515932,41.50586,0
+                2.1509522,41.505537,0
+                2.1499362,41.505025,0
+                2.1490982,41.504606,0
+                2.1490522,41.504471,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Sector 2: Can Mas</name>
+      <Placemark>
+        <name>Sector 2</name>
+        <description><![CDATA[Començament servei  nov 2023<br>Recollida en contenidor]]></description>
+        <styleUrl>#poly-FFD600-2000-77</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                2.1664116,41.495687,0
+                2.1671566,41.495698,0
+                2.1682416,41.496097,0
+                2.1680166,41.496241,0
+                2.1670796,41.496032,0
+                2.1664916,41.49589,0
+                2.1662396,41.496276,0
+                2.1660046,41.496537,0
+                2.1659046,41.496674,0
+                2.1656956,41.496595,0
+                2.1654006,41.496538,0
+                2.1650546,41.49614,0
+                2.1611817,41.4979516,0
+                2.1619978,41.4989462,0
+                2.1606976,41.4995239,0
+                2.158998,41.498849,0
+                2.157774,41.4982744,0
+                2.1601824,41.497253,0
+                2.1607746,41.496984,0
+                2.1602896,41.496455,0
+                2.1603284,41.4959793,0
+                2.1601096,41.4958049,0
+                2.1596226,41.495551,0
+                2.1594446,41.495267,0
+                2.158721,41.4954401,0
+                2.1584356,41.495385,0
+                2.1574676,41.495933,0
+                2.1564326,41.496311,0
+                2.1561506,41.496451,0
+                2.1561866,41.496628,0
+                2.1562096,41.496726,0
+                2.1561566,41.496753,0
+                2.1561276,41.496739,0
+                2.1560986,41.496629,0
+                2.1557266,41.496518,0
+                2.1557136,41.496315,0
+                2.1560036,41.496269,0
+                2.1556346,41.496,0
+                2.1555656,41.49604,0
+                2.1546486,41.49664,0
+                2.1547826,41.496802,0
+                2.1542986,41.497126,0
+                2.1540726,41.49703,0
+                2.1537736,41.497243,0
+                2.1535646,41.497177,0
+                2.1534256,41.497085,0
+                2.1533836,41.497044,0
+                2.1533516,41.497006,0
+                2.1530449,41.4969371,0
+                2.1530278,41.496813,0
+                2.1531762,41.4967338,0
+                2.1532506,41.496721,0
+                2.1542456,41.495998,0
+                2.1550316,41.495536,0
+                2.1557086,41.495176,0
+                2.1560946,41.495115,0
+                2.1568586,41.494876,0
+                2.1578246,41.494566,0
+                2.1584826,41.494415,0
+                2.1594986,41.494278,0
+                2.1597346,41.494439,0
+                2.1593826,41.494977,0
+                2.1595306,41.494925,0
+                2.1600806,41.494749,0
+                2.1605366,41.494634,0
+                2.1609186,41.494507,0
+                2.1606716,41.494141,0
+                2.1615746,41.494021,0
+                2.1618596,41.494038,0
+                2.1621586,41.494147,0
+                2.1624526,41.494294,0
+                2.1625966,41.494183,0
+                2.1632236,41.494316,0
+                2.1654906,41.494013,0
+                2.1662546,41.493919,0
+                2.1673596,41.493722,0
+                2.1682176,41.493637,0
+                2.1705566,41.493396,0
+                2.1707066,41.493621,0
+                2.1707496,41.4942,0
+                2.1702136,41.494553,0
+                2.1697736,41.494557,0
+                2.1697846,41.495148,0
+                2.1696126,41.495251,0
+                2.1685776,41.495292,0
+                2.1677136,41.495345,0
+                2.1668636,41.495383,0
+                2.1666426,41.495386,0
+                2.1664816,41.495551,0
+                2.1664116,41.495687,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Sector 2 - Polideport</name>
+        <description>Recollida en contenidor</description>
+        <styleUrl>#poly-FFD600-1200-77</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                2.1488476,41.500436,0
+                2.1491802,41.4996967,0
+                2.1502102,41.4998655,0
+                2.149781,41.5006047,0
+                2.1488476,41.500436,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Sector 4: Tiana-Pont Vell</name>
+      <Placemark>
+        <name>Sector 4</name>
+        <description>Recollida en contenidor</description>
+        <styleUrl>#poly-9C27B0-1200-77</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                2.1409922,41.4991856,0
+                2.1418934,41.4981731,0
+                2.143061,41.49707,0
+                2.1449404,41.4972731,0
+                2.1482878,41.4948784,0
+                2.1489745,41.4937212,0
+                2.1491461,41.4924354,0
+                2.1509271,41.4911013,0
+                2.1526437,41.4921943,0
+                2.1499186,41.495007,0
+                2.1492105,41.4956659,0
+                2.1470004,41.4973695,0
+                2.1445113,41.499282,0
+                2.1428161,41.5000373,0
+                2.1409922,41.4991856,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name><![CDATA[Arees d'Emergència Intinerants]]></name>
+      <Placemark>
+        <name>Pge. Institut</name>
+        <description>L,X,V</description>
+        <styleUrl>#icon-1899-FF5252</styleUrl>
+        <Point>
+          <coordinates>
+            2.1523174,41.5006239,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rbla. Pinetons</name>
+        <description>M, J</description>
+        <styleUrl>#icon-1899-F9A825</styleUrl>
+        <Point>
+          <coordinates>
+            2.157803,41.501133,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Salvador Espriu</name>
+        <description>L, X, V</description>
+        <styleUrl>#icon-1899-FF5252</styleUrl>
+        <Point>
+          <coordinates>
+            2.160511,41.503754,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Barberá</name>
+        <description>M, J</description>
+        <styleUrl>#icon-1899-F9A825</styleUrl>
+        <Point>
+          <coordinates>
+            2.154534,41.503672,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Area Emergència Fixa</name>
+      <Placemark>
+        <name>Àrea Emergència Fixa C/Molí</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.1599791,41.492362,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Ubicacions Textil Sanitario</name>
+      <Placemark>
+        <name>1. Av. Catalunya 28b</name>
+        <styleUrl>#icon-seq2-6-0-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.157351,41.506051,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2. Carrer Barberá del Vallés</name>
+        <styleUrl>#icon-seq2-6-1-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.154223,41.503994,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3. Carrer Cervantes / Fontanella</name>
+        <styleUrl>#icon-seq2-6-2-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.160098,41.500357,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4. Carrer Calvari 23</name>
+        <styleUrl>#icon-seq2-6-3-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.1568233,41.4965443,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>5. Carrer Montcada / Sol</name>
+        <styleUrl>#icon-seq2-6-4-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.1564276,41.4984335,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>6. Carrer Fontanella / Josep de Viure</name>
+        <styleUrl>#icon-seq2-6-5-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.164591,41.497941,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>7. Rbla. Sant Andreu / Pau Casals</name>
+        <styleUrl>#icon-seq2-6-6-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.16295,41.500063,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>8. Carrer Sant Joan 24</name>
+        <styleUrl>#icon-seq2-6-7-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.1585278,41.4964386,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>9. Rbla. Pinetons / Palau Ausit</name>
+        <styleUrl>#icon-seq2-6-8-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.1584446,41.502176,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>10. Carrer Federico García Lorca / Mª Torras</name>
+        <styleUrl>#icon-seq2-6-9-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.1605421,41.5033109,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>11. Carrer la Salut / General Prim</name>
+        <styleUrl>#icon-seq2-6-10-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.154208,41.498201,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>12. Carrer Canigó / Rbla. Sant Esteve</name>
+        <styleUrl>#icon-seq2-6-11-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.157266,41.49957,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>13. Carrer Afores, 53</name>
+        <styleUrl>#icon-seq2-6-12-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.156747,41.501564,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>14. Carrer Sant Josep / Pedraforca</name>
+        <styleUrl>#icon-seq2-6-13-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.153583,41.501832,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[15. Carrer Molí d'en Rata (CIP)]]></name>
+        <styleUrl>#icon-seq2-6-14-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.15279,41.499338,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>16. Carrer Pizarro / Collserola</name>
+        <styleUrl>#icon-seq2-6-15-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.15252,41.503086,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>17. Av. Catalunya, 24</name>
+        <styleUrl>#icon-seq2-6-16-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.15586,41.50626,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>18. Carrer María Torras, 22</name>
+        <styleUrl>#icon-seq2-6-17-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.158882,41.503878,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>19. Carrer Federico García Lorca, 5</name>
+        <styleUrl>#icon-seq2-6-18-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.160126,41.502302,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>20. Sant Joan 9 (aparcament)</name>
+        <styleUrl>#icon-seq2-6-19-880E4F-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.157305,41.497124,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Contenidors</name>
+      <Placemark>
+        <name>3. C/ València - C/ Girona</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.169421,41.49402,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4. C/ de la Mercè - Rbla. Sant Jordi</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.168261,41.494436,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>5. C/ Tamarit (Parc Primer de Maig)</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.167473,41.495324,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>7. C/ Tamarit 69</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.164334,41.496333,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>8. C/Joan Miro / C/ Tamarit</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.162448,41.496988,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>9. C/ Tamarit / C/Padró</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.158998,41.498849,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>11. C/ Dr. Bergós / C/ Nou</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.1595,41.499514,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>12. C/ Dr. Bergós 36</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.161487,41.498275,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>13. C/ Dr. Bergós - Sarria de Ter</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.165398,41.496549,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>14. C/ Fontanella/ C/ Joan Miró</name>
+        <description>.</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.163252,41.49829,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>15. C/ Fontanella / C/Pau Casals</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.161684,41.498926,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>16. C/ Fontanella / C/ Rafael Albertí</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.160114,41.500069,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>18. C/ Rocabruna / C/ Joan Miró</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.163944,41.498703,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>19. C/ de Sant Andreu 19</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.163866,41.499627,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>20. C/ de Sant Andreu (Darrere Camp Futbol Industrial)</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.162131,41.500414,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>21. C/ del Padró 175</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.16269,41.502089,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>22. C/ Pau Casals 102-104</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.165125,41.499459,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>23. C/ Pau Casals 80</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.163584,41.500622,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>24. C/ Pau Casals 37/ C/Tamarit</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.160829,41.497825,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>25. C/ Pau Casals, 34 / Rbla Sant Jordi</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.160467,41.497232,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>26. C/ Pau Casals / C/ Calvari</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.158729,41.495543,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>27. C/ Calvari / C/Balmes</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.162165,41.494259,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[28. C/ Calvari, davant Casal d'avis]]></name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.159755,41.495035,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>29. C/ Calvari 13</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.156711,41.496568,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>30. C/ Sant Joan / C/Padró</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.156966,41.497297,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>31. C/ Sant Joan 15-17</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.157682,41.496912,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>34. C/ de Balmes / C/ Angel Guimerà</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.157072,41.494922,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>35. C/ Maragall / C/Baixada Sant Enric</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.155524,41.495936,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>36. C/ Maragall / Escales Carrer Padró</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.154546,41.496606,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>37. C/ Maragall / C/Padró</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.153713,41.497179,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>38. Ctra. de Santiga 6</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.152787,41.497677,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[39. Ctra. de l'Estació / C/Balmes]]></name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.1531,41.496841,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>40. C/ de Balmes 8</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.155075,41.495563,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>41. C/ Verge de Montserrat 1</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.151443,41.49282,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>42. C/ Verge de Montserrat, 24</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.150198,41.493727,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>43. C/ Verge de Montserrat 82 / C/ Concordia</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.145036,41.497469,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>44. C/ Verge de Montserrat (davant CEIP Tiana)</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.144198,41.498409,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>45. C/ Santa Rosa 15</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.143511,41.497393,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>46. C/ Blasco Ibañez / C/ Pablo Picasso</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.141978,41.499148,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>47. C/ Ramon i Cajal 1</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.142347,41.498088,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>48. C/ Ramon i Cajal 10</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.143393,41.498705,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>50. C/ de Sant Sebastià 20</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.146797,41.496872,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>51. C/ de Sant Sebastià / C/Tiana</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.148053,41.495976,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>52. C/ de Sant Sebastià 9 / C/ Rosari</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.149449,41.494937,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>53. C/ Ntra. Sra. dels Àngels 23</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.150522,41.492757,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>54. C/ Ntra. Sra. del Pilar / C/ Ntra Sra dels Angels</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.150924,41.492431,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>55. C/ Bonavista 1</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.149423,41.492418,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>56. C/ Ntra. Sra. dels Àngels 13-1</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.149214,41.49371,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>57. C/ Tarragona (davant CAP II)</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.15158,41.491722,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>58. C/ del Padró / Rambla Sant Jordi</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.158417,41.498305,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>59. C/ de la Lluna / Rambla Sant Jordi</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.15952,41.497788,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>60. C/ de la Lluna / C/Doctor Bergós</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.160241,41.498797,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>62. C/ Josep de Viure /  C/Doctor Bergós</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.163965,41.497251,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>63. C/ Josep de Viure / Rambla Sant Jordi</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.162694,41.495829,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>64. C/ Covadonga / Rambla Sant Jordi (per sobre la Rambla)</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.164801,41.495491,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>65. C/ Sarrià de Ter / C/Pollancres</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.164778,41.49816,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>66. C/ Covadonga / Rambla Sant Jordi (per sota la Rambla)</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.164705,41.495284,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>67. C/ Covadonga / C/Sant Jaume</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.164063,41.494437,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>68. C/ Monturiol 41</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.161522,41.495951,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>69. C/ Ramon Llull</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.163672,41.495679,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>70. C/ Monturiol 83</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.165092,41.494649,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>71. C/ Sarrià de Ter / Rambla Sant Jordi</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.166331,41.494882,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>72. C/ Sant Jaume 55</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.167165,41.493954,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>73. C/ Montcada 70</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.162005,41.495066,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>74. C/ Montcada / C/Casanovas</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.160197,41.495888,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>75. C/ Montcada / C/Estrella</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.157992,41.497106,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>76. C/ Montcada / C/ Nou</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.15674,41.498111,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>77. C/ de la Salut 12</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.154811,41.49752,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>78. C/ dels Afores 1</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.154564,41.498441,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>79. C/ dels Afores 34</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.156135,41.500085,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>80. C/ dels Afores 56</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.156819,41.501794,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>81. Pl. dels Vinaters</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.156929,41.50272,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>82. Rambla dels Pinetons / Palau Ausit</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.158598,41.502166,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>83.Rambla dels Pinetons 47 (davant bosquet Pinetons)</name>
+        <description><![CDATA[45041 FORM  <br>1 Vidre]]></description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.159898,41.504438,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>84.Av. de Catalunya</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.158661,41.505733,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>85.Rambla de les Vinyes 6</name>
+        <description><![CDATA[45032 FORM <br>1 Vidre]]></description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.157519,41.505134,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[86.Av. Maria Torras - C/ L'Era]]></name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.156907,41.504127,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>87.Pl. Lluís Millet - Av. María Torras</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.154646,41.503655,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>88. Av. Maria Torras / C/ Can Boter</name>
+        <description><![CDATA[45107 FORM <br>1 Vidre]]></description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.158801,41.503946,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>89.Av. Maria Torras / C/ Salvador Espriu</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.160927,41.503749,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>90. C/ Federico Garcia Lorca 13</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.160292,41.503653,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>91. C/ Federico Garcia Lorca / Plaça Palau Ausit</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.159748,41.501752,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>92. C/ Pizarro / C/Jacint Verdaguer</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.157112,41.50104,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>93.C/ Pizarro 42 - C/Cerdanyola del V.</name>
+        <description><![CDATA[45034 FORM <br>1 Vidre]]></description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.151255,41.505089,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>94. C/ Barberà del Vallès / C/Cerdanyola del Valles</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.153168,41.504571,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>95. C/ de Sant Josep - C/ Pizarro</name>
+        <description><![CDATA[45049 FORM <br>1 Vidre]]></description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.153862,41.502069,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>96.C/ de Sant Josep (Pisos Sindicatos)</name>
+        <description><![CDATA[45043 FORM<br>1 Vidre]]></description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.153406,41.500766,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[97. C/ de les Moreres / C/ Molí d'en Rata]]></name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.153125,41.49958,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>98. C/ del Doctor Figuerola / C/Afores</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.155478,41.4994,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>99. C/ de Sant Lluís 19</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.1552,41.501413,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>100.C/ de Sant Lluís / C/ Nord</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.155692,41.502823,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>101.C/ del Nord / C/ Pizarro</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.155953,41.501339,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>102. C/ de les Escoles / C/del Sol</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.156819,41.498813,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>103. C/ Canigó / Rambla de Sant Esteve</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.157308,41.499589,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>104. C/ Magallanes / C/de Sant Salvador</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.154056,41.500276,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>105. C/ Magallanes 14</name>
+        <description><![CDATA[45044 FORM <br>1 Vidre]]></description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.152682,41.500247,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>106.C/ Magallanes (PAME)</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.14937,41.500141,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>107.Ctra. de Santiga</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.151103,41.500758,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>108.C/ de Collserola - Passatge Institut</name>
+        <description>1 FORM + 1 Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.151639,41.5015,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>109.C/ de Collserola</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.152783,41.50301,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>110.C/ del Puigmal - C/ Verema</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.155203,41.505136,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>111. Av. del Mediterrani 24</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.154397,41.507646,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>112.Av. de Catalunya 27 / Rbla. Vinyes</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.156221,41.506277,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>114. Parc dels Pinetons</name>
+        <description>FORM + Vidre+ Resta+ Envasos + Paper</description>
+        <styleUrl>#icon-1899-BDBDBD</styleUrl>
+        <Point>
+          <coordinates>
+            2.150285,41.508652,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>115.Rambla de les Vinyes (brollador)</name>
+        <description>FORM + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.156301,41.507211,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>117. Av. Catalunya con Rbla. Vinyas</name>
+        <styleUrl>#icon-1899-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            2.157494,41.506011,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>118. C/ Tamarit / C/Sarria de Ter</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.166137,41.495492,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>121. C/ Verge de Montserrat 44</name>
+        <description>FORM + Envasos + Paper-cartró + Resta + Vidre</description>
+        <styleUrl>#icon-1899-F57C00</styleUrl>
+        <Point>
+          <coordinates>
+            2.148486,41.495003,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

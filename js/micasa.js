@@ -4,6 +4,8 @@
 // refugio climático; y a cuántos en coche, una base de emergencias.
 import { crearGrafo, tiempos, nodoCercano, nodosDe } from './rutas.js';
 import { celdaAnalizable } from './inundacion.js';
+import { sectorEn, sectorProbable, recogidaDia, diaVisor } from './residuos.js';
+import { calificacionEn, familiaMUC } from './planeamiento.js';
 
 export const TEXTOS_MICASA = {
   es: {
@@ -16,7 +18,7 @@ export const TEXTOS_MICASA = {
     mcSinCert: "sin certificados energéticos", mcSolar: "☀️ Cubierta", mcSolarTxt: "{0} kWh/m²·año de sol · podría producir ≈ {1} MWh/año ({2} kWp)",
     mcRuido: "🔊 Zona acústica", mcRuidoTxt: "{0}: objetivo {1} dB de día y {2} dB de noche", mcSinZona: "sin zona acústica asignada",
     mcBarrio: "👥 Barrio (sección censal {0})", mcBarrioTxt: "{0} vecinos · {1} % de 65 años o más · renta media {2} €/persona · índice de vulnerabilidad {3}/100",
-    mcCerca: "🚶 A pie desde aquí", mcCoche: "🚑 Emergencias en coche: {0} min ({1})",
+    mcCerca: "🚶 A pie desde aquí", mcResiduos: "♻️ Recogida: sector {0} ({1})", mcHoy: "Hoy: {0}", mcPlan: "🏛 Planeamiento", mcCoche: "🚑 Emergencias en coche: {0} min ({1})",
     mcMin: "{0}: {1} min ({2})", mcLejos: "{0}: más de 30 min",
     mcCats: { educacion: "Escuela", salud: "Centro de salud", comida: "Comida", farmacia: "Farmacia", bus: "Parada de bus",
             refugio: "Refugio climático" },
@@ -32,7 +34,7 @@ export const TEXTOS_MICASA = {
     mcSinCert: "sense certificats energètics", mcSolar: "☀️ Coberta", mcSolarTxt: "{0} kWh/m²·any de sol · podria produir ≈ {1} MWh/any ({2} kWp)",
     mcRuido: "🔊 Zona acústica", mcRuidoTxt: "{0}: objectiu {1} dB de dia i {2} dB de nit", mcSinZona: "sense zona acústica assignada",
     mcBarrio: "👥 Barri (secció censal {0})", mcBarrioTxt: "{0} veïns · {1} % de 65 anys o més · renda mitjana {2} €/persona · índex de vulnerabilitat {3}/100",
-    mcCerca: "🚶 A peu des d'aquí", mcCoche: "🚑 Emergències en cotxe: {0} min ({1})",
+    mcCerca: "🚶 A peu des d'aquí", mcResiduos: "♻️ Recollida: sector {0} ({1})", mcHoy: "Avui: {0}", mcPlan: "🏛 Planejament", mcCoche: "🚑 Emergències en cotxe: {0} min ({1})",
     mcMin: "{0}: {1} min ({2})", mcLejos: "{0}: més de 30 min",
     mcCats: { educacion: "Escola", salud: "Centre de salut", comida: "Menjar", farmacia: "Farmàcia", bus: "Parada de bus",
             refugio: "Refugi climàtic" },
@@ -161,6 +163,12 @@ const herramientaMicasa = {
         filas.push(`<b>${t("mcRuido")}</b><br>` + (za ? t("mcRuidoTxt", USOS_ZONA[za.usos] ?? za.usos, za.ld, za.ln) : t("mcSinZona")));
         const s = ctx.secciones4m && ctx.DATOS.secciones?.lista?.[ctx.secciones4m[k] - 1];
         if (s) filas.push(`<b>${t("mcBarrio", s.codigo)}</b><br>${t("mcBarrioTxt", numero(s.poblacion), numero(s.mayores, 1), numero(s.renta), s.indice)}`);
+        // Recogida de residuos y planeamiento
+        const sec = sectorEn(ctx, c[0], c[1]);
+        if (sec) filas.push(`<b>${t("mcResiduos", sec, ctx.residuos.calendarios[sec].nombre)}</b>` +
+          `${sectorProbable(ctx, c[0], c[1]) ? t("reProbable") : ""}<br>${t("mcHoy", recogidaDia(ctx, sec, diaVisor(ctx)))}`);
+        const cal = calificacionEn(ctx, c[0], c[1]);
+        if (cal) filas.push(`<b>${t("mcPlan")}</b><br>${cal.codigo} · ${cal.nombre} (${(tx("familias")[familiaMUC(cal.codigo)] ?? [""])[0]})`);
         // A pie y en coche
         const o = nodoCercano(G, c[0], c[1], nodoPie), { t: T } = tiempos(G, [o.nodo], (a) => (G.pie[a] ? G.largo[a] / PIE_MC : Infinity));
         const cats = tx("mcCats"), lineas = [];
