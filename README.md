@@ -344,6 +344,22 @@ cada herramienta, no se descarga.
 | Zonas inundables del río | ACA en el SNCZI (MITECO), servicio IDEE | `obtener_oficial.py` |
 | **Alcantarillado** | **No es público** (ni Catastro, ni ICGC, ni OSM) | Habría que pedirlo a quien gestiona la red |
 
+## Seguridad
+
+Los textos de los datos vienen de fuentes que puede editar cualquiera (los nombres de OpenStreetMap) o que no
+controlamos (Catastro, GTFS, Ripollet Aporta, Diputació, GBIF, la agenda de ripollet.cat), y el visor los pinta en sus
+fichas. Dos capas para que nadie pueda colar código por ahí:
+
+1. **Limpieza al ensamblar** (`limpiar()` en `ensamblar.py`): en todo texto de `datos.json`, de los blobs JSON y de la
+   agenda, «<» y «>» pasan a «‹» y «›» (ningún nombre real los usa). Así un nombre no puede meter HTML ni cerrar el
+   `<script>` del visor. `obtener_agenda.py` hace lo mismo con la agenda que se actualiza cada día.
+2. **Política de seguridad de contenido (CSP)** en las dos versiones del visor: solo se ejecutan sus propios scripts
+   (por su huella SHA-256, que `ensamblar.py` calcula en cada montaje) y los de la CDN de three.js; conexiones solo
+   con los servicios que usa. Comprobado: un `<img onerror>` o un `<script>` inyectados en la página no se ejecutan.
+
+Sin cookies ni analítica; en el navegador solo se guardan las preferencias (idioma, modo, vista, sonido) y las
+incidencias que apunta cada uno.
+
 ## Datos y licencias
 
 Código: licencia MIT (`LICENSE`), salvo **Neutro** (`js/neutro_nucleo.js`, también dentro de `ripollet.html` y

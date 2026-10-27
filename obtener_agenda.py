@@ -21,7 +21,9 @@ for url in enlaces:
         s = pedir(url)
     except OSError:
         continue
-    prop = lambda p: next((html.unescape(m).strip() for m in re.findall(rf'itemprop="{p}"[^>]*>([^<]*)<', s) if m.strip()), "")
+    # (sin «<» ni «>»: el visor pinta estos textos; ver limpiar() en ensamblar.py)
+    prop = lambda p: next((html.unescape(m).strip().replace("<", "\u2039").replace(">", "\u203a")
+                           for m in re.findall(rf'itemprop="{p}"[^>]*>([^<]*)<', s) if m.strip()), "")
     actos.append({"titulo": prop("name") or prop("summary"), "inicio": prop("startDate"), "fin": prop("endDate"),
                   "lugar": prop("address") or prop("location"), "descripcion": prop("description")[:160], "url": url})
 actos = [a for a in actos if a["titulo"] and a["inicio"]]

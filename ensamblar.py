@@ -67,22 +67,68 @@ def fisica():
     return salida
 
 
+# SEGURIDAD: los textos de los datos vienen de fuentes que puede editar cualquiera (nombres de OpenStreetMap) o que no
+# controlamos (Catastro, GTFS, Ripollet Aporta, Diputació, GBIF, la agenda). El visor los pinta con innerHTML y los
+# lleva escritos dentro de su <script>: un «<» o un «>» podrían colar HTML o cerrar el script. Un nombre real no los
+# necesita: se cambian por «‹» y «›» en todo texto de los datos, al ensamblar.
+def limpiar(o):
+    if isinstance(o, str):
+        return o.replace("<", "\u2039").replace(">", "\u203a")
+    if isinstance(o, list):
+        return [limpiar(v) for v in o]
+    if isinstance(o, dict):
+        return {limpiar(k): limpiar(v) for k, v in o.items()}
+    return o
+
+
+def json_limpio(texto):
+    return json.dumps(limpiar(json.loads(texto)), ensure_ascii=False, separators=(",", ":"))
+
+
+def blob_limpio(datos):
+    """Los blobs que son JSON (lugares, transporte, residuos, patrimonio, naturaleza, direcciones), limpios."""
+    if datos[:1] not in (b"{", b"["):
+        return datos
+    try:
+        return json_limpio(datos.decode("utf-8")).encode("utf-8")
+    except (UnicodeDecodeError, ValueError):
+        return datos
+
+
+def con_csp(html):
+    """Política de seguridad de contenido: solo se ejecutan los scripts del propio visor (por su huella SHA-256) y los
+    de la CDN de three.js; aunque algo se colara en la página, el navegador no lo ejecutaría."""
+    import hashlib
+    huellas = " ".join("'sha256-" + base64.b64encode(hashlib.sha256(s.encode("utf-8")).digest()).decode() + "'"
+                       for s in re.findall(r"<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>", html, re.S))
+    politica = ("default-src 'self'; "
+                f"script-src {huellas} https://cdn.jsdelivr.net 'wasm-unsafe-eval'; worker-src 'self' blob:; "
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
+                "img-src 'self' data: blob: https://fokosoft.github.io; media-src 'self' https://fokosoft.github.io; "
+                "connect-src 'self' data: blob: https://cdn.jsdelivr.net https://api.open-meteo.com "
+                "https://air-quality-api.open-meteo.com https://analisi.transparenciacatalunya.cat https://fokosoft.github.io; "
+                "object-src 'none'; base-uri 'none'; form-action 'none'")
+    return html.replace("<meta charset=\"utf-8\">",
+                        f'<meta charset="utf-8">\n<meta http-equiv="Content-Security-Policy" content="{politica}">', 1)
+
+
 def construir():
-    datos = leer(os.path.join(DATOS, "datos.json"))
-    comprimidos = {b: zlib.compress(leer(os.path.join(DATOS, b + ".bin"), "rb"), 9) for b in BLOBS}
+    datos = json_limpio(leer(os.path.join(DATOS, "datos.json")))
+    comprimidos = {b: zlib.compress(blob_limpio(leer(os.path.join(DATOS, b + ".bin"), "rb")), 9) for b in BLOBS}
     comprimidos.update({b: zlib.compress(v, 9) for b, v in fisica().items()})
     for opcional in ("oficial", "sotanos", "farolas", "secciones", "rehab", "lugares", "transporte", "acustica", "direcciones", "copas", "cobertes", "sectores", "residuos", "planeamiento", "ruta_patrimonio", "naturaleza"):   # zonas inundables oficiales, sótanos (Catastro), farolas (AMB)
         if os.path.exists(os.path.join(DATOS, opcional + ".bin")):
-            comprimidos[opcional] = zlib.compress(leer(os.path.join(DATOS, opcional + ".bin"), "rb"), 9)
+            comprimidos[opcional] = zlib.compress(blob_limpio(leer(os.path.join(DATOS, opcional + ".bin"), "rb")), 9)
     memoria = opcional_json("neutro_memoria.json")       # lo que aprendió Neutro (entrenar_neutro.mjs)
     medicion = opcional_json("neutro_medicion.json")     # cómo se midió, frente a qué rival
     codigo_modulos = modulos()
 
     # Agenda: copia de web/agenda.json dentro del visor, por si no se puede leer la actualizada (archivo local)
     agenda = opcional_json(os.path.join("web", "agenda.json"))
+    agenda = json_limpio(agenda) if agenda != "null" else agenda
 
     def visor(blobs, glb):
-        return (leer(os.path.join(DIR, "visor_ripollet.html"))
+        return con_csp(leer(os.path.join(DIR, "visor_ripollet.html"))
                 .replace("/*__MODULOS__*/", codigo_modulos)
                 .replace("__DATOS__", datos)
                 .replace("__BLOBS__", blobs)
