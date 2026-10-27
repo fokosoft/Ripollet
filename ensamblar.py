@@ -103,7 +103,7 @@ def con_csp(html):
                        for s in re.findall(r"<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>", html, re.S))
     politica = ("default-src 'self'; "
                 f"script-src {huellas} https://cdn.jsdelivr.net 'wasm-unsafe-eval'; worker-src 'self' blob:; "
-                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
+                "style-src 'self' 'unsafe-inline'; font-src 'self' data:; "
                 "img-src 'self' data: blob: https://fokosoft.github.io; media-src 'self' https://fokosoft.github.io; "
                 "connect-src 'self' data: blob: https://cdn.jsdelivr.net https://api.open-meteo.com "
                 "https://air-quality-api.open-meteo.com https://analisi.transparenciacatalunya.cat https://fokosoft.github.io; "
@@ -127,8 +127,16 @@ def construir():
     agenda = opcional_json(os.path.join("web", "agenda.json"))
     agenda = json_limpio(agenda) if agenda != "null" else agenda
 
+    # Letra Silkscreen (fuentes/, SIL OFL) en la propia página: sin peticiones a Google Fonts (la IP del visitante
+    # no sale a terceros) y sin parpadeo de letra al cargar. Solo el subconjunto latino (castellano y catalán): 16 KB.
+    fuentes = "".join(
+        f"@font-face {{ font-family: 'Silkscreen'; font-style: normal; font-weight: {p}; font-display: swap; "
+        f"src: url(data:font/woff2;base64,{base64.b64encode(leer(os.path.join(DIR, 'fuentes', f'silkscreen-{p}.woff2'), 'rb')).decode()}) "
+        f"format('woff2'); }}\n  " for p in (400, 700))
+
     def visor(blobs, glb):
         return con_csp(leer(os.path.join(DIR, "visor_ripollet.html"))
+                .replace("/*__FUENTES__*/", fuentes)
                 .replace("/*__MODULOS__*/", codigo_modulos)
                 .replace("__DATOS__", datos)
                 .replace("__BLOBS__", blobs)

@@ -49,8 +49,8 @@ en la línea de atribución) explica cómo se usa y de dónde sale cada dato, en
 
 Estética de diorama de pixel art: la escena se dibuja a baja resolución y se amplía con píxeles nítidos, con una
 paleta de 32 colores, contornos donde cambia la profundidad y tramado opcional; vista de teleobjetivo casi
-isométrica que gira de 90 en 90°, fondo claro sin bruma e interfaz clara con letra de píxel (Silkscreen, Google
-Fonts). En «🎛 Vista»: Píxel / 3D, Maqueta, Girar, tamaño del píxel (2–8), Paleta, Tramado y Contornos; se recuerda
+isométrica que gira de 90 en 90°, fondo claro sin bruma e interfaz clara con letra de píxel (Silkscreen, SIL OFL, en `fuentes/` y
+dentro de la propia página: no se pide nada a Google). En «🎛 Vista»: Píxel / 3D, Maqueta, Girar, tamaño del píxel (2–8), Paleta, Tramado y Contornos; se recuerda
 en el navegador. Combina con el estilo realista o el artístico y con el coche. Además aligera la GPU (con píxel 4
 dibuja 16 veces menos). `?real` abre la vista 3D clásica.
 
@@ -357,7 +357,8 @@ fichas. Dos capas para que nadie pueda colar código por ahí:
    (por su huella SHA-256, que `ensamblar.py` calcula en cada montaje) y los de la CDN de three.js; conexiones solo
    con los servicios que usa. Comprobado: un `<img onerror>` o un `<script>` inyectados en la página no se ejecutan.
 
-Sin cookies ni analítica; en el navegador solo se guardan las preferencias (idioma, modo, vista, sonido) y las
+Sin cookies, sin analítica y sin Google Fonts (la letra va dentro de la página: la IP de quien la visita no sale a
+terceros); en el navegador solo se guardan las preferencias (idioma, modo, vista, sonido) y las
 incidencias que apunta cada uno.
 
 ## Datos y licencias
