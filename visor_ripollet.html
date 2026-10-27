@@ -968,8 +968,19 @@ const mallasModelo = [];
 let estiloArte = new URLSearchParams(location.search).has("arte");   // ?arte abre ya en estilo artístico
 const draco = new DRACOLoader().setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/");
 new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
+  // RENDIMIENTO: el GLB trae materiales «físicos» (MeshStandardMaterial); en una maqueta mate (rugosidad 0,95) se ven
+  // casi igual con Lambert, que ilumina con una cuenta mucho más simple: ~40 % menos de tiempo por fotograma en 3D,
+  // lo que más se nota en un móvil. El agua (la única con brillo) se queda como está.
+  const lambert = new Map();
+  const aLambert = (m) => {
+    if (m.type !== "MeshStandardMaterial" || m.name === "agua") return m;
+    if (!lambert.has(m)) lambert.set(m, Object.assign(new THREE.MeshLambertMaterial({
+      map: m.map, color: m.color, side: m.side, flatShading: true, transparent: m.transparent, opacity: m.opacity }), { name: m.name }));
+    return lambert.get(m);
+  };
   gltf.scene.traverse((o) => {
     if (!o.isMesh) return;
+    o.material = aLambert(o.material);
     o.castShadow = !["suelo", "calzada", "peatonal", "cesped", "bosque", "matorral", "pista", "agua", "aparcamiento"].includes(o.name);
     o.receiveShadow = true;
     // Texturas nítidas aunque se vean muy de lado (el asfalto desde el coche)
@@ -987,12 +998,12 @@ new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
 });
 
 // ------------------------------------------------------------ árboles (instancias)
+let arbolesLod = () => {};
 // Una geometría por tipo, repetida en la GPU: miles de árboles sin pesar en el GLB.
 {
   const A = D.arboles, n = A.length / 5;
   const mat = (nombre, color) => Object.assign(
-    new THREE.MeshStandardMaterial({ color: new THREE.Color().setRGB(...color), flatShading: true, roughness: 0.95 }),
-    { name: nombre });
+    new THREE.MeshLambertMaterial({ color: new THREE.Color().setRGB(...color), flatShading: true }), { name: nombre });
   const formas = {
     tronco: [new THREE.CylinderGeometry(0.22, 0.3, 1, 3, 1, true), mat("tronco", [0.40, 0.26, 0.15])],
     pino: [new THREE.ConeGeometry(1, 1, 5, 1, true), mat("copa_pino", [0.18, 0.42, 0.24])],
@@ -1059,6 +1070,49 @@ new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
     matrices[tipo].push(m.clone().compose(new THREE.Vector3(x, base, z), new THREE.Quaternion(), escala));
     coloresCopa[tipo]?.push(colorCopa(formas[tipo][1].color.toArray(), k));
   }
+  // NIVEL DE DETALLE de las copas redondas (la mayor parte de los triángulos de la escena): a menos de LOD_CERCA m
+  // de la cámara, la copa de 80 caras; más lejos, la de 20, que a esa distancia ocupa unos pocos píxeles. El reparto
+  // se rehace cuando la cámara se ha movido (arbolesLod, cada fotograma con el mapa en marcha).
+  const LOD_CERCA = 300;
+  const copasLod = [];
+  for (const tipo of ["bola_copa", "bola_copa_clara"]) {
+    const lista = matrices[tipo], colores = coloresCopa[tipo];
+    if (!lista.length) continue;
+    const material = formas[tipo][1];
+    if (colores) material.color.setRGB(1, 1, 1);
+    const centros = lista.map((m) => new THREE.Vector3().setFromMatrixPosition(m));
+    const [cerca, lejos] = [new THREE.IcosahedronGeometry(1, 1), new THREE.IcosahedronGeometry(1, 0)].map((g) => {
+      const malla = new THREE.InstancedMesh(g, material, lista.length);
+      if (colores) malla.setColorAt(0, colores[0]);          // crea el búfer de color por instancia
+      malla.count = 0;
+      malla.castShadow = malla.receiveShadow = true;
+      scene.add(malla);
+      mallasModelo.push(malla);
+      return malla;
+    });
+    copasLod.push({ lista, colores, centros, cerca, lejos });
+    matrices[tipo] = [];                                     // (no se crea la malla única de abajo)
+  }
+  const ultimaLod = new THREE.Vector3(Infinity, 0, 0);
+  arbolesLod = () => {
+    if (camera.position.distanceTo(ultimaLod) < 40) return;
+    ultimaLod.copy(camera.position);
+    const d2 = LOD_CERCA * LOD_CERCA;
+    for (const c of copasLod) {
+      let nc = 0, nl = 0;
+      for (let i = 0; i < c.lista.length; i++) {
+        const malla = c.centros[i].distanceToSquared(camera.position) < d2 ? c.cerca : c.lejos;
+        const k = malla === c.cerca ? nc++ : nl++;
+        malla.setMatrixAt(k, c.lista[i]);
+        if (c.colores) malla.setColorAt(k, c.colores[i]);
+      }
+      c.cerca.count = nc; c.lejos.count = nl;
+      for (const m of [c.cerca, c.lejos]) {
+        m.instanceMatrix.needsUpdate = true;
+        if (m.instanceColor) m.instanceColor.needsUpdate = true;
+      }
+    }
+  };
   for (const [tipo, lista] of Object.entries(matrices)) {
     if (!lista.length) continue;
     const malla = new THREE.InstancedMesh(formas[tipo][0], formas[tipo][1], lista.length);
@@ -2872,6 +2926,7 @@ renderer.setAnimationLoop(() => {
   farolas.cadaFrame(dt);
   ambiente.cadaFrame(dt);
   pajaros.cadaFrame(dt);
+  arbolesLod();
   nocheVentanas.value = tiempoReal?.noche?.() ?? 0;
   // La bruma (y la niebla del tiempo real) es la de quien está en la calle: mirando la maqueta desde lejos, empieza
   // como pronto en el punto que se mira, con el mismo espesor. Así el centro siempre se ve y la niebla vela el fondo.
