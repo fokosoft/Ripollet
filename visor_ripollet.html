@@ -999,6 +999,7 @@ new GLTFLoader().setDRACOLoader(draco).load(GLB, (gltf) => {
 
 // ------------------------------------------------------------ árboles (instancias)
 let arbolesLod = () => {};
+const mallasArbol = [], datosRecortables = [];      // árboles 3D y, para la vista maqueta, sus recortables (js/arboles_sprite.js)
 // Una geometría por tipo, repetida en la GPU: miles de árboles sin pesar en el GLB.
 {
   const A = D.arboles, n = A.length / 5;
@@ -1044,6 +1045,7 @@ let arbolesLod = () => {};
       const q = new THREE.Quaternion(), grueso = THREE.MathUtils.clamp(r / 2.5, 0.8, 2.2);
       if (tipo === "arbusto") {
         matrices.arbusto.push(m.clone().compose(new THREE.Vector3(x, y + alto / 2, z), q, new THREE.Vector3(r, Math.max(alto / 2, 0.4), r)));
+        datosRecortables.push({ tipo: "arbusto", x, y, z, ancho: 2.3 * r, alto: Math.max(alto, 0.8), color: formas.arbusto[1].color.clone() });
         continue;
       }
       const copa = tipo === "pino" ? alto * 0.6 : tipo.startsWith("cono") ? alto * 0.75 : Math.min(2 * r, alto * 0.7);
@@ -1057,6 +1059,8 @@ let arbolesLod = () => {};
       const forma = tipo === "pino" || tipo.startsWith("cono") ? new THREE.Vector3(r, copa, r) : new THREE.Vector3(r, copa / 2, r);
       matrices[tipo].push(m.clone().compose(new THREE.Vector3(x + dx, y + fuste + copa / 2, z + dz), q, forma));
       coloresCopa[tipo]?.push(colorCopa(formas[tipo][1].color.toArray(), k));
+      datosRecortables.push({ tipo: tipo === "cono_copa_clara" ? "cono_copa" : tipo, x: x + dx / 2, y, z: z + dz / 2,
+                              ancho: 2.2 * r, alto, color: coloresCopa[tipo]?.at(-1) ?? formas[tipo][1].color.clone() });
       continue;
     }
     if (tipo !== "arbusto") {
@@ -1069,6 +1073,9 @@ let arbolesLod = () => {};
     else if (tipo.startsWith("cono")) { base = y + 1.4 + alto / 2; escala = new THREE.Vector3(r, alto, r); }
     matrices[tipo].push(m.clone().compose(new THREE.Vector3(x, base, z), new THREE.Quaternion(), escala));
     coloresCopa[tipo]?.push(colorCopa(formas[tipo][1].color.toArray(), k));
+    datosRecortables.push({ tipo: tipo === "cono_copa_clara" ? "cono_copa" : tipo, x, y, z, ancho: 2.2 * r,
+                            alto: tipo === "arbusto" ? 1 : base + escala.y - y,
+                            color: coloresCopa[tipo]?.at(-1) ?? formas[tipo][1].color.clone() });
   }
   // NIVEL DE DETALLE de las copas redondas (la mayor parte de los triángulos de la escena): a menos de LOD_CERCA m
   // de la cámara, la copa de 80 caras; más lejos, la de 20, que a esa distancia ocupa unos pocos píxeles. El reparto
@@ -1088,6 +1095,7 @@ let arbolesLod = () => {};
       malla.castShadow = malla.receiveShadow = true;
       scene.add(malla);
       mallasModelo.push(malla);
+      mallasArbol.push(malla);
       return malla;
     });
     copasLod.push({ lista, colores, centros, cerca, lejos });
@@ -1125,8 +1133,11 @@ let arbolesLod = () => {};
     malla.receiveShadow = true;
     scene.add(malla);
     mallasModelo.push(malla);
+    mallasArbol.push(malla);
   }
 }
+const arbolesRecortables = crearArbolesSprite({ THREE, scene }, datosRecortables);
+let conRecortables = null;
 
 // ------------------------------------------------------------ etiquetas y vuelos
 for (const l of DATOS.lugares) {
@@ -2926,7 +2937,15 @@ renderer.setAnimationLoop(() => {
   farolas.cadaFrame(dt);
   ambiente.cadaFrame(dt);
   pajaros.cadaFrame(dt);
-  arbolesLod();
+  // Vista maqueta (píxel + teleobjetivo): árboles recortables de pixel art en vez de los 3D (2 triángulos cada uno)
+  const recortables = pixelado.activo && pixelado.enMaqueta && modo === "mapa";
+  if (recortables !== conRecortables) {
+    conRecortables = recortables;
+    arbolesRecortables.grupo.visible = recortables;
+    for (const m of mallasArbol) m.visible = !recortables;
+  }
+  if (recortables) arbolesRecortables.actualizar(camera);
+  else arbolesLod();
   nocheVentanas.value = tiempoReal?.noche?.() ?? 0;
   // La bruma (y la niebla del tiempo real) es la de quien está en la calle: mirando la maqueta desde lejos, empieza
   // como pronto en el punto que se mira, con el mismo espesor. Así el centro siempre se ve y la niebla vela el fondo.

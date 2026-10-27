@@ -204,6 +204,7 @@ export function crearPixelado(ctx, div) {
 
   return {
     get activo() { return op.activo; },
+    get enMaqueta() { return enMaqueta; },
     render,
     traducir: rotulos,
     /** El coche pone su propia cámara: al entrar se deja la maqueta (sin tocar nada) y al salir se recupera. */
