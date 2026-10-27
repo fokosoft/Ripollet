@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-sXWZtfJ6C/B218NLPOnZ87YR9LdJFaOkMqQquqsH2jU=' 'sha256-6VYrgpR6MtP87w2irkuyFfYrXpbbHUM1g4mSb70lAu8=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://fokosoft.github.io; media-src 'self' https://fokosoft.github.io; connect-src 'self' data: blob: https://cdn.jsdelivr.net https://api.open-meteo.com https://air-quality-api.open-meteo.com https://analisi.transparenciacatalunya.cat https://fokosoft.github.io; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-sXWZtfJ6C/B218NLPOnZ87YR9LdJFaOkMqQquqsH2jU=' 'sha256-OukMjEed+BakRzawpOdF/b+gwagUXpU8lpRe5TdHhyw=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://fokosoft.github.io; media-src 'self' https://fokosoft.github.io; connect-src 'self' data: blob: https://cdn.jsdelivr.net https://api.open-meteo.com https://air-quality-api.open-meteo.com https://analisi.transparenciacatalunya.cat https://fokosoft.github.io; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ripollet · maqueta 3D</title>
 <meta name="description" content="Maqueta 3D de Ripollet amb dades obertes: la teva adreça, la recollida de residus, l'agenda, Ripollet en el temps (1946–avui), patrimoni, natura, transport i risc d'inundació. En català i castellà. · Maqueta 3D de Ripollet con datos abiertos.">
@@ -123,6 +123,20 @@
   #tactil { position: fixed; left: 0; right: 0; bottom: 16px; display: none; justify-content: space-between;
             padding: 0 16px; pointer-events: none; }
   #tactil div { display: flex; gap: 10px; pointer-events: auto; }
+  /* Conduciendo en pantalla táctil: sin las instrucciones de teclado; arriba solo los botones, en una fila compacta;
+     el velocímetro y la atribución, en el centro por encima de los botones de dirección (no se pisan) */
+  @media (pointer: coarse), (max-width: 760px) {
+    #hud > span, #hud > br { display: none; }
+    #hud { top: max(8px, env(safe-area-inset-top)); left: 8px; right: 8px; padding: 6px 8px; }
+    #hud .botones { margin-top: 0; gap: 6px; flex-wrap: nowrap; overflow-x: auto; }
+    #hud .botones button { padding: 6px 8px; font-size: 12px; min-height: 36px; white-space: nowrap; flex: none; }
+    #velocidad { right: auto; left: 50%; transform: translateX(-50%); bottom: calc(118px + env(safe-area-inset-bottom));
+                 font-size: 22px; padding: 6px 12px; }
+    #senal { width: 32px; height: 32px; border-width: 4px; font-size: 13px; }
+    body.conduciendo #osm { bottom: calc(92px + env(safe-area-inset-bottom)); left: 50%; right: auto;
+                            transform: translateX(-50%); white-space: nowrap; font-size: 9px; }
+    #tactil { bottom: max(16px, env(safe-area-inset-bottom)); }
+  }
   #tactil button { width: 64px; height: 64px; font-size: 26px; border-radius: 50%; background: rgba(0,0,0,.45); color: #fff;
                    border-color: rgba(255,255,255,.6); box-shadow: none; }
 
@@ -8152,7 +8166,11 @@ function entrarAlCoche() {
   mostrarPanel(null);
   $("hud").style.display = "block";
   $("velocidad").style.display = "block";
-  if (matchMedia("(pointer: coarse)").matches) $("tactil").style.display = "flex";
+  if (matchMedia("(pointer: coarse)").matches) {
+    $("tactil").style.display = "flex";
+    // en el móvil no hay teclado: los botones sin «(C)», «(Esc)»…
+    for (const b of $("hud").querySelectorAll("button")) b.textContent = b.textContent.replace(/\s*\([^)]*\)\s*$/, "");
+  }
 }
 
 function salirDelCoche() {
