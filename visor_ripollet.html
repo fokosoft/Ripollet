@@ -270,6 +270,7 @@
                    background: currentColor; opacity: .3; }
     .rejilla { grid-template-columns: repeat(3, 1fr); }
     #osm { bottom: 66px; font-size: 10px; }
+    .pista { white-space: normal; width: max-content; max-width: calc(100vw - 32px); text-align: center; }
     .etiqueta { font-size: 9px; padding: 3px 6px 2px; }
     #explicacion { display: none; }
     #recorrido { top: 56px; bottom: auto; padding: 10px 12px; }
@@ -2574,6 +2575,7 @@ const CTX = {
   nombreCalle, choca, SOTANOS, secciones4m: SECCIONES_4M, rehab: REHAB, lugaresOsm: LUGARES_OSM, transporte: TRANSPORTE, acustica4m: ACUSTICA_4M, direcciones: DIRECCIONES,
   sectores4m: SECTORES_4M, planeamiento4m: PLANEAMIENTO_4M, residuos: RESIDUOS, agendaLocal: AGENDA_LOCAL, rutaPatrimonio: RUTA_PATRIMONIO, naturaleza: NATURALEZA,
   compartir: (extra) => compartir(extra),
+  aviso: (texto, ms) => aviso(texto, ms),
   capa1m: { datos: datosCapa1m, actualizar: () => { texCapa1m.needsUpdate = true; },
             ver: (v) => { capa1mActiva.value = v ? 1 : 0; } },
   capaTechos: { datos: datosCapaTechos, nx: S1.nx / 2, ny: S1.ny / 2, actualizar: () => { texCapaTechos.needsUpdate = true; },
