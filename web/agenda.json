@@ -18,22 +18,6 @@
 "url": "https://www.ripollet.cat/actualitat/agenda/esportiva2019t-jesa-ripollet-1"
 },
 {
-"titulo": "Túnel del terror infantil: “El otro lado: No mires atrás”",
-"inicio": "2026-10-30T17:45:00+01:00",
-"fin": "2026-10-30T20:00:00+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "De 17.45 a 20 h, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/tunel-del-terror-infantil-201cel-otro-lado-no-mires-atras201d"
-},
-{
-"titulo": "Teatre: Permagel",
-"inicio": "2026-10-30T20:30:00+01:00",
-"fin": "2026-10-30T21:30:00+01:00",
-"lugar": "Teatre Auditori del Mercat Vell",
-"descripcion": "A les 20.30 h, al Teatre Auditori del Mercat Vell",
-"url": "https://www.ripollet.cat/actualitat/agenda/teatre-permagel"
-},
-{
 "titulo": "Túnel del terror d’adults: “Museo Warren”",
 "inicio": "2026-10-31T18:45:00+01:00",
 "fin": "2026-10-31T22:30:00+01:00",
@@ -66,6 +50,14 @@
 "url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cgimcana-de-biodiversitat201d"
 },
 {
+"titulo": "Vine a conèixer el nou local de l&#x27;Economat del Barri",
+"inicio": "2026-11-02T09:30:00+01:00",
+"fin": "2026-11-02T13:00:00+01:00",
+"lugar": "Carretera de Barcelona, 43",
+"descripcion": "De 9.30 a 13 h, a la carretera de Barcelona, 43",
+"url": "https://www.ripollet.cat/actualitat/agenda/vine-a-coneixer-el-nou-local-de-leconomat-del-barri"
+},
+{
 "titulo": "Jornada de voleibol 2x2",
 "inicio": "2026-11-02T10:00:00+01:00",
 "fin": "2026-11-02T13:00:00+01:00",
@@ -74,12 +66,28 @@
 "url": "https://www.ripollet.cat/actualitat/agenda/jornada-de-voleibol-2x2"
 },
 {
+"titulo": "Xarxa de Sabers: Astrologia, art i vincles",
+"inicio": "2026-11-02T17:00:00+01:00",
+"fin": "2026-11-02T23:59:59+01:00",
+"lugar": "Els Solets (carrer del Sol, 13)",
+"descripcion": "A les 17 h, a Els Solets (carrer del Sol, 13)",
+"url": "https://www.ripollet.cat/actualitat/agenda/xarxa-de-sabers-astrologia-art-i-vincles-1"
+},
+{
 "titulo": "Book Club: Frenchbraid",
 "inicio": "2026-11-02T18:30:00+01:00",
 "fin": "2026-11-02T19:30:00+01:00",
 "lugar": "Biblioteca Municipal de Ripollet",
 "descripcion": "A les 18.30 h, a la Biblioteca Municipal",
 "url": "https://www.ripollet.cat/actualitat/agenda/book-club-frenchbraid"
+},
+{
+"titulo": "Vine a conèixer el nou local de l&#x27;Economat del Barri",
+"inicio": "2026-11-03T10:30:00+01:00",
+"fin": "2026-11-03T13:00:00+01:00",
+"lugar": "Carretera de Barcelona, 43",
+"descripcion": "De 10.30 a 13 h, a la carretera de Barcelona, 43",
+"url": "https://www.ripollet.cat/actualitat/agenda/vine-a-coneixer-el-nou-local-de-leconomat-del-barri-1"
 },
 {
 "titulo": "Aula d’Extensió Universitària: “Parlem de l’islam i fem-ho bé”",
@@ -120,6 +128,14 @@
 "lugar": "El Local, carrer de Monturiol",
 "descripcion": "A les 19 h, a El Local",
 "url": "https://www.ripollet.cat/actualitat/agenda/ucraina-no-estas-sola"
+},
+{
+"titulo": "Xarxa de Sabers: Mocs, tos i respiració",
+"inicio": "2026-11-05T17:00:00+01:00",
+"fin": "2026-11-05T23:59:59+01:00",
+"lugar": "Els Solets (carrer del Sol, 13)",
+"descripcion": "A les 17 h, a Els Solets (carrer del Sol, 13)",
+"url": "https://www.ripollet.cat/actualitat/agenda/xarxa-de-sabers-mocs-tos-i-respiracio"
 },
 {
 "titulo": "Xerrada: “Les dones de Ripollet durant la Guerra Civil”",
@@ -224,22 +240,6 @@
 "lugar": "Teatre Auditori del Mercat Vell",
 "descripcion": "A les 18 h, al Teatre Auditori del Mercat Vell",
 "url": "https://www.ripollet.cat/actualitat/agenda/petit-mercat-vell-com-els-pinguins"
-},
-{
-"titulo": "Cafè Literari: Mirall trencat",
-"inicio": "2026-11-09T16:30:00+01:00",
-"fin": "2026-11-09T17:30:00+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "A les 16.30 h, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/cafe-literari-mirall-trencat"
-},
-{
-"titulo": "Llegir el Teatre: L’Hostal de les Tres Camèlies",
-"inicio": "2026-11-09T18:30:00+01:00",
-"fin": "2026-11-09T19:30:00+01:00",
-"lugar": "Biblioteca Municipal de Ripollet",
-"descripcion": "A les 18.30 h, a la Biblioteca Municipal",
-"url": "https://www.ripollet.cat/actualitat/agenda/llegir-el-teatre-l2019hostal-de-les-tres-camelies"
 }
 ]
 }
