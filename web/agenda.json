@@ -2,70 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Activitats al Casal de Joves",
-"inicio": "2026-10-01T00:00:00+02:00",
-"fin": "2026-10-31T23:59:59+01:00",
-"lugar": "Casal de Joves",
-"descripcion": "Tot el mes d'octubre",
-"url": "https://www.ripollet.cat/actualitat/agenda/activitats-al-casal-de-joves-1"
-},
-{
-"titulo": "Esportiva’t: JESA Ripollet",
-"inicio": "2026-10-01T00:00:00+02:00",
-"fin": "2026-10-31T23:59:59+01:00",
-"lugar": "Ripollet",
-"descripcion": "Tot el mes d'octubre",
-"url": "https://www.ripollet.cat/actualitat/agenda/esportiva2019t-jesa-ripollet-1"
-},
-{
-"titulo": "Túnel del terror d’adults: “Museo Warren”",
-"inicio": "2026-10-31T18:45:00+01:00",
-"fin": "2026-10-31T22:30:00+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "De 18.45 a 22.30 h, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/tunel-del-terror-d2019adults-201cmuseo-warren201d"
-},
-{
-"titulo": "CastaFest, la festa de la Castanyada",
-"inicio": "2026-11-01T00:00:00+01:00",
-"fin": "2026-11-01T23:59:59+01:00",
-"lugar": "Plaça de Joan Abad",
-"descripcion": "De 0 a 3 h,  a la plaça de Joan Abad",
-"url": "https://www.ripollet.cat/actualitat/agenda/castafest"
-},
-{
-"titulo": "Jugatecambiental Maria Regordosa i Masot: “Gimcana de biodiversitat”",
-"inicio": "2026-11-01T11:30:00+01:00",
-"fin": "2026-11-01T13:30:00+01:00",
-"lugar": "Parc de Maria Regordosa i del Masot",
-"descripcion": "D’11.30 a 13.30 h, al parc de Maria Regordosa i Masot",
-"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-maria-regordosa-i-masot-201cgimcana-de-biodiversitat201d"
-},
-{
-"titulo": "Jugatecambiental Pinetons: “Gimcana de biodiversitat”",
-"inicio": "2026-11-01T11:30:00+01:00",
-"fin": "2026-11-01T13:30:00+01:00",
-"lugar": "Parc dels Pinetons de Ripolllet",
-"descripcion": "D’11.30 a 13.30 h, al parc dels Pinetons",
-"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cgimcana-de-biodiversitat201d"
-},
-{
-"titulo": "Vine a conèixer el nou local de l&#x27;Economat del Barri",
-"inicio": "2026-11-02T09:30:00+01:00",
-"fin": "2026-11-02T13:00:00+01:00",
-"lugar": "Carretera de Barcelona, 43",
-"descripcion": "De 9.30 a 13 h, a la carretera de Barcelona, 43",
-"url": "https://www.ripollet.cat/actualitat/agenda/vine-a-coneixer-el-nou-local-de-leconomat-del-barri"
-},
-{
-"titulo": "Jornada de voleibol 2x2",
-"inicio": "2026-11-02T10:00:00+01:00",
-"fin": "2026-11-02T13:00:00+01:00",
-"lugar": "Pavelló Francesc Barneda",
-"descripcion": "De 10 a 13 h, al Pavelló Municipal Francesc Barneda",
-"url": "https://www.ripollet.cat/actualitat/agenda/jornada-de-voleibol-2x2"
-},
-{
 "titulo": "Xarxa de Sabers: Astrologia, art i vincles",
 "inicio": "2026-11-02T17:00:00+01:00",
 "fin": "2026-11-02T23:59:59+01:00",
@@ -240,6 +176,70 @@
 "lugar": "Teatre Auditori del Mercat Vell",
 "descripcion": "A les 18 h, al Teatre Auditori del Mercat Vell",
 "url": "https://www.ripollet.cat/actualitat/agenda/petit-mercat-vell-com-els-pinguins"
+},
+{
+"titulo": "Cafè Literari: Mirall trencat",
+"inicio": "2026-11-09T16:30:00+01:00",
+"fin": "2026-11-09T17:30:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "A les 16.30 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/cafe-literari-mirall-trencat"
+},
+{
+"titulo": "Llegir el Teatre: L’Hostal de les Tres Camèlies",
+"inicio": "2026-11-09T18:30:00+01:00",
+"fin": "2026-11-09T19:30:00+01:00",
+"lugar": "Biblioteca Municipal de Ripollet",
+"descripcion": "A les 18.30 h, a la Biblioteca Municipal",
+"url": "https://www.ripollet.cat/actualitat/agenda/llegir-el-teatre-l2019hostal-de-les-tres-camelies"
+},
+{
+"titulo": "Ucraïna no estàs sola",
+"inicio": "2026-11-10T19:00:00+01:00",
+"fin": "2026-11-10T20:00:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "A les 19 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/ucraina-no-estas-sola-1"
+},
+{
+"titulo": "Campionat de Catalunya Universitari de Tennis Taula",
+"inicio": "2026-11-12T09:00:00+01:00",
+"fin": "2026-11-12T23:59:59+01:00",
+"lugar": "Poliesportiu Municipal de Ripollet",
+"descripcion": "A partir de les 9 h, al Poliesportiu Municipal",
+"url": "https://www.ripollet.cat/actualitat/agenda/campionat-de-catalunya-universitari-de-tennis-taula"
+},
+{
+"titulo": "Lectura de fragments de “Lletres de sang, cor de drap, orenetes de llibertat. Contes de conflicte i exili”",
+"inicio": "2026-11-12T18:00:00+01:00",
+"fin": "2026-11-12T19:00:00+01:00",
+"lugar": "CIP Molí d’en Rata",
+"descripcion": "A les 18 h, al CIP Molí d’en Rata",
+"url": "https://www.ripollet.cat/actualitat/agenda/lectura-de-fragments-de-201clletres-de-sang-cor-de-drap-orenetes-de-llibertat-contes-de-conflicte-i-exili201d"
+},
+{
+"titulo": "Xerrada: “Soldats ripolletencs a la Guerra Civil”",
+"inicio": "2026-11-12T18:00:00+01:00",
+"fin": "2026-11-12T19:00:00+01:00",
+"lugar": "CIP Molí d’en Rata",
+"descripcion": "A les 18 h, al CIP Molí d’en Rata",
+"url": "https://www.ripollet.cat/actualitat/agenda/xerrada-201csoldats-ripolletencs-a-la-guerra-civil201d"
+},
+{
+"titulo": "Llegim l’Òpera: L’Elisir d’Amore",
+"inicio": "2026-11-12T18:30:00+01:00",
+"fin": "2026-11-12T19:30:00+01:00",
+"lugar": "Biblioteca Municipal.",
+"descripcion": "A les 18.30 h, a la Biblioteca Municipal",
+"url": "https://www.ripollet.cat/actualitat/agenda/llegim-l2019opera-l2019elisir-d2019amore"
+},
+{
+"titulo": "Reconeixements Impulsa",
+"inicio": "2026-11-12T20:00:00+01:00",
+"fin": "2026-11-12T21:00:00+01:00",
+"lugar": "Teatre Auditori del Mercat Vell",
+"descripcion": "A les 20 h, al Teatre Auditori Mercat del Vell",
+"url": "https://www.ripollet.cat/actualitat/agenda/reconeixements-impulsa"
 }
 ]
 }
