@@ -2,30 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Xarxa de Sabers: Astrologia, art i vincles",
-"inicio": "2026-11-02T17:00:00+01:00",
-"fin": "2026-11-02T23:59:59+01:00",
-"lugar": "Els Solets (carrer del Sol, 13)",
-"descripcion": "A les 17 h, a Els Solets (carrer del Sol, 13)",
-"url": "https://www.ripollet.cat/actualitat/agenda/xarxa-de-sabers-astrologia-art-i-vincles-1"
-},
-{
-"titulo": "Book Club: Frenchbraid",
-"inicio": "2026-11-02T18:30:00+01:00",
-"fin": "2026-11-02T19:30:00+01:00",
-"lugar": "Biblioteca Municipal de Ripollet",
-"descripcion": "A les 18.30 h, a la Biblioteca Municipal",
-"url": "https://www.ripollet.cat/actualitat/agenda/book-club-frenchbraid"
-},
-{
-"titulo": "Vine a conèixer el nou local de l&#x27;Economat del Barri",
-"inicio": "2026-11-03T10:30:00+01:00",
-"fin": "2026-11-03T13:00:00+01:00",
-"lugar": "Carretera de Barcelona, 43",
-"descripcion": "De 10.30 a 13 h, a la carretera de Barcelona, 43",
-"url": "https://www.ripollet.cat/actualitat/agenda/vine-a-coneixer-el-nou-local-de-leconomat-del-barri-1"
-},
-{
 "titulo": "Aula d’Extensió Universitària: “Parlem de l’islam i fem-ho bé”",
 "inicio": "2026-11-03T18:00:00+01:00",
 "fin": "2026-11-03T23:59:59+01:00",
@@ -240,6 +216,30 @@
 "lugar": "Teatre Auditori del Mercat Vell",
 "descripcion": "A les 20 h, al Teatre Auditori Mercat del Vell",
 "url": "https://www.ripollet.cat/actualitat/agenda/reconeixements-impulsa"
+},
+{
+"titulo": "Veus el que beus?",
+"inicio": "2026-11-13T10:30:00+01:00",
+"fin": "2026-11-13T23:59:59+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "A les 10.30, davant del Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/veus-el-que-beus"
+},
+{
+"titulo": "Festival Internacional de Dones Màgiques DAMA",
+"inicio": "2026-11-13T16:00:00+01:00",
+"fin": "2026-11-13T18:30:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "Per la tarda, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/festival-internacional-de-dones-magiques-dama"
+},
+{
+"titulo": "Setmana de la Ciència: Lego Builds the Change",
+"inicio": "2026-11-13T17:30:00+01:00",
+"fin": "2026-11-13T18:30:00+01:00",
+"lugar": "Biblioteca Municipal de Ripollet",
+"descripcion": "A les 17.30 h, a la Biblioteca Municipal",
+"url": "https://www.ripollet.cat/actualitat/agenda/setmana-de-la-ciencia-lego-builds-the-change"
 }
 ]
 }
