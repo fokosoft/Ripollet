@@ -2,14 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Aula d’Extensió Universitària: “Parlem de l’islam i fem-ho bé”",
-"inicio": "2026-11-03T18:00:00+01:00",
-"fin": "2026-11-03T23:59:59+01:00",
-"lugar": "Teatre Auditori del Mercat Vell",
-"descripcion": "A les 18 h, al Teatre Auditori del Mercat Vell",
-"url": "https://www.ripollet.cat/actualitat/agenda/aula-d2019extensio-universitaria-201cparlem-de-l2019islam-i-fem-ho-be201d"
-},
-{
 "titulo": "Donació de sang",
 "inicio": "2026-11-04T17:00:00+01:00",
 "fin": "2026-11-04T21:00:00+01:00",
@@ -240,6 +232,14 @@
 "lugar": "Biblioteca Municipal de Ripollet",
 "descripcion": "A les 17.30 h, a la Biblioteca Municipal",
 "url": "https://www.ripollet.cat/actualitat/agenda/setmana-de-la-ciencia-lego-builds-the-change"
+},
+{
+"titulo": "Experiments científics en família: ciència amb bombolles",
+"inicio": "2026-11-14T10:30:00+01:00",
+"fin": "2026-11-14T23:59:59+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "A les 10.30 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/experiments-cientifics-en-familia-ciencia-amb-bombolles"
 }
 ]
 }
