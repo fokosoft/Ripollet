@@ -2,38 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Donació de sang",
-"inicio": "2026-11-04T17:00:00+01:00",
-"fin": "2026-11-04T21:00:00+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "De 17 a 21 h, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/donacio-de-sang-43"
-},
-{
-"titulo": "Hora del conte: Del conte contat a un espectacle improvisat",
-"inicio": "2026-11-04T17:30:00+01:00",
-"fin": "2026-11-04T18:30:00+01:00",
-"lugar": "Biblioteca Municipal de Ripollet",
-"descripcion": "A les 17.30 h, a la Biblioteca Municipal",
-"url": "https://www.ripollet.cat/actualitat/agenda/hora-del-conte-del-conte-contat-a-un-espectacle-improvisat"
-},
-{
-"titulo": "VIII Jornades de Memòria Històrica: Històries de guerra, resistència i exili “Dones del 36”",
-"inicio": "2026-11-04T18:00:00+01:00",
-"fin": "2026-11-04T23:59:59+01:00",
-"lugar": "Teatre Auditori del Mercat Vell",
-"descripcion": "A les 18 h, al Teatre Auditori del Mercat Vell",
-"url": "https://www.ripollet.cat/actualitat/agenda/viii-jornades-de-memoria-historica-histories-de-guerra-resistencia-i-exili-201cdones-del-36201d"
-},
-{
-"titulo": "Ucraïna no estàs sola",
-"inicio": "2026-11-04T19:00:00+01:00",
-"fin": "2026-11-04T20:00:00+01:00",
-"lugar": "El Local, carrer de Monturiol",
-"descripcion": "A les 19 h, a El Local",
-"url": "https://www.ripollet.cat/actualitat/agenda/ucraina-no-estas-sola"
-},
-{
 "titulo": "Xarxa de Sabers: Mocs, tos i respiració",
 "inicio": "2026-11-05T17:00:00+01:00",
 "fin": "2026-11-05T23:59:59+01:00",
@@ -240,6 +208,38 @@
 "lugar": "Centre Cultural de Ripollet",
 "descripcion": "A les 10.30 h, al Centre Cultural",
 "url": "https://www.ripollet.cat/actualitat/agenda/experiments-cientifics-en-familia-ciencia-amb-bombolles"
+},
+{
+"titulo": "Presentació dels equips del Club Bàsquet Ripollet",
+"inicio": "2026-11-14T16:00:00+01:00",
+"fin": "2026-11-14T23:59:59+01:00",
+"lugar": "Pavelló Francesc Barneda",
+"descripcion": "A partir de les 16 h, al Pavelló Francesc Barneda",
+"url": "https://www.ripollet.cat/actualitat/agenda/presentacio-dels-equips-del-club-basquet-ripollet"
+},
+{
+"titulo": "El Museu dona Joc. Activitat de rols ocults: “Blood on the Clocktower”",
+"inicio": "2026-11-14T17:00:00+01:00",
+"fin": "2026-11-14T23:59:59+01:00",
+"lugar": "CIP Molí d'en Rata",
+"descripcion": "A les 17 h, al CIP Molí d’en Rata",
+"url": "https://www.ripollet.cat/actualitat/agenda/el-museu-dona-joc-activitat-de-rols-ocults-201cblood-on-the-clocktower201d"
+},
+{
+"titulo": "Festival Internacional de Dones Màgiques DAMA",
+"inicio": "2026-11-14T19:00:00+01:00",
+"fin": "2026-11-14T22:30:00+01:00",
+"lugar": "Teatre Auditori del Mercat Vell i Centre Cultural",
+"descripcion": "De 19 a 22.30 hores, al Teatre Auditori del Mercat Vell. Sessió golfa al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/festival-internacional-de-dones-magiques-dama-1"
+},
+{
+"titulo": "3a Fira de les Economies Transformadores: Fira migrant, diversa i antiracista",
+"inicio": "2026-11-15T10:00:00+01:00",
+"fin": "2026-11-15T15:00:00+01:00",
+"lugar": "Rambla de Sant Jordi",
+"descripcion": "De 10 a 15 h, a la rbla. de Sant Jordi",
+"url": "https://www.ripollet.cat/actualitat/agenda/3a-fira-de-les-economies-transformadores-fira-migrant-diversa-i-antiracista"
 }
 ]
 }
