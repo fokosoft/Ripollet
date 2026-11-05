@@ -88,7 +88,7 @@ const herramientaResiduos = {
     for (const p of P.filter((p) => p.tipo !== "contenedor")) {
       const d = document.createElement("div");
       d.className = "marca";
-      Object.assign(d.style, { background: p.tipo === "area" ? "#2e9e54" : "#f08a3c", color: "#fff", width: "22px", height: "22px", fontSize: "12px" });
+      Object.assign(d.style, { background: p.tipo === "area" ? "var(--reciclaje)" : "var(--textil)", color: "#fff", width: "22px", height: "22px", fontSize: "12px" });
       d.textContent = p.tipo === "area" ? "♻" : "T";
       d.title = p.nombre;
       const o = new ctx.CSS2DObject(d);

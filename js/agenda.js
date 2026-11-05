@@ -81,7 +81,7 @@ const herramientaAgenda = {
         if (!p) continue;
         const d = document.createElement("div");
         d.className = "marca";
-        Object.assign(d.style, { background: "#fff", color: "#1d2230", border: "2px solid #b83232", width: "22px", height: "22px", fontSize: "12px" });
+        Object.assign(d.style, { background: "#fff", color: "var(--tinta)", border: "2px solid var(--teja)", width: "22px", height: "22px", fontSize: "12px" });
         d.textContent = "📅";
         d.title = a.titulo;
         const o = new ctx.CSS2DObject(d);

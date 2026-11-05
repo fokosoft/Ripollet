@@ -93,7 +93,7 @@ const herramientaLugares = {
     const marcas = L.map((l, k) => {
       const d = document.createElement("div");
       d.className = "marca";
-      Object.assign(d.style, { background: "#fff", color: "#1d2230", border: "2px solid #1d2230", width: "22px", height: "22px",
+      Object.assign(d.style, { background: "#fff", color: "var(--tinta)", border: "2px solid var(--tinta)", width: "22px", height: "22px",
                                fontSize: "12px" });
       d.textContent = ICONO[l.c] ?? "📍";
       d.title = l.n;
@@ -232,7 +232,7 @@ const herramientaLugares = {
       grupoRuta.add(discos);
       const ini = document.createElement("div");
       ini.className = "marca";
-      Object.assign(ini.style, { background: "#16181d", width: "24px", height: "24px", fontSize: "12px" });
+      Object.assign(ini.style, { background: "var(--tinta)", width: "24px", height: "24px", fontSize: "12px" });
       ini.textContent = "🚶";
       const o = new ctx.CSS2DObject(ini);
       o.position.set(x0, ctx.altura(x0, z0) + 5, z0);

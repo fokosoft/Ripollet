@@ -77,7 +77,7 @@ const herramientaPatrimonio = {
     const marcas = R.map((p, i) => {
       const d = document.createElement("div");
       d.className = "marca";
-      Object.assign(d.style, { background: "#b8322f", width: "26px", height: "26px", fontSize: "12px" });
+      Object.assign(d.style, { background: "var(--teja)", width: "26px", height: "26px", fontSize: "12px" });
       d.textContent = i + 1;
       d.title = p.n;
       d.onclick = () => ir(i);
@@ -93,7 +93,7 @@ const herramientaPatrimonio = {
       if (!y.dentro) return null;
       const d = document.createElement("div");
       d.className = "marca";
-      Object.assign(d.style, { background: "#f5ead0", color: "#16181d", width: "30px", height: "30px", borderColor: "#7a4b32" });
+      Object.assign(d.style, { background: "var(--pergamino)", color: "var(--tinta)", width: "30px", height: "30px", borderColor: "var(--madera)" });
       d.innerHTML = iconoPx("vasija");
       d.title = y.n;
       d.onclick = () => verYac(i);

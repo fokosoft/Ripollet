@@ -2,6 +2,7 @@
 // (32 colores de diorama), tramado ordenado opcional y contornos donde cambia la profundidad, como un diorama de pixel art.
 // La vista «maqueta» usa un teleobjetivo (casi isométrica) y gira de 90 en 90°. Además es más ligera: con píxeles
 // de 4, la GPU dibuja 16 veces menos.
+import { menosMovimiento } from './comun.js';
 
 export const TEXTOS_PIXEL = {
   es: {
@@ -212,7 +213,7 @@ export function crearPixelado(ctx, div) {
     alSalirCoche() { if (op.maqueta) ponerMaqueta(true); rotulos(); },
     cadaFrame(dt) {
       if (!giro) return;
-      const paso = Math.sign(giro.total) * Math.min(Math.abs(giro.total - giro.hecho), dt * Math.PI);   // 90° en 0,5 s
+      const paso = Math.sign(giro.total) * Math.min(Math.abs(giro.total - giro.hecho), menosMovimiento() ? Infinity : dt * Math.PI);   // 90° en 0,5 s
       giro.hecho += paso;
       camera.position.sub(controls.target).applyAxisAngle(new THREE.Vector3(0, 1, 0), paso).add(controls.target);
       camera.lookAt(controls.target);

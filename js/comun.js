@@ -1,6 +1,10 @@
 // PIEZAS COMUNES de las herramientas: la rejilla de 2 m (tipo de suelo y calle de cada celda) y un montículo
 // binario para los caminos más cortos (Dijkstra) sobre esa rejilla o sobre el grafo de calles.
 
+// ¿Ha pedido la persona menos movimiento en su sistema? Se mira en cada fotograma: si lo cambia, vale al momento.
+const PIDE_QUIETO = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)");
+export const menosMovimiento = () => PIDE_QUIETO?.matches ?? false;
+
 let rejilla = null;
 /** Rejilla de 2 m (la mitad de la de aceras): tipo 0 otro · 1 acera · 2 calzada · 3 edificio · 4 plaza o parque;
  *  calle más cercana y código de la simulación. Se calcula una vez y la comparten todas las herramientas. */

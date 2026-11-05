@@ -4,6 +4,7 @@
 // AFOROS (nombre de la calle → vehículos/día) y mandan sobre la estimación.
 // Gráficos mínimos: una caja por coche y un palito por persona, todos con instancias (2 llamadas a la GPU).
 import { crearGrafo } from './rutas.js';
+import { menosMovimiento } from './comun.js';
 
 export const TEXTOS_TRAFICO = {
   es: {
@@ -206,6 +207,7 @@ export function crearTrafico(ctx, div) {
       if (!activo) return;
       espera -= dt;
       if (espera <= 0) { espera = 15; recalcular(); }
+      if (menosMovimiento()) dt = 0;                 // coches y gente siguen ahí, pero quietos
       // Ajuste suave al número que toca: unos pocos por fotograma
       for (let k = 0; k < 20 && lista.length < objetivoCoches; k++) lista.push(nuevoCoche());
       if (lista.length > objetivoCoches) lista.length = Math.max(objetivoCoches, lista.length - 10);

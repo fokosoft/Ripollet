@@ -3,6 +3,13 @@
 // queda cada edificio de una parada, y de una parada «frecuente» (4 buses o más por hora a primera hora).
 import { crearGrafo, tiempos, nodoCercano, nodosDe, centrosEdificios } from './rutas.js';
 
+/** Letra legible sobre el color de una línea: el negro gana a partir de luminancia 0,179 (mismo contraste que el blanco). */
+function letraSobre(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const [r, g, b] = [n >> 16, (n >> 8) & 255, n & 255].map((v) => (v / 255 <= 0.04045 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.179 ? "#000" : "#fff";
+}
+
 export const TEXTOS_TRANSPORTE = {
   es: {
     transporteBoton: "🚌 Transporte público", tpTitulo: "Autobuses", tpVer: "Cubiertas",
@@ -76,7 +83,7 @@ const herramientaTransporte = {
     T.paradas.forEach((p, q) => {
       const d = document.createElement("div");
       d.className = "marca";
-      Object.assign(d.style, { background: "#fff", color: "#1d2230", border: "2px solid #1d2230", width: "22px", height: "22px", fontSize: "12px" });
+      Object.assign(d.style, { background: "#fff", color: "var(--tinta)", border: "2px solid var(--tinta)", width: "22px", height: "22px", fontSize: "12px" });
       d.textContent = "🚏";
       d.title = p.n;
       d.onclick = () => elegir(q);
@@ -139,7 +146,7 @@ const herramientaTransporte = {
       parada = q;
       const p = T.paradas[q], dia = tipoDia(), { hora } = ctx.hora(), ahora = Math.floor(hora * 60);
       const prox = p.s[dia].filter(([m]) => m >= ahora && m < ahora + 120);
-      const chip = (l) => `<span style="background:${T.lineas[l].color};color:#fff;border-radius:3px;padding:0 4px">${T.lineas[l].ref}</span>`;
+      const chip = (l) => `<span style="background:${T.lineas[l].color};color:${letraSobre(T.lineas[l].color)};border-radius:3px;padding:0 4px">${T.lineas[l].ref}</span>`;
       $("tpParada").innerHTML = t("tpParada", p.n, prox.filter(([m]) => m < ahora + 60).length) + " " + p.l.map(chip).join(" ") +
         "<br>" + (prox.length ? t("tpProximos", tx("tpDias")[dia]) + "<br>" +
           prox.slice(0, 6).map(([m, l]) => `${chip(l)} ${reloj(m)} · ${t("tpEnMin", m - ahora)}`).join("<br>") : t("tpNinguno"));
@@ -158,7 +165,7 @@ const herramientaTransporte = {
         const b = document.createElement("button");
         b.textContent = l.ref;
         b.title = l.nombre;
-        Object.assign(b.style, { background: l.color, color: "#fff", border: "0", outline: linea === q ? "2px solid #000" : "" });
+        Object.assign(b.style, { background: l.color, color: letraSobre(l.color), border: "0", outline: linea === q ? "2px solid var(--tinta)" : "" });
         b.onclick = () => { linea = linea === q ? -1 : q; rotulos(); pintar(); };
         return b;
       }));

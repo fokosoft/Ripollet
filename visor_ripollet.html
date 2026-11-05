@@ -28,7 +28,8 @@
      Piezas de diorama: bordes de 2 px, esquinas rectas y sombras duras; iconos de píxel propios (js/iconos.js).
      Dos temas con las mismas piezas: claro con la vista píxel (body.claro) y nocturno con la 3D. */
   :root { --tinta: #16181d; --papel: #fbfbf8; --mesa: #eef0f4; --teja: #b8322f; --verde: #2c6b30; --agua: #2a6db0;
-          --marino: #1f3f74; --sol: #f2c14e; --pixel: "Silkscreen", ui-monospace, monospace; }
+          --marino: #1f3f74; --sol: #f2c14e; --teja-oscura: #9c2a27; --alerta: #d7263d; --aviso: #f2b632;
+          --reciclaje: #2c6b30; --textil: #b85a14; --pergamino: #f5ead0; --madera: #7a4b32; --pixel: "Silkscreen", ui-monospace, monospace; }
   body { --p-fondo: rgba(22,24,29,.94); --p-texto: #f4f4f2; --p-borde: #000; --p-sombra: 3px 3px 0 rgba(0,0,0,.5);
          --b-fondo: #2e323c; --b-hover: #3c404a; --b-texto: #f4f4f2; --b-borde: #000; --b-sombra: 2px 2px 0 rgba(0,0,0,.6);
          --t-fondo: #0b0c0f; --t-texto: #f7e08a; --acento: #f2c14e; --enlace: #9fd3f0; --suave: rgba(255,255,255,.07);
@@ -53,6 +54,7 @@
   .panel a { color: var(--enlace); }
   .valor { color: var(--enlace); }
   .c2 { color: #ff7b7b; } body.claro .c2 { color: #c62828; }
+  .verdeDato { color: #5ad17a; } body.claro .verdeDato { color: var(--verde); }
   .lilaOficial { color: #c9a3ff; } body.claro .lilaOficial { color: #6a3fb0; }   /* la leyenda de las zonas de la ACA */
   .nota { font-size: 12px; margin-top: 8px; color: var(--nota); }
   .resumen, details { margin-top: 10px; padding: 8px 10px; background: var(--suave); border: 1px solid var(--linea); }
@@ -77,7 +79,7 @@
   button:active { transform: translate(2px, 2px); box-shadow: none; }
   button:disabled { opacity: .45; cursor: default; transform: none; box-shadow: none; }
   button.principal { background: var(--teja); color: #fff; border-color: var(--b-borde); font-weight: 600; }
-  button.principal:hover { background: #9c2a27; }
+  button.principal:hover { background: var(--teja-oscura); }
   button.activo { background: var(--t-fondo); color: var(--t-texto); }
   body.claro button.activo { background: var(--tinta); color: var(--papel); }
   /* Controles de formulario a juego */
@@ -86,6 +88,7 @@
     background: var(--b-fondo); color: var(--b-texto); max-width: 100%; }
   select { appearance: none; padding-right: 26px; margin-left: 4px; cursor: pointer;
            background: var(--b-fondo) var(--flecha) no-repeat right 8px center; }
+  input[type=text], input[type=search] { box-sizing: border-box; max-width: 100%; }
   ::placeholder { color: var(--nota); opacity: 1; }
   input[type=checkbox], input[type=radio], input[type=range] { accent-color: var(--acento); }
   input[type=checkbox] { width: 16px; height: 16px; vertical-align: -3px; }
@@ -142,7 +145,7 @@
   .etiqueta { padding: 4px 8px 3px; background: rgba(22,24,29,.88); color: #fbfbf8; border: 2px solid #000;
               font: 400 11px var(--pixel); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; pointer-events: none; }
   body.claro .etiqueta { background: #fff; color: var(--tinta); border-color: var(--tinta); box-shadow: 2px 2px 0 var(--tinta); }
-  .marca { width: 24px; height: 24px; border-radius: 50%; background: #d7263d; color: #fff; font: 700 13px system-ui;
+  .marca { width: 24px; height: 24px; border-radius: 50%; background: var(--alerta); color: #fff; font: 700 13px system-ui;
            display: grid; place-items: center; border: 2px solid #fff; box-shadow: 0 0 0 2px var(--tinta);
            cursor: pointer; pointer-events: auto; }
   .pin { width: 14px; height: 14px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid #fff;
@@ -216,7 +219,7 @@
     .botones button, .herramienta button, #lluvia button, #riesgo button { min-height: 40px; }
     select, input[type=date], input[type=text], input[type=search] { font-size: 16px; min-height: 38px; }
   }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+  @media (prefers-reduced-motion: reduce) { *, ::before, ::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
 
   /* ===== Modos: vecino (por defecto, lo que afecta a cada uno) y técnico (todo) ===== */
   body.vecino .soloTecnico { display: none !important; }
@@ -260,6 +263,7 @@
            box-shadow: 3px 3px 0 rgba(0,0,0,.35); white-space: nowrap; }
   body.conduciendo #barra, body.conduciendo #nav, body.conduciendo #mapa { display: none !important; }
   @media (max-width: 760px) {
+    body:not(.claro) { --p-fondo: var(--tinta); }   /* hojas opacas: los créditos no se transparentan detrás */
     #barra { top: 0; left: 0; right: 0; width: auto; height: auto; padding: 6px 10px; border-width: 0 0 2px;
              padding-top: max(6px, env(safe-area-inset-top)); box-shadow: 0 3px 0 rgba(22,24,29,.12); }
     #logo img { height: 32px; }
@@ -330,6 +334,7 @@
   <button data-sec="micasa" class="soloVecino"><span class="ico">🏠</span><span data-t="navCasa"></span></button>
   <button data-sec="ajustes"><span class="ico">⚙️</span><span data-t="navAjustes"></span></button>
 </nav>
+<main id="principal">
 <div id="mapa" class="panel"><div class="asa"></div>
   <section data-sec="explorar">
     <button id="lluviaAhora" hidden></button>
@@ -430,9 +435,10 @@
 <div id="explicacion" class="panel"></div>
 <div id="medicion" class="panel"></div>
 <div id="creditos" class="panel" role="dialog" aria-labelledby="crTitulo"><b id="crTitulo" role="heading" aria-level="2" data-t="crTitulo"></b><button class="cerrar">✕</button><div data-t="crTexto"></div></div>
+</main>
 <div id="informe"></div>
 <div id="grano"></div>
-<div id="osm">© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ICGC · AMB · Catastro · <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> · <a href="#creditos" id="verCreditos">FOKO SOFT</a></div>
+<footer id="osm">© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ICGC · AMB · Catastro · <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> · <a href="#creditos" id="verCreditos">FOKO SOFT</a></footer>
 <script type="module">
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -770,7 +776,8 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-document.body.appendChild(renderer.domElement);
+const PRINCIPAL = document.getElementById("principal");
+PRINCIPAL.appendChild(renderer.domElement);
 // El mapa es un lienzo: para lectores de pantalla, un nombre y una descripción (las herramientas tienen texto)
 Object.assign(renderer.domElement, { tabIndex: 0 });
 renderer.domElement.setAttribute("role", "img");
@@ -779,7 +786,7 @@ renderer.domElement.setAttribute("aria-describedby", "descMapa");
 const etiquetas = new CSS2DRenderer();
 etiquetas.setSize(innerWidth, innerHeight);
 Object.assign(etiquetas.domElement.style, { position: "fixed", top: "0", pointerEvents: "none", zIndex: "1" });
-document.body.appendChild(etiquetas.domElement);
+PRINCIPAL.appendChild(etiquetas.domElement);
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xbfe0f5);
@@ -1189,7 +1196,7 @@ const vista = { escala: 1 };     // > 1 con el teleobjetivo de la maqueta: la c�
 function volarA(destino, distancia = 1) {
   const desplaz = new THREE.Vector3(180, 220, 260).multiplyScalar(distancia * vista.escala);
   destino.y = altura(destino.x, destino.z);
-  vuelo = { t: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0.999 : 0, desdeT: controls.target.clone(),
+  vuelo = { t: menosMovimiento() ? 0.999 : 0, desdeT: controls.target.clone(),
             desdeC: camera.position.clone(), haciaT: destino, haciaC: destino.clone().add(desplaz) };
 }
 
@@ -1952,7 +1959,7 @@ $("quitar").onclick = () => { while (tormentas.length) quitarTormenta(tormentas[
 $("secar").onclick = () => { simulacion.secar(); tiempoSim = 0; volumenCaido = 0; };
 
 function actualizarLluvia(dt) {
-  tiempoGotas.value += dt;
+  if (!menosMovimiento()) tiempoGotas.value += dt;   // con menos movimiento, la lluvia se ve pero no cae
   if (comprobacion) avanzarComprobacion();
   else if (!pausa) {
     const pasos = +$("pasos").value;
@@ -2181,7 +2188,7 @@ function explicar(celda, numeroPunto = null) {
   const cod = D.codigos[celda];
   let html = `<button class="cerrarExp" style="float:right">${iconoPx("cerrar")}</button><b>${numeroPunto ? `${numeroPunto} · ` : ""}${t("porQue")}</b><br>`;
   html += `${t("calle")}: ${nombreCalle(D.calles[celda])}<br>`;
-  if (OFICIAL && OFICIAL[celda]) html += `<span style="color:#c9a3ff">${t("oficialCelda", PERIODOS[OFICIAL[celda]])}</span><br>`;
+  if (OFICIAL && OFICIAL[celda]) html += `<span class="lilaOficial">${t("oficialCelda", PERIODOS[OFICIAL[celda]])}</span><br>`;
   if (!celdaAnalizable(cod)) html += t("noAnaliza");
   else {
     const s = situacion(iEscenario, cod, D.rasgos[celda]);
@@ -2194,7 +2201,7 @@ function explicar(celda, numeroPunto = null) {
     html += t("neutroDice", tx("clases")[ACCIONES.indexOf(accion)]) + ` (${INTENSIDADES[iEscenario]} mm/h)<br>`;
     if (excepcion) {
       const fechas = neurona.incidencias.map((id) => incidencias.find((i) => i.id === id)?.fecha).filter(Boolean);
-      html += `<span style="color:#5ad17a">${t("porIncidencia", fechas.join(", "))}</span><br>`;
+      html += `<span class="verdeDato">${t("porIncidencia", fechas.join(", "))}</span><br>`;
     }
     html += t("concepto", tx("conceptos")[percepcion.nombrar(s)]);
     html += `<ul><li>${tx("suelos")[r.suelo] ?? ""}</li><li>${tx("cuencas")[r.cuenca]}</li>`
@@ -2471,7 +2478,7 @@ function pintarIncidencias() {
   for (const inc of incidencias) {
     const div = document.createElement("div");
     div.className = "pin";
-    div.style.background = inc.gravedad === 2 ? "#d7263d" : "#f2b632";
+    div.style.background = inc.gravedad === 2 ? "var(--alerta)" : "var(--aviso)";
     div.title = `${inc.fecha} · ${tx("clases")[inc.gravedad]}${inc.nota ? ` · ${inc.nota}` : ""}`;
     div.onclick = () => explicar(Math.floor((inc.z - SIM.z0) / SIM.celda) * SIM.nx + Math.floor((inc.x - SIM.x0) / SIM.celda));
     const obj = new CSS2DObject(div);
@@ -2636,7 +2643,7 @@ for (const h of LISTA_HERRAMIENTAS) {
   const div = document.createElement("div");
   div.className = "panel herramienta";
   div.id = h.id;
-  document.body.appendChild(div);
+  PRINCIPAL.appendChild(div);
   const boton = document.createElement("button");
   boton.dataset.t = h.id + "Boton";
   boton.dataset.herr = h.id;

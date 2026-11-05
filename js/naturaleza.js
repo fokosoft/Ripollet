@@ -3,6 +3,7 @@
 // qué se ha visto cerca del punto que se toca. Además, siempre en el mapa (de día), bandadas de pájaros animados
 // sobrevuelan los sitios con más observaciones de aves: el río, los parques… (golondrinas y vencejos solo de abril a
 // septiembre, como en la realidad).
+import { menosMovimiento } from './comun.js';
 
 export const TEXTOS_NATURALEZA = {
   es: {
@@ -72,7 +73,7 @@ export function crearPajaros(ctx, N) {
   return {
     grupo,
     cadaFrame(dt) {
-      grupo.visible = ctx.enMapa() && (ctx.noche?.() ?? 0) < 0.5;
+      grupo.visible = ctx.enMapa() && (ctx.noche?.() ?? 0) < 0.5 && !menosMovimiento();   // quietos en el aire no pintan nada
       if (!grupo.visible) return;
       t += dt;
       pajaros.forEach((b, i) => {
