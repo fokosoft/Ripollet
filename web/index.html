@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-sXWZtfJ6C/B218NLPOnZ87YR9LdJFaOkMqQquqsH2jU=' 'sha256-ynm0RtLj4ieZKerF5nVU1O6cyWMWw9jPoMt+M5zkMY4=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://fokosoft.github.io; media-src 'self' https://fokosoft.github.io; connect-src 'self' data: blob: https://cdn.jsdelivr.net https://api.open-meteo.com https://air-quality-api.open-meteo.com https://analisi.transparenciacatalunya.cat https://fokosoft.github.io; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-sXWZtfJ6C/B218NLPOnZ87YR9LdJFaOkMqQquqsH2jU=' 'sha256-9nM/kYNaNwyL5Ttovsp4xvj0KuBZnN+KvUEE93YWtL4=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://fokosoft.github.io; media-src 'self' https://fokosoft.github.io; connect-src 'self' data: blob: https://cdn.jsdelivr.net https://api.open-meteo.com https://air-quality-api.open-meteo.com https://analisi.transparenciacatalunya.cat https://fokosoft.github.io; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ripollet · maqueta 3D</title>
 <meta name="description" content="Maqueta 3D de Ripollet amb dades obertes: la teva adreça, la recollida de residus, l'agenda, Ripollet en el temps (1946–avui), patrimoni, natura, transport i risc d'inundació. En català i castellà. · Maqueta 3D de Ripollet con datos abiertos.">
@@ -60,7 +60,7 @@
   .nota { font-size: 12px; margin-top: 8px; color: var(--nota); }
   .resumen, details { margin-top: 10px; padding: 8px 10px; background: var(--suave); border: 1px solid var(--linea); }
   summary { cursor: pointer; font: 400 11px var(--pixel); text-transform: uppercase; letter-spacing: .05em; color: var(--p-texto); }
-  .subtitulo { margin: 14px 0 0; font: 400 10px var(--pixel); text-transform: uppercase; letter-spacing: .08em; color: var(--nota); }
+  .subtitulo { margin: 14px 0 0; font: 400 11px var(--pixel); text-transform: uppercase; letter-spacing: .08em; color: var(--nota); }
   /* Título de cada panel: barra de ventana de tinta con letra de píxel; ✕ dentro, a la derecha */
   .herramienta > b:first-of-type, #lluvia > b:first-of-type, #riesgo > b:first-of-type, #creditos > b:first-of-type {
     display: block; margin: -10px -14px 10px; padding: 10px 46px 9px 14px; background: var(--t-fondo); color: var(--t-texto);
@@ -89,6 +89,7 @@
     background: var(--b-fondo); color: var(--b-texto); max-width: 100%; }
   select { appearance: none; padding-right: 26px; margin-left: 4px; cursor: pointer;
            background: var(--b-fondo) var(--flecha) no-repeat right 8px center; }
+  ::placeholder { color: var(--nota); opacity: 1; }
   input[type=checkbox], input[type=radio], input[type=range] { accent-color: var(--acento); }
   input[type=checkbox] { width: 16px; height: 16px; vertical-align: -3px; }
   input[type=range] { width: 100%; }
@@ -134,7 +135,7 @@
                  font-size: 22px; padding: 6px 12px; }
     #senal { width: 32px; height: 32px; border-width: 4px; font-size: 13px; }
     body.conduciendo #osm { bottom: calc(92px + env(safe-area-inset-bottom)); left: 50%; right: auto;
-                            transform: translateX(-50%); white-space: nowrap; font-size: 9px; }
+                            transform: translateX(-50%); white-space: nowrap; font-size: 11px; }
     #tactil { bottom: max(16px, env(safe-area-inset-bottom)); }
   }
   #tactil button { width: 64px; height: 64px; font-size: 26px; border-radius: 50%; background: rgba(0,0,0,.45); color: #fff;
@@ -142,7 +143,7 @@
 
   /* Sobre el mapa: rótulos, marcas e iconos */
   .etiqueta { padding: 4px 8px 3px; background: rgba(22,24,29,.88); color: #fbfbf8; border: 2px solid #000;
-              font: 400 10px var(--pixel); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; pointer-events: none; }
+              font: 400 11px var(--pixel); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; pointer-events: none; }
   body.claro .etiqueta { background: #fff; color: var(--tinta); border-color: var(--tinta); box-shadow: 2px 2px 0 var(--tinta); }
   .marca { width: 24px; height: 24px; border-radius: 50%; background: #d7263d; color: #fff; font: 700 13px system-ui;
            display: grid; place-items: center; border: 2px solid #fff; box-shadow: 0 0 0 2px var(--tinta);
@@ -190,8 +191,8 @@
   .marcaApp { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
   #logo img { display: block; height: 38px; width: auto; }                 /* el escudo de Ripollet en píxel (js/logo.js) */
   .marcaApp span { display: flex; flex-direction: column; min-width: 0; line-height: 1.1; }
-  .marcaApp b { font: 700 19px/1 var(--pixel); color: var(--p-texto); letter-spacing: .02em; text-transform: uppercase; }
-  .marcaApp small { font: 400 9px var(--pixel); letter-spacing: .06em; text-transform: uppercase; color: var(--nota);
+  .marcaApp h1 { margin: 0; font: 700 19px/1 var(--pixel); color: var(--p-texto); letter-spacing: .02em; text-transform: uppercase; }
+  .marcaApp small { font: 400 11px var(--pixel); letter-spacing: .02em; text-transform: uppercase; color: var(--nota);
                     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
   .chip { height: 32px; padding: 0 9px !important; font-size: 13px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
   #nav { top: 62px; left: 12px; right: auto; width: 440px; max-width: none; gap: 6px; padding: 8px; z-index: 4;
@@ -236,8 +237,8 @@
   /* Recorrido guiado */
   #recorrido { position: fixed; left: 50%; right: auto; top: auto; transform: translateX(-50%); bottom: 24px; max-width: none;
                width: min(540px, calc(100vw - 24px)); z-index: 9; display: none; padding: 12px 16px; }
-  #recorrido .rcPaso { font: 400 10px var(--pixel); color: var(--nota); letter-spacing: .08em; text-transform: uppercase; }
-  #recorrido h3 { margin: 4px 0 4px; font-size: 17px; }
+  #recorrido .rcPaso { font: 400 11px var(--pixel); color: var(--nota); letter-spacing: .08em; text-transform: uppercase; }
+  #recorrido h2 { margin: 4px 0 4px; font-size: 17px; }
   #recorrido p { margin: 0 0 8px; font-size: 14px; line-height: 1.45; }
   #recorrido .botones { justify-content: flex-end; }
   #recorrido .barraRc { height: 6px; background: var(--suave); border: 1px solid var(--linea); margin-top: 10px; overflow: hidden; }
@@ -286,12 +287,13 @@
     .asa::before { content: ""; position: absolute; left: 50%; top: 8px; width: 40px; height: 6px; margin-left: -20px;
                    background: currentColor; opacity: .3; }
     .rejilla { grid-template-columns: repeat(3, 1fr); }
-    #osm { bottom: 66px; font-size: 10px; }
+    #osm { bottom: 66px; font-size: 11px; }
     .pista { white-space: normal; width: max-content; max-width: calc(100vw - 32px); text-align: center; }
-    .etiqueta { font-size: 9px; padding: 3px 6px 2px; }
+    .etiqueta { font-size: 11px; padding: 3px 6px 2px; }
     #explicacion { display: none; }
-    #recorrido { top: 56px; bottom: auto; padding: 10px 12px; }
-    #recorrido h3 { font-size: 15px; }
+    #barra button { min-width: 44px; min-height: 44px; height: 44px; }
+    #recorrido { top: 66px; bottom: auto; padding: 10px 12px; }
+    #recorrido h2 { font-size: 15px; }
     #recorrido p { font-size: 13px; }
     body.enRecorrido .herramienta, body.enRecorrido #riesgo { bottom: 0 !important; }
     body.enRecorrido #explicacion { display: none !important; }
@@ -319,7 +321,7 @@
 <body>
 <div id="cargando" data-t="cargando"></div>
 <header id="barra" class="panel">
-  <div class="marcaApp"><span id="logo" aria-hidden="true"></span><span><b>Ripollet</b><small data-t="kicker"></small></span></div>
+  <div class="marcaApp"><span id="logo" aria-hidden="true"></span><span><h1>Ripollet</h1><small data-t="kicker"></small></span></div>
   <button id="compartir" class="chip" data-t="compartirBoton"></button>
   <button id="chipTiempo" class="chip"></button>
   <button id="idioma"></button>
@@ -359,7 +361,7 @@
 </div>
 <div class="pista" id="pista" role="status" aria-live="polite"></div>
 <p id="descMapa" class="solo-lector"></p>
-<div id="recorrido" class="panel" role="dialog" aria-labelledby="rcTitulo" aria-live="polite"><div class="rcPaso" id="rcPaso"></div><h3 id="rcTitulo"></h3><p id="rcTexto"></p>
+<div id="recorrido" class="panel" role="dialog" aria-labelledby="rcTitulo" aria-live="polite"><div class="rcPaso" id="rcPaso"></div><h2 id="rcTitulo"></h2><p id="rcTexto"></p>
   <div class="botones"><button id="rcSalir" data-t="rcSalir"></button><button id="rcAuto"></button>
   <button id="rcAtras">◀</button><button id="rcSigue" class="principal"></button></div>
   <div class="barraRc"><i id="rcBarra"></i></div></div>
@@ -371,7 +373,7 @@
 <div id="tactil"><div><button data-tecla="ArrowLeft">◀</button><button data-tecla="ArrowRight">▶</button></div>
 <div><button data-tecla="ArrowDown">▼</button><button data-tecla="ArrowUp">▲</button></div></div>
 
-<div id="lluvia" class="panel"><b data-t="tituloLluvia"></b>
+<div id="lluvia" class="panel"><b role="heading" aria-level="2" data-t="tituloLluvia"></b>
 <button class="cerrar" style="float:right">✕</button><br><span data-t="ayudaLluvia"></span>
 <div class="botones"><button id="lluviaReal" data-t="lluviaRealBoton"></button></div><div id="lluviaRealNota" class="nota"></div>
 <label><span data-t="intensidad"></span>: <span class="valor" id="vIntensidad"></span>
@@ -387,7 +389,7 @@
 <button id="quitar" data-t="quitar"></button><button id="secar" data-t="secar"></button></div>
 <div id="estadoLluvia" class="nota"></div></div>
 
-<div id="riesgo" class="panel"><b data-t="tituloRiesgo"></b>
+<div id="riesgo" class="panel"><b role="heading" aria-level="2" data-t="tituloRiesgo"></b>
 <button class="cerrar" style="float:right">✕</button><br><span data-t="queEs"></span>
 <label><span data-t="escenario"></span> <select id="escenario"></select></label>
 <label><span data-t="fuente"></span> <select id="fuente"><option value="fisica" data-t="fuenteFisica"></option>
@@ -430,7 +432,7 @@
 
 <div id="explicacion" class="panel"></div>
 <div id="medicion" class="panel"></div>
-<div id="creditos" class="panel" role="dialog" aria-labelledby="crTitulo"><b id="crTitulo" data-t="crTitulo"></b><button class="cerrar">✕</button><div data-t="crTexto"></div></div>
+<div id="creditos" class="panel" role="dialog" aria-labelledby="crTitulo"><b id="crTitulo" role="heading" aria-level="2" data-t="crTitulo"></b><button class="cerrar">✕</button><div data-t="crTexto"></div></div>
 <div id="informe"></div>
 <div id="grano"></div>
 <div id="osm">© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ICGC · AMB · Catastro · <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> · <a href="#creditos" id="verCreditos">FOKO SOFT</a></div>
@@ -4043,7 +4045,7 @@ const herramientaSeguridad = {
           const u = l.filter((a) => a.zona === "Zona urbana").length, c = l.length - u;
           return `<div title="${y}: ${l.length}" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%">
             <div style="height:${100 * c / maxN}%;background:rgb(${CAR})"></div><div style="height:${100 * u / maxN}%;background:rgb(${URB})"></div>
-            <small style="font-size:8px;text-align:center">${String(y).slice(2)}</small></div>`;
+            <small style="font-size:11px;text-align:center">${String(y).slice(2)}</small></div>`;
         }).join("");
         const caja = (c, k) => `<span><i style="background:rgb(${c})"></i>${t(k)}</span>`;
         $("svLeyenda").innerHTML = caja(URB, "svUrbano") + caja(CAR, "svCarretera");
@@ -5851,7 +5853,7 @@ const herramientaHistoria = {
       <div id="hiAno" style="font:700 40px/1 var(--pixel);margin:8px 0 2px;color:var(--acento)"></div>
       <div id="hiFoto" style="margin-top:2px;font-size:12px;opacity:.85"></div>
       <input type="range" id="hiSlider" min="0" max="${VUELOS.length}" step="1" value="0" style="margin-top:8px">
-      <div id="hiMarcas" style="display:flex;justify-content:space-between;font-size:10px;opacity:.75"></div>
+      <div id="hiMarcas" style="display:flex;justify-content:space-between;font-size:11px;opacity:.75"></div>
       <div class="botones"><button id="hiPlay" class="principal"></button></div>
       <label><input type="checkbox" id="hiEdif" checked> <span data-t="hiEdificios"></span></label>
       <p id="hiCuenta"></p>
@@ -7316,7 +7318,7 @@ const TEXTOS = {
 const LISTA_HERRAMIENTAS = globalThis.HERRAMIENTAS ?? [];
 for (const h of LISTA_HERRAMIENTAS) for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], h.textos[l]);
 for (const l of ["es", "ca"]) Object.assign(TEXTOS[l], TEXTOS_TIEMPO[l], TEXTOS_PIXEL[l], TEXTOS_TRAFICO[l],
-  { kicker: l === "es" ? "Maqueta · del centro a Pinetons" : "Maqueta · del centre als Pinetons" },
+  { kicker: "Maqueta 3D" },
   l === "es" ? { navExplorar: "Explorar", navHerramientas: "Herramientas", navRiesgo: "Riesgo", navAjustes: "Ajustes",
                  navIr: "Ir a…", navPista: "Busca tu dirección o toca 🧰 Herramientas", navAsa: "Plegar o desplegar",
                  navCasa: "Mi casa", navBuscar: "Busca tu dirección", navBuscarEj: "Calle y número, p. ej. «Balmes 12»",
@@ -8049,6 +8051,10 @@ $("chipTiempo").onclick = () => {
 /** Panel de herramienta: asa y ✕ para cerrar (se vuelven a poner cuando la herramienta rellena su panel). */
 function adornarHerramienta(panel) {
   ponerAsa(panel);
+  // Encabezados para los lectores de pantalla: el título del panel y sus apartados
+  panel.querySelector(":scope > b")?.setAttribute("role", "heading");
+  panel.querySelector(":scope > b")?.setAttribute("aria-level", "2");
+  for (const s of panel.querySelectorAll("p.subtitulo")) { s.setAttribute("role", "heading"); s.setAttribute("aria-level", "3"); }
   if (panel.querySelector(":scope > .cerrar")) return;
   const x = document.createElement("button");
   Object.assign(x, { className: "cerrar", innerHTML: iconoPx("cerrar"), onclick: () => mostrarPanel(null) });

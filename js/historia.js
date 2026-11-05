@@ -118,7 +118,7 @@ const herramientaHistoria = {
       <div id="hiAno" style="font:700 40px/1 var(--pixel);margin:8px 0 2px;color:var(--acento)"></div>
       <div id="hiFoto" style="margin-top:2px;font-size:12px;opacity:.85"></div>
       <input type="range" id="hiSlider" min="0" max="${VUELOS.length}" step="1" value="0" style="margin-top:8px">
-      <div id="hiMarcas" style="display:flex;justify-content:space-between;font-size:10px;opacity:.75"></div>
+      <div id="hiMarcas" style="display:flex;justify-content:space-between;font-size:11px;opacity:.75"></div>
       <div class="botones"><button id="hiPlay" class="principal"></button></div>
       <label><input type="checkbox" id="hiEdif" checked> <span data-t="hiEdificios"></span></label>
       <p id="hiCuenta"></p>

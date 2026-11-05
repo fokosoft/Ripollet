@@ -172,7 +172,7 @@ const herramientaSeguridad = {
           const u = l.filter((a) => a.zona === "Zona urbana").length, c = l.length - u;
           return `<div title="${y}: ${l.length}" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%">
             <div style="height:${100 * c / maxN}%;background:rgb(${CAR})"></div><div style="height:${100 * u / maxN}%;background:rgb(${URB})"></div>
-            <small style="font-size:8px;text-align:center">${String(y).slice(2)}</small></div>`;
+            <small style="font-size:11px;text-align:center">${String(y).slice(2)}</small></div>`;
         }).join("");
         const caja = (c, k) => `<span><i style="background:rgb(${c})"></i>${t(k)}</span>`;
         $("svLeyenda").innerHTML = caja(URB, "svUrbano") + caja(CAR, "svCarretera");
