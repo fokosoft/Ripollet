@@ -2,36 +2,12 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Xarxa de Sabers: Mocs, tos i respiració",
-"inicio": "2026-11-05T17:00:00+01:00",
-"fin": "2026-11-05T23:59:59+01:00",
-"lugar": "Els Solets (carrer del Sol, 13)",
-"descripcion": "A les 17 h, a Els Solets (carrer del Sol, 13)",
-"url": "https://www.ripollet.cat/actualitat/agenda/xarxa-de-sabers-mocs-tos-i-respiracio"
-},
-{
-"titulo": "Xerrada: “Les dones de Ripollet durant la Guerra Civil”",
-"inicio": "2026-11-05T18:00:00+01:00",
-"fin": "2026-11-05T19:00:00+01:00",
-"lugar": "CIP Molí d’en Rata",
-"descripcion": "A les 18 h, al CIP Molí d’en Rata",
-"url": "https://www.ripollet.cat/actualitat/agenda/xerrada-201cles-dones-de-ripollet-durant-la-guerra-civil201d"
-},
-{
-"titulo": "Objectiu Gran Angular: de la rivalitat a l’amistat",
-"inicio": "2026-11-05T19:00:00+01:00",
-"fin": "2026-11-05T20:00:00+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "A les 19 h, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/objectiu-gran-angular-de-la-rivalitat-a-l2019amistat"
-},
-{
-"titulo": "Nits de Música: “Centenari de Jerry Lewis (2a part)”",
-"inicio": "2026-11-05T19:00:00+01:00",
-"fin": "2026-11-05T20:00:00+01:00",
-"lugar": "Teatre Auditori del Mercat Vell",
-"descripcion": "A les 19 h, al Teatre Auditori del Mercat Vell",
-"url": "https://www.ripollet.cat/actualitat/agenda/nits-de-musica-201ccentenari-de-jerry-lewis-2a-part-201d"
+"titulo": "Presentació dels equips de l&#x27;Escola de Futbol Base de Ripollet",
+"inicio": "2026-11-06T18:00:00+01:00",
+"fin": "2026-11-06T19:00:00+01:00",
+"lugar": "Camp de Futbol Municipal de l'Industrial de Ripollet",
+"descripcion": "A les 18 h, al Camp Municipal de Futbol Industrial.",
+"url": "https://www.ripollet.cat/actualitat/agenda/presentacio-dels-equips-de-lescola-de-futbol-base-de-ripollet"
 },
 {
 "titulo": "Teatre: Un tal Cèsar",
@@ -240,6 +216,30 @@
 "lugar": "Rambla de Sant Jordi",
 "descripcion": "De 10 a 15 h, a la rbla. de Sant Jordi",
 "url": "https://www.ripollet.cat/actualitat/agenda/3a-fira-de-les-economies-transformadores-fira-migrant-diversa-i-antiracista"
+},
+{
+"titulo": "Festival Internacional de Dones Màgiques DAMA",
+"inicio": "2026-11-15T10:30:00+01:00",
+"fin": "2026-11-15T14:00:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "De 10.30 a 14 h,  al pati del Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/festival-internacional-de-dones-magiques-dama-2"
+},
+{
+"titulo": "Jugatecambiental Pinetons: “Construïm la brúixola”",
+"inicio": "2026-11-15T11:30:00+01:00",
+"fin": "2026-11-15T13:30:00+01:00",
+"lugar": "Parc dels Pinetons de Ripolllet",
+"descripcion": "D’11.30 a 13.30 h, al parc dels Pinetons",
+"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cconstruim-la-bruixola201d"
+},
+{
+"titulo": "Jugatecambiental Maria Regordosa i Masot: “Agafem el cabàs”",
+"inicio": "2026-11-15T11:30:00+01:00",
+"fin": "2026-11-15T13:00:00+01:00",
+"lugar": "Parc de Maria Regordosa i del Masot",
+"descripcion": "D’11.30 a 13.30 h, al parc de Maria Regordosa i Masot",
+"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-maria-regordosa-i-masot-201cagafem-el-cabas201d"
 }
 ]
 }
