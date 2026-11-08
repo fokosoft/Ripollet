@@ -2,38 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Presentació dels equips de l&#x27;Escola de Futbol Base de Ripollet",
-"inicio": "2026-11-06T18:00:00+01:00",
-"fin": "2026-11-06T19:00:00+01:00",
-"lugar": "Camp de Futbol Municipal de l'Industrial de Ripollet",
-"descripcion": "A les 18 h, al Camp Municipal de Futbol Industrial.",
-"url": "https://www.ripollet.cat/actualitat/agenda/presentacio-dels-equips-de-lescola-de-futbol-base-de-ripollet"
-},
-{
-"titulo": "Teatre: Un tal Cèsar",
-"inicio": "2026-11-06T20:30:00+01:00",
-"fin": "2026-11-06T21:30:00+01:00",
-"lugar": "Teatre Auditori del Mercat Vell",
-"descripcion": "A les 20.30 h, al Teatre Auditori del Mercat Vell",
-"url": "https://www.ripollet.cat/actualitat/agenda/teatre-un-tal-cesar"
-},
-{
-"titulo": "Festa de la Castanyada de l’AV Sant Andreu",
-"inicio": "2026-11-07T10:00:00+01:00",
-"fin": "2026-11-07T11:00:00+01:00",
-"lugar": "Centre Cívic Sant Andreu i parc de Norbert Fusté",
-"descripcion": "A partir de les 10 h, al Centre Cívic Sant Andreu i parc de Norbert Fusté",
-"url": "https://www.ripollet.cat/actualitat/agenda/festa-de-la-castanyada-de-l2019av-sant-andreu"
-},
-{
-"titulo": "Cuina en família: “Rolls de canyella i galetes crackers de formatge”",
-"inicio": "2026-11-07T10:00:00+01:00",
-"fin": "2026-11-07T12:00:00+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "De 10 a 12 h, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/cuina-en-familia-201crolls-de-canyella-i-galetes-crackers-de-formatge201d"
-},
-{
 "titulo": "Dinar final de temporada Ripollet Unió Atlètica",
 "inicio": "2026-11-07T10:00:00+01:00",
 "fin": "2026-11-07T23:59:59+01:00",
@@ -114,6 +82,14 @@
 "url": "https://www.ripollet.cat/actualitat/agenda/ucraina-no-estas-sola-1"
 },
 {
+"titulo": "2a Biennal de Fotografia Carme Aldana",
+"inicio": "2026-11-12T00:00:00+01:00",
+"fin": "2026-11-13T23:59:59+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "Del 12 de novembre al 8 de desembre, a la Sala d’Art del Centre Cultural de Ripollet.",
+"url": "https://www.ripollet.cat/actualitat/agenda/2a-biennal-de-fotografia-carme-aldana"
+},
+{
 "titulo": "Campionat de Catalunya Universitari de Tennis Taula",
 "inicio": "2026-11-12T09:00:00+01:00",
 "fin": "2026-11-12T23:59:59+01:00",
@@ -186,6 +162,14 @@
 "url": "https://www.ripollet.cat/actualitat/agenda/experiments-cientifics-en-familia-ciencia-amb-bombolles"
 },
 {
+"titulo": "Lliurament de premis de les biennals de fotografia",
+"inicio": "2026-11-14T11:30:00+01:00",
+"fin": "2026-11-14T12:30:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "A les 11.30 h, a la Sala d’Art del Centre Cultural de Ripollet",
+"url": "https://www.ripollet.cat/actualitat/agenda/lliurament-de-premis-de-les-biennals-de-fotografia"
+},
+{
 "titulo": "Presentació dels equips del Club Bàsquet Ripollet",
 "inicio": "2026-11-14T16:00:00+01:00",
 "fin": "2026-11-14T23:59:59+01:00",
@@ -240,6 +224,22 @@
 "lugar": "Parc de Maria Regordosa i del Masot",
 "descripcion": "D’11.30 a 13.30 h, al parc de Maria Regordosa i Masot",
 "url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-maria-regordosa-i-masot-201cagafem-el-cabas201d"
+},
+{
+"titulo": "Concert de les corals, bandeta i banda de la SCV",
+"inicio": "2026-11-15T18:30:00+01:00",
+"fin": "2026-11-15T19:30:00+01:00",
+"lugar": "Teatre Auditori del Mercat Vell",
+"descripcion": "A les 18.30 h, al Teatre Auditori del Mercat Vell",
+"url": "https://www.ripollet.cat/actualitat/agenda/concert-de-les-corals-bandeta-i-banda-de-la-scv"
+},
+{
+"titulo": "La Llançadora: Impuls de nous projectes (1a sessió)",
+"inicio": "2026-11-17T18:00:00+01:00",
+"fin": "2026-11-17T22:00:00+01:00",
+"lugar": "CIP Molí d’en Rata",
+"descripcion": "A les 18 h, al CIP Molí d'En Rata",
+"url": "https://www.ripollet.cat/actualitat/agenda/la-llancadora-impuls-de-nous-projectes-1a-sessio"
 }
 ]
 }
