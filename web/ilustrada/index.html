@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ripollet · vista ilustrada</title>
+<meta name="description" content="Ripollet entero en una ilustración isométrica: la maqueta 3D renderizada en Blender y pintada con IA en edificios y árboles.">
+<meta name="theme-color" content="#16181d">
+<link rel="icon" href="data:,">
+<style>
+  :root { --tinta: #16181d; --papel: #fbfbf8; --teja: #b8322f; --fondo: #a9b0b9; }
+  html, body { margin: 0; height: 100%; background: var(--fondo); color: var(--tinta); font: 14px/1.4 system-ui, sans-serif; }
+  #mapa { position: fixed; inset: 0; }
+  .pieza { background: var(--papel); color: var(--tinta); border: 2px solid var(--tinta); box-shadow: 3px 3px 0 var(--tinta); }
+  header { position: fixed; left: 12px; top: 12px; right: 12px; display: flex; gap: 8px; align-items: flex-start; pointer-events: none; }
+  header > * { pointer-events: auto; }
+  h1 { margin: 0; padding: 8px 12px; font-size: 16px; }
+  .hueco { flex: 1; }
+  a.boton, button { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; font: 600 14px system-ui, sans-serif;
+                    text-decoration: none; cursor: pointer; }
+  a.principal { background: var(--teja); color: #fff; }
+  a.boton:focus-visible, button:focus-visible { outline: 3px solid var(--teja); outline-offset: 2px; }
+  #pie { position: fixed; left: 12px; bottom: 12px; max-width: min(420px, calc(100% - 24px)); padding: 8px 12px; font-size: 12px; box-sizing: border-box; }
+  #pie p { margin: 0; } #pie p + p { margin-top: 4px; }
+  #pie a { color: inherit; }
+  #zoom { position: fixed; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
+  #zoom button { width: 44px; justify-content: center; padding: 0; font-size: 20px; }
+  @media (max-width: 640px) {
+    h1 { font-size: 14px; } a.boton, button { padding: 0 10px; font-size: 13px; }
+    #pie { bottom: 12px; max-width: calc(100% - 80px); }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div id="mapa" role="img"></div>
+  <header>
+    <h1 class="pieza" data-t="titulo"></h1>
+    <span class="hueco"></span>
+    <button id="idioma" class="pieza" type="button"></button>
+    <a class="boton pieza principal" href="../" data-t="volver"></a>
+  </header>
+  <div id="zoom"><button class="pieza" id="mas" type="button">+</button><button class="pieza" id="menos" type="button">−</button></div>
+</main>
+<footer id="pie" class="pieza"><p data-t="explica"></p>
+  <p>© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · Catastro · ICGC ·
+  <a href="https://github.com/fokosoft" target="_blank" rel="noopener">FOKO SOFT</a></p></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"></script>
+<script>
+  const TEXTOS = {
+    es: { titulo: "Ripollet · vista ilustrada", volver: "Volver a la maqueta 3D", otro: "Català", lengua: "es",
+          explica: "La maqueta 3D renderizada en Blender y pintada con IA (Stable Diffusion) solo en edificios y árboles; calles, parques y río quedan como en la maqueta. Es una ilustración: algún detalle de tejados y fachadas es inventado.",
+          mapa: "Ilustración isométrica de Ripollet entero, del centro a los Pinetons. Arrastra para moverte y usa la rueda o los botones para acercar.",
+          mas: "Acercar", menos: "Alejar" },
+    ca: { titulo: "Ripollet · vista il·lustrada", volver: "Tornar a la maqueta 3D", otro: "Castellano", lengua: "ca",
+          explica: "La maqueta 3D renderitzada amb Blender i pintada amb IA (Stable Diffusion) només als edificis i els arbres; carrers, parcs i riu queden com a la maqueta. És una il·lustració: algun detall de teulades i façanes és inventat.",
+          mapa: "Il·lustració isomètrica de tot Ripollet, del centre als Pinetons. Arrossega per moure't i fes servir la roda o els botons per apropar.",
+          mas: "Apropar", menos: "Allunyar" },
+  };
+  let idioma = "es";
+  try { idioma = localStorage.getItem("idioma") || (navigator.language.startsWith("ca") ? "ca" : "es"); } catch {}
+  function pintarTextos() {
+    const T = TEXTOS[idioma];
+    document.documentElement.lang = T.lengua;
+    document.title = T.titulo;
+    for (const e of document.querySelectorAll("[data-t]")) e.textContent = T[e.dataset.t];
+    document.getElementById("idioma").textContent = T.otro;
+    document.getElementById("mapa").setAttribute("aria-label", T.mapa);
+    document.getElementById("mas").setAttribute("aria-label", T.mas);
+    document.getElementById("menos").setAttribute("aria-label", T.menos);
+  }
+  document.getElementById("idioma").onclick = () => {
+    idioma = idioma === "es" ? "ca" : "es";
+    try { localStorage.setItem("idioma", idioma); } catch {}
+    pintarTextos();
+  };
+  pintarTextos();
+
+  OpenSeadragon.setImageFormatsSupported({ webp: true });
+  const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const visor = OpenSeadragon({ id: "mapa", tileSources: "teselas/ripollet.dzi", showNavigationControl: false,
+    maxZoomPixelRatio: 1.6, visibilityRatio: 0.6, constrainDuringPan: true, immediateRender: quieto,
+    animationTime: quieto ? 0 : 1.0, springStiffness: quieto ? 100 : 6.5, gestureSettingsMouse: { clickToZoom: false } });
+  document.getElementById("mas").onclick = () => visor.viewport.zoomBy(1.6);
+  document.getElementById("menos").onclick = () => visor.viewport.zoomBy(1 / 1.6);
+</script>
+</body>
+</html>

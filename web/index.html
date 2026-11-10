@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-sXWZtfJ6C/B218NLPOnZ87YR9LdJFaOkMqQquqsH2jU=' 'sha256-J5ITcyWoMaikR4mcXFMjiGD+34tFSJ91wmJD2TquAxs=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://fokosoft.github.io; media-src 'self' https://fokosoft.github.io; connect-src 'self' data: blob: https://cdn.jsdelivr.net https://api.open-meteo.com https://air-quality-api.open-meteo.com https://analisi.transparenciacatalunya.cat https://fokosoft.github.io; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-sXWZtfJ6C/B218NLPOnZ87YR9LdJFaOkMqQquqsH2jU=' 'sha256-QGsnW3yrMuYGqEIFxouY+JpiKIpJNkfyLBc2TF5SB8c=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://fokosoft.github.io; media-src 'self' https://fokosoft.github.io; connect-src 'self' data: blob: https://cdn.jsdelivr.net https://api.open-meteo.com https://air-quality-api.open-meteo.com https://analisi.transparenciacatalunya.cat https://fokosoft.github.io; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ripollet · maqueta 3D</title>
 <meta name="description" content="Maqueta 3D de Ripollet amb dades obertes: la teva adreça, la recollida de residus, l'agenda, Ripollet en el temps (1946–avui), patrimoni, natura, transport i risc d'inundació. En català i castellà. · Maqueta 3D de Ripollet con datos abiertos.">
@@ -252,7 +252,7 @@
   .rejilla.grandes button { color: #fff !important; font-size: 13px; }
   .rejilla.grandes button:hover { filter: brightness(1.12); }
   #abrirRecorrido { background: var(--tinta) !important; } #abrirMicasa { background: var(--verde) !important; }
-  #conducir { background: var(--teja) !important; } #abrirLluvia { background: var(--agua) !important; }
+  #conducir { background: var(--teja) !important; } #abrirIlustrada { background: var(--agua) !important; } #abrirLluvia { background: var(--agua) !important; }
   #abrirRiesgo { background: var(--marino) !important; }
   /* Aviso de lluvia real en Explorar (solo cuando llueve en Ripollet) */
   #lluviaAhora { display: block; width: 100%; margin: 6px 0 4px; padding: 10px 12px; text-align: left; font-weight: 600;
@@ -347,6 +347,7 @@
     <div class="rejilla grandes dos"><button id="abrirRecorrido" data-t="rcBoton"></button>
       <button id="abrirMicasa" data-t="micasaBoton"></button></div>
     <div class="rejilla grandes"><button id="conducir" data-t="conducir"></button>
+      <button id="abrirIlustrada" data-t="ilustradaBoton"></button>
       <button id="abrirLluvia" class="soloTecnico" data-t="lluvia"></button><button id="abrirRiesgo" class="soloTecnico" data-t="riesgo"></button></div>
     <p class="subtitulo" data-t="navIr"></p>
     <div class="botones" id="ir"></div>
@@ -7154,7 +7155,7 @@ const TEXTOS = {
     titulo: "<b>Ripollet</b>: del centro a Pinetons, generado en Blender desde OpenStreetMap.",
     ayudaMapa: "Arrastra para moverte · clic derecho para girar · rueda para zoom",
     ayudaTactil: "Un dedo para moverte · dos dedos para girar y hacer zoom",
-    conducir: "🚗 Conducir", lluvia: "🌧 Lluvia", riesgo: "⚠️ Riesgo de inundación",
+    conducir: "🚗 Conducir", ilustradaBoton: "🎨 Vista ilustrada", lluvia: "🌧 Lluvia", riesgo: "⚠️ Riesgo de inundación",
     estiloArte: "🎨 Estilo artístico", estiloReal: "🏙 Estilo realista",
     hud1: "<b>Conduciendo</b> · W/↑ acelerar · S/↓ frenar y marcha atrás · A D/← → girar",
     hud2: "Espacio freno de mano · Shift acelera más · C cámara · R volver a la salida · nunca pasa del límite de la calle 🚦",
@@ -7245,7 +7246,7 @@ const TEXTOS = {
     titulo: "<b>Ripollet</b>: del centre a Pinetons, generat amb Blender a partir d'OpenStreetMap.",
     ayudaMapa: "Arrossega per moure't · clic dret per girar · roda per fer zoom",
     ayudaTactil: "Un dit per moure't · dos dits per girar i fer zoom",
-    conducir: "🚗 Conduir", lluvia: "🌧 Pluja", riesgo: "⚠️ Risc d'inundació",
+    conducir: "🚗 Conduir", ilustradaBoton: "🎨 Vista il·lustrada", lluvia: "🌧 Pluja", riesgo: "⚠️ Risc d'inundació",
     estiloArte: "🎨 Estil artístic", estiloReal: "🏙 Estil realista",
     hud1: "<b>Conduint</b> · W/↑ accelerar · S/↓ frenar i marxa enrere · A D/← → girar",
     hud2: "Espai fre de mà · Shift accelera més · C càmera · R tornar a la sortida · mai passa del límit del carrer 🚦",
@@ -7396,7 +7397,7 @@ const numero = (x, dec = 0) => x.toLocaleString(idioma === "ca" ? "ca-ES" : "es-
 // ICONOS DE PÍXEL (js/iconos.js) en vez de emojis: menú, cuadrículas, cerrar, buscar, compartir y logotipo
 const ICONO_DE = {
   explorar: "mapa", herramientas: "caja", riesgo: "aviso", micasa: "casa", ajustes: "ajustes",
-  abrirRecorrido: "play", abrirMicasa: "casa", conducir: "coche", abrirLluvia: "lluvia", abrirRiesgo: "gota",
+  abrirRecorrido: "play", abrirMicasa: "casa", conducir: "coche", abrirIlustrada: "mapa", abrirLluvia: "lluvia", abrirRiesgo: "gota",
   sombra: "arbol", acces: "silla", incendio: "fuego", solar: "sol", emerg: "cruz", minutos: "reloj", proy: "grua",
   incid: "nota", vulner: "personas", rehab: "ladrillos", seguridad: "semaforo", lugares: "tienda", transporte: "bus",
   ambiente: "altavoz", residuos: "contenedor", plan: "plano", agenda: "calendario", patri: "columna", epoca: "reloj", natura: "pajaro",
@@ -8221,6 +8222,8 @@ function salirDelCoche() {
 }
 
 $("conducir").onclick = entrarAlCoche;
+// Vista ilustrada: página aparte con teselas (web/ilustrada/); desde el archivo suelto se abre la publicada
+$("abrirIlustrada").onclick = () => { location.href = location.protocol === "file:" ? "https://fokosoft.github.io/Ripollet/web/ilustrada/" : "ilustrada/"; };
 $("salir").onclick = salirDelCoche;
 $("camara").onclick = () => { vistaConductor = !vistaConductor; };
 $("reiniciar").onclick = aLaSalida;
