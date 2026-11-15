@@ -2,38 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "2a Biennal de Fotografia Carme Aldana",
-"inicio": "2026-11-12T00:00:00+01:00",
-"fin": "2026-11-13T23:59:59+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "Del 12 de novembre al 8 de desembre, a la Sala d’Art del Centre Cultural de Ripollet.",
-"url": "https://www.ripollet.cat/actualitat/agenda/2a-biennal-de-fotografia-carme-aldana"
-},
-{
-"titulo": "Veus el que beus?",
-"inicio": "2026-11-13T10:30:00+01:00",
-"fin": "2026-11-13T23:59:59+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "A les 10.30, davant del Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/veus-el-que-beus"
-},
-{
-"titulo": "Festival Internacional de Dones Màgiques DAMA",
-"inicio": "2026-11-13T16:00:00+01:00",
-"fin": "2026-11-13T18:30:00+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "Per la tarda, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/festival-internacional-de-dones-magiques-dama"
-},
-{
-"titulo": "Setmana de la Ciència: Lego Builds the Change",
-"inicio": "2026-11-13T17:30:00+01:00",
-"fin": "2026-11-13T18:30:00+01:00",
-"lugar": "Biblioteca Municipal de Ripollet",
-"descripcion": "A les 17.30 h, a la Biblioteca Municipal",
-"url": "https://www.ripollet.cat/actualitat/agenda/setmana-de-la-ciencia-lego-builds-the-change"
-},
-{
 "titulo": "Quedada d&#x27;entrenament de KMSxELA a Ripollet",
 "inicio": "2026-11-14T08:30:00+01:00",
 "fin": "2026-11-14T23:59:59+01:00",
@@ -48,14 +16,6 @@
 "lugar": "Centre Cultural de Ripollet",
 "descripcion": "A les 10.30 h, al Centre Cultural",
 "url": "https://www.ripollet.cat/actualitat/agenda/experiments-cientifics-en-familia-ciencia-amb-bombolles"
-},
-{
-"titulo": "Lliurament de premis de les biennals de fotografia",
-"inicio": "2026-11-14T11:30:00+01:00",
-"fin": "2026-11-14T12:30:00+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "A les 11.30 h, a la Sala d’Art del Centre Cultural de Ripollet",
-"url": "https://www.ripollet.cat/actualitat/agenda/lliurament-de-premis-de-les-biennals-de-fotografia"
 },
 {
 "titulo": "Presentació dels equips del Club Bàsquet Ripollet",
@@ -240,6 +200,46 @@
 "lugar": "",
 "descripcion": "De 12 a 20 h, a les pistes de l’ESBAR",
 "url": "https://www.ripollet.cat/actualitat/agenda/nit-de-bruixes-201cla-rabia-que-ens-mou201d"
+},
+{
+"titulo": "Dansa: Folk as Queer",
+"inicio": "2026-11-21T20:30:00+01:00",
+"fin": "2026-11-21T21:30:00+01:00",
+"lugar": "Teatre Auditori del Mercat Vell",
+"descripcion": "A les 20.30 h, al Teatre Auditori del Mercat Vell",
+"url": "https://www.ripollet.cat/actualitat/agenda/dansa-folk-as-queer"
+},
+{
+"titulo": "2a Trobada de Vespes i Sidecars de Ripollet",
+"inicio": "2026-11-22T09:00:00+01:00",
+"fin": "2026-11-22T14:00:00+01:00",
+"lugar": "Recinte firal de Ripollet",
+"descripcion": "A partir de les 9 h, al recinte firal",
+"url": "https://www.ripollet.cat/actualitat/agenda/2a-trobada-de-vespes-i-sidecars-de-ripollet"
+},
+{
+"titulo": "Visita guiada i taller de pa al Molí d’en Rata t",
+"inicio": "2026-11-22T11:00:00+01:00",
+"fin": "2026-11-22T23:59:59+01:00",
+"lugar": "CIP Molí d’en Rata",
+"descripcion": "A les 11 h, al CIP Molí d’en Rata",
+"url": "https://www.ripollet.cat/actualitat/agenda/visita-guiada-i-taller-de-pa-al-moli-d2019en-rata-t"
+},
+{
+"titulo": "Jugatecambiental Maria Regordosa i Masot: “Personalitzem la bici!”",
+"inicio": "2026-11-22T11:30:00+01:00",
+"fin": "2026-11-22T13:30:00+01:00",
+"lugar": "Parc de Maria Regordosa i del Masot",
+"descripcion": "D’11.30 a 13.30 h, al parc de Maria Regordosa i Masot",
+"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-maria-regordosa-i-masot-201cpersonalitzem-la-bici-201d"
+},
+{
+"titulo": "Jugatecambiental Pinetons: “Un celler de Can Roca per als ocells”",
+"inicio": "2026-11-22T11:30:00+01:00",
+"fin": "2026-11-22T13:30:00+01:00",
+"lugar": "Parc dels Pinetons de Ripolllet",
+"descripcion": "D’11.30 a 13.30 h, al parc dels Pinetons",
+"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cun-celler-de-can-roca-per-als-ocells201d-1"
 }
 ]
 }
