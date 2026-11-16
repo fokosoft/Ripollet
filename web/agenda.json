@@ -2,78 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Quedada d&#x27;entrenament de KMSxELA a Ripollet",
-"inicio": "2026-11-14T08:30:00+01:00",
-"fin": "2026-11-14T23:59:59+01:00",
-"lugar": "Poliesportiu Municipal de Ripollet",
-"descripcion": "A les 8.30 h, al Poliesportiu Municipal de Ripollet",
-"url": "https://www.ripollet.cat/actualitat/agenda/quedada-dentrenament-de-kmsxela-a-ripollet"
-},
-{
-"titulo": "Experiments científics en família: ciència amb bombolles",
-"inicio": "2026-11-14T10:30:00+01:00",
-"fin": "2026-11-14T23:59:59+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "A les 10.30 h, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/experiments-cientifics-en-familia-ciencia-amb-bombolles"
-},
-{
-"titulo": "Presentació dels equips del Club Bàsquet Ripollet",
-"inicio": "2026-11-14T16:00:00+01:00",
-"fin": "2026-11-14T23:59:59+01:00",
-"lugar": "Pavelló Francesc Barneda",
-"descripcion": "A partir de les 16 h, al Pavelló Francesc Barneda",
-"url": "https://www.ripollet.cat/actualitat/agenda/presentacio-dels-equips-del-club-basquet-ripollet"
-},
-{
-"titulo": "El Museu dona Joc. Activitat de rols ocults: “Blood on the Clocktower”",
-"inicio": "2026-11-14T17:00:00+01:00",
-"fin": "2026-11-14T23:59:59+01:00",
-"lugar": "CIP Molí d'en Rata",
-"descripcion": "A les 17 h, al CIP Molí d’en Rata",
-"url": "https://www.ripollet.cat/actualitat/agenda/el-museu-dona-joc-activitat-de-rols-ocults-201cblood-on-the-clocktower201d"
-},
-{
-"titulo": "Festival Internacional de Dones Màgiques DAMA",
-"inicio": "2026-11-14T19:00:00+01:00",
-"fin": "2026-11-14T22:30:00+01:00",
-"lugar": "Teatre Auditori del Mercat Vell i Centre Cultural",
-"descripcion": "De 19 a 22.30 hores, al Teatre Auditori del Mercat Vell. Sessió golfa al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/festival-internacional-de-dones-magiques-dama-1"
-},
-{
-"titulo": "3a Fira de les Economies Transformadores: Fira migrant, diversa i antiracista",
-"inicio": "2026-11-15T10:00:00+01:00",
-"fin": "2026-11-15T15:00:00+01:00",
-"lugar": "Rambla de Sant Jordi",
-"descripcion": "De 10 a 15 h, a la rbla. de Sant Jordi",
-"url": "https://www.ripollet.cat/actualitat/agenda/3a-fira-de-les-economies-transformadores-fira-migrant-diversa-i-antiracista"
-},
-{
-"titulo": "Festival Internacional de Dones Màgiques DAMA",
-"inicio": "2026-11-15T10:30:00+01:00",
-"fin": "2026-11-15T14:00:00+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "De 10.30 a 14 h,  al pati del Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/festival-internacional-de-dones-magiques-dama-2"
-},
-{
-"titulo": "Jugatecambiental Pinetons: “Construïm la brúixola”",
-"inicio": "2026-11-15T11:30:00+01:00",
-"fin": "2026-11-15T13:30:00+01:00",
-"lugar": "Parc dels Pinetons de Ripolllet",
-"descripcion": "D’11.30 a 13.30 h, al parc dels Pinetons",
-"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cconstruim-la-bruixola201d"
-},
-{
-"titulo": "Jugatecambiental Maria Regordosa i Masot: “Agafem el cabàs”",
-"inicio": "2026-11-15T11:30:00+01:00",
-"fin": "2026-11-15T13:00:00+01:00",
-"lugar": "Parc de Maria Regordosa i del Masot",
-"descripcion": "D’11.30 a 13.30 h, al parc de Maria Regordosa i Masot",
-"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-maria-regordosa-i-masot-201cagafem-el-cabas201d"
-},
-{
 "titulo": "Concert de les corals, bandeta i banda de la SCV",
 "inicio": "2026-11-15T18:30:00+01:00",
 "fin": "2026-11-15T19:30:00+01:00",
@@ -240,6 +168,22 @@
 "lugar": "Parc dels Pinetons de Ripolllet",
 "descripcion": "D’11.30 a 13.30 h, al parc dels Pinetons",
 "url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cun-celler-de-can-roca-per-als-ocells201d-1"
+},
+{
+"titulo": "Taller d&#x27;iniciació a la marxa nòrdica per a gent gran",
+"inicio": "2026-11-23T09:30:00+01:00",
+"fin": "2026-11-23T13:30:00+01:00",
+"lugar": "Poliesportiu Municipal de Ripollet",
+"descripcion": "De 9.30 a 13.30 h, al Poliesportiu Municipal.",
+"url": "https://www.ripollet.cat/actualitat/agenda/taller-diniciacio-a-la-marxa-nordica-per-a-gent-gran-3"
+},
+{
+"titulo": "Recital de poesia dedicat a l&#x27;amor i a Federico García Lorca",
+"inicio": "2026-11-28T18:00:00+01:00",
+"fin": "2026-11-28T23:59:59+01:00",
+"lugar": "Teatre Auditori del Mercat Vell",
+"descripcion": "A les 18 h, al Teatre Auditori del Mercat Vell.",
+"url": "https://www.ripollet.cat/actualitat/agenda/recital-de-poesia-dedicat-a-lamor-i-a-federico-garcia-lorca"
 }
 ]
 }
