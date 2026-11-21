@@ -2,22 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "El museu endolceix les festes: “Braç de gitano”",
-"inicio": "2026-11-19T18:00:00+01:00",
-"fin": "2026-11-19T23:59:59+01:00",
-"lugar": "CIP Molí d’en Rata",
-"descripcion": "A les 18 h, al CIP Molí d’en Rata",
-"url": "https://www.ripollet.cat/actualitat/agenda/el-museu-endolceix-les-festes-201cbrac-de-gitano201d"
-},
-{
-"titulo": "Xarxa de Sabers: Ordre i gestió de joguines aquest Nadal",
-"inicio": "2026-11-19T18:15:00+01:00",
-"fin": "2026-11-19T23:59:59+01:00",
-"lugar": "Els Solets (carrer del Sol, 13)",
-"descripcion": "A les 18.15 h, a Els Solets (carrer del Sol, 13)",
-"url": "https://www.ripollet.cat/actualitat/agenda/xarxa-de-sabers-ordre-i-gestio-de-joguines-aquest-nadal"
-},
-{
 "titulo": "Festa de Peluixos",
 "inicio": "2026-11-20T18:00:00+01:00",
 "fin": "2026-11-21T11:00:00+01:00",
@@ -96,6 +80,126 @@
 "lugar": "Poliesportiu Municipal de Ripollet",
 "descripcion": "De 9.30 a 13.30 h, al Poliesportiu Municipal.",
 "url": "https://www.ripollet.cat/actualitat/agenda/taller-diniciacio-a-la-marxa-nordica-per-a-gent-gran-3"
+},
+{
+"titulo": "Gravat i revolta: taller artístic",
+"inicio": "2026-11-23T18:00:00+01:00",
+"fin": "2026-11-23T19:00:00+01:00",
+"lugar": "Casal de Joves de Ripollet",
+"descripcion": "A les 18 h, al Casal de Joves",
+"url": "https://www.ripollet.cat/actualitat/agenda/gravat-i-revolta-taller-artistic"
+},
+{
+"titulo": "Club de Lectura Paraules que curen",
+"inicio": "2026-11-24T11:00:00+01:00",
+"fin": "2026-11-24T12:00:00+01:00",
+"lugar": "Biblioteca Municipal de Ripollet",
+"descripcion": "A les 11 h, a la Biblioteca Municipal",
+"url": "https://www.ripollet.cat/actualitat/agenda/club-de-lectura-paraules-que-curen"
+},
+{
+"titulo": "Desmuntant el masclisme: sensibilització, reflexió i acció",
+"inicio": "2026-11-24T12:00:00+01:00",
+"fin": "2026-11-24T23:59:59+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "A les 12 h, al Centre Cultural Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/desmuntant-el-masclisme-sensibilitzacio-reflexio-i-accio"
+},
+{
+"titulo": "Qui ocupa l’espai?",
+"inicio": "2026-11-24T17:00:00+01:00",
+"fin": "2026-11-24T20:00:00+01:00",
+"lugar": "Casal de Joves de Ripollet",
+"descripcion": "De 17 a 20 h, al Casal de Joves",
+"url": "https://www.ripollet.cat/actualitat/agenda/qui-ocupa-l2019espai"
+},
+{
+"titulo": "Cafè pedagògic “La importància del joc de qualitat i com acompanyar-lo a casa: Cap a un Nadal conscient”",
+"inicio": "2026-11-24T17:30:00+01:00",
+"fin": "2026-11-24T18:30:00+01:00",
+"lugar": "",
+"descripcion": "A les 17.30 h, a Els Solets- Minnilàndia",
+"url": "https://www.ripollet.cat/actualitat/agenda/cafe-pedagogic-201cla-importancia-del-joc-de-qualitat-i-com-acompanyar-lo-a-casa-cap-a-un-nadal-conscient201d"
+},
+{
+"titulo": "Cançons i pel·lícules",
+"inicio": "2026-11-24T17:30:00+01:00",
+"fin": "2026-11-24T18:30:00+01:00",
+"lugar": "Centre Cultural",
+"descripcion": "A les 17.30 h, a la Sala 2 d’entitats del Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/cancons-i-pel-licules"
+},
+{
+"titulo": "Cronograma de la igualtat de gènere",
+"inicio": "2026-11-24T17:30:00+01:00",
+"fin": "2026-11-24T18:30:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "A les 17.30 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/cronograma-de-la-igualtat-de-genere"
+},
+{
+"titulo": "Taller d’autodefensa per a dones adultes",
+"inicio": "2026-11-24T18:00:00+01:00",
+"fin": "2026-11-24T19:00:00+01:00",
+"lugar": "Centre cívic can Mas",
+"descripcion": "A les 18 h, al Centre Cívic Can Mas",
+"url": "https://www.ripollet.cat/actualitat/agenda/taller-d2019autodefensa-per-a-dones-adultes-1"
+},
+{
+"titulo": "Lectura del manifest del 25N",
+"inicio": "2026-11-25T12:00:00+01:00",
+"fin": "2026-11-25T23:59:59+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "A les 12 h, al pati del Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/lectura-del-manifest-del-25n"
+},
+{
+"titulo": "Curtmetratge: Dàlia",
+"inicio": "2026-11-25T19:00:00+01:00",
+"fin": "2026-11-25T23:59:59+01:00",
+"lugar": "Centre Cultural",
+"descripcion": "A les 19 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/curtmetratge-dalia"
+},
+{
+"titulo": "Donació de sang",
+"inicio": "2026-11-26T17:00:00+01:00",
+"fin": "2026-11-26T21:00:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "De 17 a 21 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/donacio-de-sang-44"
+},
+{
+"titulo": "Taller d’autodefensa per a dones joves",
+"inicio": "2026-11-26T17:00:00+01:00",
+"fin": "2026-11-26T23:59:59+01:00",
+"lugar": "Centre cívic can Mas",
+"descripcion": "A les 17 h, al Centre Cívic Can Mas",
+"url": "https://www.ripollet.cat/actualitat/agenda/taller-d2019autodefensa-per-a-dones-joves-1"
+},
+{
+"titulo": "Tira la canya: tarot i birres",
+"inicio": "2026-11-26T18:00:00+01:00",
+"fin": "2026-11-26T23:59:59+01:00",
+"lugar": "El Local, carrer de Monturiol",
+"descripcion": "A les 18 h, a El local",
+"url": "https://www.ripollet.cat/actualitat/agenda/tira-la-canya-tarot-i-birres"
+},
+{
+"titulo": "Nits de Música: “Sarsuela: Luisa Fernanda, comèdia lírica de Federico Moreno Torroba”",
+"inicio": "2026-11-26T19:00:00+01:00",
+"fin": "2026-11-26T20:00:00+01:00",
+"lugar": "Teatre Auditori del Mercat Vell",
+"descripcion": "A les 19 h, al Teatre Auditori",
+"url": "https://www.ripollet.cat/actualitat/agenda/nits-de-musica-201csarsuela-luisa-fernanda-comedia-lirica-de-federico-moreno-torroba201d"
+},
+{
+"titulo": "Concert itinerant Pau per la Pau",
+"inicio": "2026-11-28T17:30:00+01:00",
+"fin": "2026-11-28T23:59:59+01:00",
+"lugar": "Església de Sant Esteve",
+"descripcion": "A les 17.30 h, a l'església de Sant Esteve",
+"url": "https://www.ripollet.cat/actualitat/agenda/concert-itinerant-pau-per-la-pau"
 },
 {
 "titulo": "Recital de poesia dedicat a l&#x27;amor i a Federico García Lorca",
