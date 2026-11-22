@@ -2,30 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Festa de Peluixos",
-"inicio": "2026-11-20T18:00:00+01:00",
-"fin": "2026-11-21T11:00:00+01:00",
-"lugar": "Biblioteca Municipal de Ripollet",
-"descripcion": "A les 18.30 h, a la Biblioteca Municipal",
-"url": "https://www.ripollet.cat/actualitat/agenda/festa-de-peluixos-1"
-},
-{
-"titulo": "Concertacció",
-"inicio": "2026-11-20T18:00:00+01:00",
-"fin": "2026-11-20T23:59:59+01:00",
-"lugar": "Patí del Centre Cultural",
-"descripcion": "A les 18 h, al pati del Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/concertaccio-2"
-},
-{
-"titulo": "Hora del conte: “L’Alba té son”",
-"inicio": "2026-11-21T11:30:00+01:00",
-"fin": "2026-11-21T12:30:00+01:00",
-"lugar": "Biblioteca Municipal de Ripollet",
-"descripcion": "A les 11.30 h, a la Biblioteca Municipal",
-"url": "https://www.ripollet.cat/actualitat/agenda/hora-del-conte-201cl2019alba-te-son201d"
-},
-{
 "titulo": "Nit de Bruixes: “La ràbia que ens mou”",
 "inicio": "2026-11-21T12:00:00+01:00",
 "fin": "2026-11-21T20:00:00+01:00",
@@ -72,6 +48,14 @@
 "lugar": "Parc dels Pinetons de Ripolllet",
 "descripcion": "D’11.30 a 13.30 h, al parc dels Pinetons",
 "url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cun-celler-de-can-roca-per-als-ocells201d-1"
+},
+{
+"titulo": "La Cobla-Orquestra Montgrins presenta &quot;El teu concert&quot; a Ripollet",
+"inicio": "2026-11-22T18:00:00+01:00",
+"fin": "2026-11-22T23:59:59+01:00",
+"lugar": "Teatre Auditori del Mercat Vell",
+"descripcion": "A les 18 h, al Teatre Auditori del Mercat Vell",
+"url": "https://www.ripollet.cat/actualitat/agenda/la-cobla-orquestra-montgrins-presenta-el-teu-concert-a-ripollet"
 },
 {
 "titulo": "Taller d&#x27;iniciació a la marxa nòrdica per a gent gran",
@@ -154,6 +138,14 @@
 "url": "https://www.ripollet.cat/actualitat/agenda/lectura-del-manifest-del-25n"
 },
 {
+"titulo": "Desmuntant el masclisme: sensibilització, reflexió i acció",
+"inicio": "2026-11-25T18:00:00+01:00",
+"fin": "2026-11-25T19:00:00+01:00",
+"lugar": "Centre Cultural",
+"descripcion": "18 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/desmuntant-el-masclisme-sensibilitzacio-reflexio-i-accio-1"
+},
+{
 "titulo": "Curtmetratge: Dàlia",
 "inicio": "2026-11-25T19:00:00+01:00",
 "fin": "2026-11-25T23:59:59+01:00",
@@ -194,20 +186,60 @@
 "url": "https://www.ripollet.cat/actualitat/agenda/nits-de-musica-201csarsuela-luisa-fernanda-comedia-lirica-de-federico-moreno-torroba201d"
 },
 {
-"titulo": "Concert itinerant Pau per la Pau",
-"inicio": "2026-11-28T17:30:00+01:00",
-"fin": "2026-11-28T23:59:59+01:00",
-"lugar": "Església de Sant Esteve",
-"descripcion": "A les 17.30 h, a l'església de Sant Esteve",
-"url": "https://www.ripollet.cat/actualitat/agenda/concert-itinerant-pau-per-la-pau"
+"titulo": "Encesa de l’enllumenat de Nadal i inauguració del Bosc Màgic",
+"inicio": "2026-11-27T17:00:00+01:00",
+"fin": "2026-11-27T23:59:59+01:00",
+"lugar": "Plaça de Joan Abad",
+"descripcion": "A partir de les 17 h, a la pl. Joan Abad",
+"url": "https://www.ripollet.cat/actualitat/agenda/encesa-de-l2019enllumenat-de-nadal-i-inauguracio-del-bosc-magic"
 },
 {
-"titulo": "Recital de poesia dedicat a l&#x27;amor i a Federico García Lorca",
-"inicio": "2026-11-28T18:00:00+01:00",
-"fin": "2026-11-28T23:59:59+01:00",
+"titulo": "Manual per sobreviure al patriarcat",
+"inicio": "2026-11-27T18:00:00+01:00",
+"fin": "2026-11-27T23:59:59+01:00",
+"lugar": "Casal de Joves de Ripollet",
+"descripcion": "A les 18 h, al Casal de Joves",
+"url": "https://www.ripollet.cat/actualitat/agenda/manual-per-sobreviure-al-patriarcat"
+},
+{
+"titulo": "Club Cinema i Literatura: Matar un ruiseñor",
+"inicio": "2026-11-27T19:30:00+01:00",
+"fin": "2026-11-27T20:30:00+01:00",
+"lugar": "La Libre, Ripollet",
+"descripcion": "A les 19.30 h, a Lalibre",
+"url": "https://www.ripollet.cat/actualitat/agenda/club-cinema-i-literatura-matar-un-ruisenor"
+},
+{
+"titulo": "Teatre: Dinamarca",
+"inicio": "2026-11-27T20:30:00+01:00",
+"fin": "2026-11-27T23:59:59+01:00",
 "lugar": "Teatre Auditori del Mercat Vell",
-"descripcion": "A les 18 h, al Teatre Auditori del Mercat Vell.",
-"url": "https://www.ripollet.cat/actualitat/agenda/recital-de-poesia-dedicat-a-lamor-i-a-federico-garcia-lorca"
+"descripcion": "A les 20.30 h, al Teatre Auditori",
+"url": "https://www.ripollet.cat/actualitat/agenda/teatre-dinamarca"
+},
+{
+"titulo": "Fira de Santa Llúcia",
+"inicio": "2026-11-28T10:00:00+01:00",
+"fin": "2026-11-28T21:00:00+01:00",
+"lugar": "Rambla de Sant Jordi",
+"descripcion": "De 10 a 21 h, a la rbla. de Sant Jordi",
+"url": "https://www.ripollet.cat/actualitat/agenda/fira-de-santa-llucia-3"
+},
+{
+"titulo": "Trobada Tribu Mamicria especial 25N",
+"inicio": "2026-11-28T10:00:00+01:00",
+"fin": "2026-11-28T11:00:00+01:00",
+"lugar": "Centre Cultural",
+"descripcion": "De 10 a 11 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/trobada-tribu-mamicria-especial-25n-1"
+},
+{
+"titulo": "Matinal de tions i música en família",
+"inicio": "2026-11-28T10:30:00+01:00",
+"fin": "2026-11-28T23:59:59+01:00",
+"lugar": "Parc Gassó Vargas",
+"descripcion": "A les 10.30 h, al parc de Gassó Vargas",
+"url": "https://www.ripollet.cat/actualitat/agenda/matinal-de-tions-i-musica-en-familia"
 }
 ]
 }
