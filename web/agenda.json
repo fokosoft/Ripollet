@@ -2,70 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Nit de Bruixes: “La ràbia que ens mou”",
-"inicio": "2026-11-21T12:00:00+01:00",
-"fin": "2026-11-21T20:00:00+01:00",
-"lugar": "",
-"descripcion": "De 12 a 20 h, a les pistes de l’ESBAR",
-"url": "https://www.ripollet.cat/actualitat/agenda/nit-de-bruixes-201cla-rabia-que-ens-mou201d"
-},
-{
-"titulo": "Dansa: Folk as Queer",
-"inicio": "2026-11-21T20:30:00+01:00",
-"fin": "2026-11-21T21:30:00+01:00",
-"lugar": "Teatre Auditori del Mercat Vell",
-"descripcion": "A les 20.30 h, al Teatre Auditori del Mercat Vell",
-"url": "https://www.ripollet.cat/actualitat/agenda/dansa-folk-as-queer"
-},
-{
-"titulo": "AJORNAT.. 2a Trobada de Vespes i Sidecars de Ripollet",
-"inicio": "2026-11-22T09:00:00+01:00",
-"fin": "2026-11-22T14:00:00+01:00",
-"lugar": "Recinte firal de Ripollet",
-"descripcion": "PRÒXIMAMENT ANUNCIARAN LA NOVA DATA.",
-"url": "https://www.ripollet.cat/actualitat/agenda/2a-trobada-de-vespes-i-sidecars-de-ripollet"
-},
-{
-"titulo": "Visita guiada i taller de pa al Molí d’en Rata t",
-"inicio": "2026-11-22T11:00:00+01:00",
-"fin": "2026-11-22T23:59:59+01:00",
-"lugar": "CIP Molí d’en Rata",
-"descripcion": "A les 11 h, al CIP Molí d’en Rata",
-"url": "https://www.ripollet.cat/actualitat/agenda/visita-guiada-i-taller-de-pa-al-moli-d2019en-rata-t"
-},
-{
-"titulo": "Jugatecambiental Maria Regordosa i Masot: “Personalitzem la bici!”",
-"inicio": "2026-11-22T11:30:00+01:00",
-"fin": "2026-11-22T13:30:00+01:00",
-"lugar": "Parc de Maria Regordosa i del Masot",
-"descripcion": "D’11.30 a 13.30 h, al parc de Maria Regordosa i Masot",
-"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-maria-regordosa-i-masot-201cpersonalitzem-la-bici-201d"
-},
-{
-"titulo": "Jugatecambiental Pinetons: “Un celler de Can Roca per als ocells”",
-"inicio": "2026-11-22T11:30:00+01:00",
-"fin": "2026-11-22T13:30:00+01:00",
-"lugar": "Parc dels Pinetons de Ripolllet",
-"descripcion": "D’11.30 a 13.30 h, al parc dels Pinetons",
-"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cun-celler-de-can-roca-per-als-ocells201d-1"
-},
-{
-"titulo": "La Cobla-Orquestra Montgrins presenta &quot;El teu concert&quot; a Ripollet",
-"inicio": "2026-11-22T18:00:00+01:00",
-"fin": "2026-11-22T23:59:59+01:00",
-"lugar": "Teatre Auditori del Mercat Vell",
-"descripcion": "A les 18 h, al Teatre Auditori del Mercat Vell",
-"url": "https://www.ripollet.cat/actualitat/agenda/la-cobla-orquestra-montgrins-presenta-el-teu-concert-a-ripollet"
-},
-{
-"titulo": "Taller d&#x27;iniciació a la marxa nòrdica per a gent gran",
-"inicio": "2026-11-23T09:30:00+01:00",
-"fin": "2026-11-23T13:30:00+01:00",
-"lugar": "Poliesportiu Municipal de Ripollet",
-"descripcion": "De 9.30 a 13.30 h, al Poliesportiu Municipal.",
-"url": "https://www.ripollet.cat/actualitat/agenda/taller-diniciacio-a-la-marxa-nordica-per-a-gent-gran-3"
-},
-{
 "titulo": "Gravat i revolta: taller artístic",
 "inicio": "2026-11-23T18:00:00+01:00",
 "fin": "2026-11-23T19:00:00+01:00",
@@ -240,6 +176,70 @@
 "lugar": "Parc Gassó Vargas",
 "descripcion": "A les 10.30 h, al parc de Gassó Vargas",
 "url": "https://www.ripollet.cat/actualitat/agenda/matinal-de-tions-i-musica-en-familia"
+},
+{
+"titulo": "Taller d’ioga per a embarassades i postpart amb nadons",
+"inicio": "2026-11-28T11:00:00+01:00",
+"fin": "2026-11-28T12:00:00+01:00",
+"lugar": "Centre Cultural de Ripollet",
+"descripcion": "D’11 a 12 h, al Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/taller-d2019ioga-per-a-embarassades-i-postpart-amb-nadons"
+},
+{
+"titulo": "Presentació de l’exposició fotogràfica Pensant en Walter Reuter, de Núria Saura-Freixes.",
+"inicio": "2026-11-28T12:00:00+01:00",
+"fin": "2026-11-28T15:00:00+01:00",
+"lugar": "El Local, carrer de Monturiol",
+"descripcion": "De 12–15 h, a el Local",
+"url": "https://www.ripollet.cat/actualitat/agenda/presentacio-de-l2019exposicio-fotografica-pensant-en-walter-reuter-de-nuria-saura-freixes"
+},
+{
+"titulo": "Performance de dansa: “Un crit en moviment”",
+"inicio": "2026-11-28T16:30:00+01:00",
+"fin": "2026-11-28T17:30:00+01:00",
+"lugar": "Pati del Centre Cultural",
+"descripcion": "A les 16.30 h, al pati del Centre Cultural",
+"url": "https://www.ripollet.cat/actualitat/agenda/performance-de-dansa-201cun-crit-en-moviment201d"
+},
+{
+"titulo": "Concert itinerant Pau per la Pau",
+"inicio": "2026-11-28T17:30:00+01:00",
+"fin": "2026-11-28T23:59:59+01:00",
+"lugar": "Església de Sant Esteve",
+"descripcion": "A les 17.30 h, a l'església de Sant Esteve",
+"url": "https://www.ripollet.cat/actualitat/agenda/concert-itinerant-pau-per-la-pau"
+},
+{
+"titulo": "Concert itinerant Pau per la Pau",
+"inicio": "2026-11-28T17:30:00+01:00",
+"fin": "2026-11-28T23:59:59+01:00",
+"lugar": "Església de Sant Esteve",
+"descripcion": "A les 17.30 h, a l’església de Sant Esteve",
+"url": "https://www.ripollet.cat/actualitat/agenda/concert-itinerant-pau-per-la-pau-1"
+},
+{
+"titulo": "Recital de poesia dedicat a l&#x27;amor i a Federico García Lorca",
+"inicio": "2026-11-28T18:00:00+01:00",
+"fin": "2026-11-28T23:59:59+01:00",
+"lugar": "Teatre Auditori del Mercat Vell",
+"descripcion": "A les 18 h, al Teatre Auditori del Mercat Vell.",
+"url": "https://www.ripollet.cat/actualitat/agenda/recital-de-poesia-dedicat-a-lamor-i-a-federico-garcia-lorca"
+},
+{
+"titulo": "Fira de Santa Llúcia",
+"inicio": "2026-11-29T10:00:00+01:00",
+"fin": "2026-11-29T20:00:00+01:00",
+"lugar": "Rambla de Sant Jordi",
+"descripcion": "De 10 a 20 h, a la rbla. de Sant Jordi",
+"url": "https://www.ripollet.cat/actualitat/agenda/fira-de-santa-llucia-4"
+},
+{
+"titulo": "Jugatecambiental Pinetons: “Les nostres amigues, les abelles”",
+"inicio": "2026-11-29T11:30:00+01:00",
+"fin": "2026-11-29T13:30:00+01:00",
+"lugar": "Parc dels Pinetons de Ripolllet",
+"descripcion": "D’11.30 a 13.30 h, al parc dels Pinetons",
+"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cles-nostres-amigues-les-abelles201d"
 }
 ]
 }
