@@ -2,22 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Gravat i revolta: taller artístic",
-"inicio": "2026-11-23T18:00:00+01:00",
-"fin": "2026-11-23T19:00:00+01:00",
-"lugar": "Casal de Joves de Ripollet",
-"descripcion": "A les 18 h, al Casal de Joves",
-"url": "https://www.ripollet.cat/actualitat/agenda/gravat-i-revolta-taller-artistic"
-},
-{
-"titulo": "Club de Lectura Paraules que curen",
-"inicio": "2026-11-24T11:00:00+01:00",
-"fin": "2026-11-24T12:00:00+01:00",
-"lugar": "Biblioteca Municipal de Ripollet",
-"descripcion": "A les 11 h, a la Biblioteca Municipal",
-"url": "https://www.ripollet.cat/actualitat/agenda/club-de-lectura-paraules-que-curen"
-},
-{
 "titulo": "Desmuntant el masclisme: sensibilització, reflexió i acció",
 "inicio": "2026-11-24T12:00:00+01:00",
 "fin": "2026-11-24T23:59:59+01:00",
@@ -240,6 +224,22 @@
 "lugar": "Parc dels Pinetons de Ripolllet",
 "descripcion": "D’11.30 a 13.30 h, al parc dels Pinetons",
 "url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-pinetons-201cles-nostres-amigues-les-abelles201d"
+},
+{
+"titulo": "Jugatecambiental Maria Regordosa i Masot: “Un parc de foto”",
+"inicio": "2026-11-29T11:30:00+01:00",
+"fin": "2026-11-29T13:30:00+01:00",
+"lugar": "Parc de Maria Regordosa i del Masot",
+"descripcion": "D’11.30 a 13.30 h, al parc de Maria Regordosa i Masot",
+"url": "https://www.ripollet.cat/actualitat/agenda/jugatecambiental-maria-regordosa-i-masot-201cun-parc-de-foto201d"
+},
+{
+"titulo": "Comprar a Ripollet aquest Nadal pot tenir premi: un viatge a Disneyland París.",
+"inicio": "2026-12-09T00:00:00+01:00",
+"fin": "2027-01-05T23:59:59+01:00",
+"lugar": "",
+"descripcion": "Del 9 de desembre al 5 de gener, comerços de Ripollet",
+"url": "https://www.ripollet.cat/actualitat/agenda/comprar-a-ripollet-aquest-nadal-pot-tenir-premi-un-viatge-a-disneyland-paris"
 }
 ]
 }
