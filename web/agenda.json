@@ -2,30 +2,6 @@
 "fuente": "Agenda de ripollet.cat",
 "actos": [
 {
-"titulo": "Lectura del manifest del 25N",
-"inicio": "2026-11-25T12:00:00+01:00",
-"fin": "2026-11-25T23:59:59+01:00",
-"lugar": "Centre Cultural de Ripollet",
-"descripcion": "A les 12 h, al pati del Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/lectura-del-manifest-del-25n"
-},
-{
-"titulo": "Desmuntant el masclisme: sensibilització, reflexió i acció",
-"inicio": "2026-11-25T18:00:00+01:00",
-"fin": "2026-11-25T19:00:00+01:00",
-"lugar": "Centre Cultural",
-"descripcion": "18 h, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/desmuntant-el-masclisme-sensibilitzacio-reflexio-i-accio-1"
-},
-{
-"titulo": "Curtmetratge: Dàlia",
-"inicio": "2026-11-25T19:00:00+01:00",
-"fin": "2026-11-25T23:59:59+01:00",
-"lugar": "Centre Cultural",
-"descripcion": "A les 19 h, al Centre Cultural",
-"url": "https://www.ripollet.cat/actualitat/agenda/curtmetratge-dalia"
-},
-{
 "titulo": "Donació de sang",
 "inicio": "2026-11-26T17:00:00+01:00",
 "fin": "2026-11-26T21:00:00+01:00",
